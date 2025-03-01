@@ -5,6 +5,7 @@ import Signup from './SignUp';
 
 function App() {
   return (
+    //Define application routes to handle navigation between various pages
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
