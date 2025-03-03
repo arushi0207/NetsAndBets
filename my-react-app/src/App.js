@@ -1,17 +1,15 @@
-import logo from './logo.svg';
 import React from 'react';
-import './App.css';
-import MessageComponent from './components/MessageComponent';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './Login.js';
+import Signup from './SignUp';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>March Madness</p>
-        <MessageComponent />
-      </header>
-    </div>
+    //Define application routes to handle navigation between various pages
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+      </Routes>
   );
 }
 
