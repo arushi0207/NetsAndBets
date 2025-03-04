@@ -51,7 +51,7 @@ public class User {
      * @return the user's username
      */
     public String getUsername() {
-        return name;
+        return username;
     }
 
     /**
@@ -69,7 +69,9 @@ public class User {
      *
      * @return the user's password
      */
-    public String getPassword() { return password; }
+    public String getPassword() {
+        return password;
+    }
 
     /**
      * Changes the user's password to the specified string. Use this if a "change password"
@@ -77,6 +79,8 @@ public class User {
      *
      * @param password - the user's new string password
      */
-    public void setPassword(String password) { this.password = password; }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
 }
