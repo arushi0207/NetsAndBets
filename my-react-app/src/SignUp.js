@@ -75,6 +75,9 @@ const Signup = () => {
 
     //Sets the state as true to allow successful submission and disabling of the signup button to prevent further submissions
     setIsSigningUp(true);
+
+    //Sends a POST request to the backend to register a new user.
+    //The request includes the username and password from the form input.
     try {
       const response = await fetch("http://localhost:8080/api/auth/signup", {
         method: "POST",
@@ -93,7 +96,7 @@ const Signup = () => {
       alert(data);
 
       if (response.ok) {
-        
+
         // Store username in local storage
         localStorage.setItem("signupUsername", formData.username);
         
