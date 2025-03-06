@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import {CircleDollarSign as Money} from 'lucide-react';
 
 const Login = () => {
 
@@ -59,49 +60,161 @@ const Login = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Login</h2>
+    <div 
+      style={{ 
+        backgroundImage: `url('https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=2070')`, 
+        backgroundSize: 'cover', 
+        backgroundPosition: 'center', 
+        minHeight: '100vh',
+        width: '100vw',
+        margin: 0,
+        padding: 0,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        overflow: 'hidden'
+      }}
+    >
+      {/* Signup card */}
+      <div 
+        style={{
+          backgroundColor: '#808080CC', 
+          borderRadius: '18px',
+          boxShadow: '0 28px 52px -10px rgba(0, 0, 0, 0.9)',
+          padding: '35px',
+          width: '100%',
+          maxWidth: '500px',
+          border: '2px solid #9CA3AF',
+          zIndex: 10
+        }}
+      >
+        <div style={{ margin: '0', padding: '0', display: 'flex', justifyContent: 'center', marginTop: '-5px' }}>
+            <p style={{ 
+              background: 'linear-gradient(to right, #FF8C00, #FFA500, #FFD700)',
+              fontFamily: "Impact, Arial Black, sans-serif", 
+              fontWeight: 'bold',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              fontSize: '38px', 
+              margin: "0", 
+              padding: "0",
+              letterSpacing: '2px',
+              textShadow: '4px 4px 6px rgba(0, 0, 0, 0.2)',
+              textTransform: 'uppercase', 
+              display: 'inline-block'
+            }}>
+              Login
+            </p>
+          </div>
 
-      {/*Input field for the username*/}
-      <input
-        type="username"
-        name="username"
-        placeholder="Username"
-        value={formData.username}
-        onChange={handleChange}
-      />
-      <br />
+          <form onSubmit={handleSubmit} style={{ marginTop: '26px', marginRight:"20px", width: '100%' }}>
+            <div style={{ marginBottom: '16px' }}>
+              <label htmlFor="username" style={{ color: 'white', fontWeight: '700', fontFamily: "Arial", marginBottom: '6px', display: 'block' }}>
+                Username
+              </label>
+              <input
+                id="username"
+                name="username"
+                placeholder="Enter your username"
+                value={formData.username}
+                onChange={handleChange}
+                required
+                style={{
+                  backgroundColor: 'rgba(22, 28, 39, 0.8)',
+                  fontFamily: "Arial",
+                  color: 'white',
+                  padding: '12px',
+                  borderRadius: '10px',
+                  width: '100%',
+                  border: '1px solid rgb(211, 87, 9)',
+                }}
+              />
+            </div>
 
-      {/*Input field for the password with dynamic visibility*/}
-      <input
-        type={showPassword ? "text" : "password"}
-        name="password"
-        placeholder="Password"
-        value={formData.password}
-        onChange={handleChange}
-      />
-      <br />
-      <label>
+            <div style={{ marginBottom: '16px' }}>
+              <label htmlFor="password" style={{ color: 'white', fontWeight: '700', fontFamily: "Arial", marginBottom: '6px', display: 'block' }}>
+                Password
+              </label>
+              <div style={{ position: 'relative' }}>
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                  style={{
+                    backgroundColor: 'rgba(22, 28, 39, 0.8)',
+                    fontFamily: "Arial",
+                    color: 'white',
+                    padding: '12px',
+                    borderRadius: '10px',
+                    width: '100%',
+                    border: '1px solid rgb(211, 87, 9)',
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{
+                    position: 'absolute',
+                    left: '95%',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    color: '#9CA3AF',
+                    background: 'none',
+                    border: 'none',
+                    fontSize: '14px'
+                  }}
+                >
+                  {showPassword ? 'Hide' : 'Show'}
+                </button>
+              </div>
+            </div>
 
-        {/*Displays checkbox to toggle visibility*/}
-        <input
-          type="checkbox"
-          checked={showPassword}
-          onChange={() => setShowPassword(!showPassword)}
-        />
-        Show Password
-      </label>
-      <br />
-      {/*Displays submit button which is disabled when logging in*/}
-      <button type="submit" disabled={isLoggingIn}>
-        {isLoggingIn ? "Logging in..." : "Login"}
-        </button>
-      <p>
+            {/*Displays submit button which is disabled when logging in*/}
+            <button 
+              type="submit" 
+              style={{
+                width: '105%',
+                backgroundColor: '#FF5F1F',
+                color: 'white',
+                padding: '10px',
+                borderRadius: '10px',
+                fontWeight: 'bold',
+                fontSize: '18px',
+                border: 'none',
+                boxShadow: '0 4px 6px -1px rgba(1, 1, 1, 0.1)',
+                marginTop: '16px'
+              }}
+              disabled={isLoggingIn}
+            >
+              {isLoggingIn ? 'Logging In!!' : 'Log In'}
+            </button>
+        </form>
 
-        {/*Link to signup page for new users*/}
-        Don't have an account? <Link to="/signup">Signup</Link>
-      </p>
-    </form>
+        <div style={{ textAlign: 'center', width: '100%', marginTop: '20px', }}>
+          <p style={{ color: 'white', fontFamily: "Arial" }}>
+            <span style={{ display: 'flex', justifyContent: 'center', gap: '6px', marginBottom: '7px' }}>
+              <Money style={{color: "green", height: "30px", width: "50px"}}/>
+              <Money style={{color: "green", height: "30px", width: "50px"}} />
+              <Money style={{color: "green", height: "30px", width: "50px"}} />
+              <Money style={{color: "green", height: "30px", width: "50px"}} />
+            </span>
+            Don't have an account?{" "}
+            <Link to="/signup" style={{ color: '#FF5F1F', fontWeight: '600', textDecoration: 'underline', textUnderlineOffset: '4px' }}>
+              Sign up
+            </Link>
+          </p>
+        </div>
+      </div>
+    </div>
   );
 };
 
