@@ -83,4 +83,18 @@ public class UserController {
         return ResponseEntity.badRequest().body("User not found");
     }
 
+    /**
+     * Retrieves the username of a specific user.
+     *
+     * @param username The username of the user.
+     * @return A ResponseEntity containing the username or an error message.
+     */
+    @GetMapping("/{username}/username")
+    public ResponseEntity<?> getUsername(@PathVariable String username) {
+        if (userDatabase.containsKey(username)) {
+            return ResponseEntity.ok(userDatabase.get(username).get("username"));
+        }
+        return ResponseEntity.badRequest().body("User not found");
+    }
+
 }
