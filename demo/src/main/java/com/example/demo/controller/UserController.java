@@ -97,4 +97,20 @@ public class UserController {
         return ResponseEntity.badRequest().body("User not found");
     }
 
+    /**
+     * Retrieves the password of a specific user.
+     * Note: In a real application, passwords should never be exposed via API.
+     * This is for demonstration purposes only.
+     *
+     * @param username The username of the user.
+     * @return A ResponseEntity containing the user's password or an error message.
+     */
+    @GetMapping("/{username}/password")
+    public ResponseEntity<?> getUserPassword(@PathVariable String username) {
+        if (userDatabase.containsKey(username)) {
+            return ResponseEntity.ok(userDatabase.get(username).get("password"));
+        }
+        return ResponseEntity.badRequest().body("User not found");
+    }
+
 }
