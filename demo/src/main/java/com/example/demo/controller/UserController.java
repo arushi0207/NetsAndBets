@@ -113,4 +113,18 @@ public class UserController {
         return ResponseEntity.badRequest().body("User not found");
     }
 
+    /**
+     * Retrieves the account balance of a specific user.
+     *
+     * @param username The username of the user.
+     * @return A ResponseEntity containing the user's account balance or an error message.
+     */
+    @GetMapping("/{username}/amount")
+    public ResponseEntity<?> getUserAmount(@PathVariable String username) {
+        if (userDatabase.containsKey(username)) {
+            return ResponseEntity.ok(userDatabase.get(username).get("amount"));
+        }
+        return ResponseEntity.badRequest().body("User not found");
+    }
+
 }
