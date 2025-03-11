@@ -31,4 +31,25 @@ public class UserController {
     // Stores user data temporarily (in a real application, use a database)
     private final Map<String, Map<String, Object>> userDatabase = new HashMap<>();
 
+    /**
+     * Constructor to initialize some sample user data.
+     */
+    public UserController() {
+        // Add some sample users
+        Map<String, Object> user1 = new HashMap<>();
+        user1.put("name", "John Doe");
+        user1.put("username", "john_doe");
+        user1.put("password", "password123");
+        user1.put("amount", 500.0);
+        
+        Map<String, Object> user2 = new HashMap<>();
+        user2.put("name", "Jane Smith");
+        user2.put("username", "jane_smith");
+        user2.put("password", "secure456");
+        user2.put("amount", 750.0);
+        
+        userDatabase.put("john_doe", user1);
+        userDatabase.put("jane_smith", user2);
+    }
+
 }
