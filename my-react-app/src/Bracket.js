@@ -183,7 +183,7 @@ const MarchMadnessBracket = () => {
 {selectedMatchup && (
   <div style={{ 
     margin: '0 auto 30px auto',
-    maxWidth: '700px',
+    maxWidth: '950px',
     backgroundColor: '#1c1c1c',
     color: 'white',
     border: '1px solid #333',
@@ -197,19 +197,20 @@ const MarchMadnessBracket = () => {
       style={{
         position: 'absolute',
         top: '0px',
-        right: '500px',
-        width: '36px',
-        height: '36px',
+        right: '0px',
+        width: '30px',
+        height: '30px',
         borderRadius: '50%',
-        backgroundColor: '#333',
+        backgroundColor: '#ff5252',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         cursor: 'pointer',
         zIndex: 10,
-        fontSize: '16px',
+        fontSize: '20px',
         fontWeight: 'bold',
-        color: '#ddd'
+        color: 'white',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.3)'
       }}
     >
       ×
@@ -222,47 +223,34 @@ const MarchMadnessBracket = () => {
         borderBottom: '1px solid #333',
         fontSize: '14px'
       }}>
-        <div style={{ padding: '8px 15px', textAlign: 'center', fontWeight: 'bold' }}>
-          
+        <div style={{ padding: '15px', textAlign: 'left', fontWeight: 'bold' }}>
+          TEAMS
         </div>
-        <div style={{ padding: '10px 15px', textAlign: 'center', fontWeight: 'bold', borderLeft: '1px solid #333' }}>
+        <div style={{ padding: '15px', textAlign: 'center', fontWeight: 'bold', borderLeft: '1px solid #333' }}>
           SPREAD
         </div>
-        <div style={{ padding: '10px 15px', textAlign: 'center', fontWeight: 'bold', borderLeft: '1px solid #333' }}>
+        <div style={{ padding: '15px', textAlign: 'center', fontWeight: 'bold', borderLeft: '1px solid #333' }}>
           TOTAL
         </div>
-        <div style={{ padding: '10px 15px', textAlign: 'center', fontWeight: 'bold', borderLeft: '1px solid #333' }}>
-          MONEYLINE
+        <div style={{ padding: '15px', textAlign: 'center', fontWeight: 'bold', borderLeft: '1px solid #333' }}>
+          ML
         </div>
       </div>
       
       {/* Team A Row */}
       <div style={{ 
         display: 'grid',
-        gridTemplateColumns: '40% 20% 20% 20%',
+        gridTemplateColumns: '35% 20% 20% 25%',
         borderBottom: '1px solid #333'
       }}>
         <div style={{ 
-          padding: '20px 80px', 
+          padding: '20px 15px', 
           display: 'flex', 
           alignItems: 'center'
         }}>
-          <div style={{ 
-            width: '36px', 
-            height: '36px', 
-            borderRadius: '50%', 
-            backgroundColor: '#0059b3', 
-            marginRight: '15px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: 'white',
-            fontWeight: 'bold',
-            fontSize: '16px'
-          }}>
-            {selectedMatchup.teamA.seed}
+          <div style={{ fontWeight: 'bold', fontSize: '18px' }}>
+            {selectedMatchup.teamA.name}
           </div>
-          <div style={{ fontWeight: 'bold', fontSize: '18px' }}>{selectedMatchup.teamA.name}</div>
         </div>
         <div style={{ 
           padding: '20px', 
@@ -276,7 +264,7 @@ const MarchMadnessBracket = () => {
           <div style={{ color: '#4caf50', marginTop: '6px', fontSize: '14px' }}>-112</div>
         </div>
         <div style={{ 
-          padding: '15px', 
+          padding: '20px', 
           display: 'flex', 
           flexDirection: 'column', 
           alignItems: 'center',
@@ -287,7 +275,7 @@ const MarchMadnessBracket = () => {
           <div style={{ color: '#4caf50', marginTop: '6px', fontSize: '14px' }}>-108</div>
         </div>
         <div style={{ 
-          padding: '15px', 
+          padding: '20px', 
           display: 'flex', 
           flexDirection: 'column', 
           alignItems: 'center',
@@ -295,8 +283,8 @@ const MarchMadnessBracket = () => {
           borderLeft: '1px solid #333'
         }}>
           <div style={{ 
-            color: selectedMatchup.teamA.moneyline > 0 ? '#4caf50' : '#4caf50', 
-            fontSize: '19px', 
+            color: '#4caf50', 
+            fontSize: '17px', 
             fontWeight: 'bold' 
           }}>
             {selectedMatchup.teamA.moneyline > 0 ? '+' : ''}{selectedMatchup.teamA.moneyline}
@@ -307,32 +295,19 @@ const MarchMadnessBracket = () => {
       {/* Team B Row */}
       <div style={{ 
         display: 'grid',
-        gridTemplateColumns: '40% 20% 20% 20%'
+        gridTemplateColumns: '35% 20% 20% 25%'
       }}>
         <div style={{ 
-          padding: '15px 80px', 
+          padding: '20px 15px', 
           display: 'flex', 
           alignItems: 'center'
         }}>
-          <div style={{ 
-            width: '36px', 
-            height: '36px', 
-            borderRadius: '50%', 
-            backgroundColor: '#cc0000', 
-            marginRight: '15px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: 'white',
-            fontWeight: 'bold',
-            fontSize: '12px'
-          }}>
-            {selectedMatchup.teamB.seed}
+          <div style={{ fontWeight: 'bold', fontSize: '18px' }}>
+            {selectedMatchup.teamB.name}
           </div>
-          <div style={{ fontWeight: 'bold', fontSize: '18px' }}>{selectedMatchup.teamB.name}</div>
         </div>
         <div style={{ 
-          padding: '15px', 
+          padding: '20px', 
           display: 'flex', 
           flexDirection: 'column', 
           alignItems: 'center',
@@ -343,7 +318,7 @@ const MarchMadnessBracket = () => {
           <div style={{ color: '#4caf50', marginTop: '6px', fontSize: '14px' }}>-108</div>
         </div>
         <div style={{ 
-          padding: '15px', 
+          padding: '20px', 
           display: 'flex', 
           flexDirection: 'column', 
           alignItems: 'center',
@@ -354,7 +329,7 @@ const MarchMadnessBracket = () => {
           <div style={{ color: '#4caf50', marginTop: '6px', fontSize: '14px' }}>-112</div>
         </div>
         <div style={{ 
-          padding: '15px', 
+          padding: '20px', 
           display: 'flex', 
           flexDirection: 'column', 
           alignItems: 'center',
@@ -362,8 +337,8 @@ const MarchMadnessBracket = () => {
           borderLeft: '1px solid #333'
         }}>
           <div style={{ 
-            color: selectedMatchup.teamB.moneyline > 0 ? '#4caf50' : '#4caf50', 
-            fontSize: '16px', 
+            color: '#4caf50', 
+            fontSize: '17px', 
             fontWeight: 'bold' 
           }}>
             {selectedMatchup.teamB.moneyline > 0 ? '+' : ''}{selectedMatchup.teamB.moneyline}
