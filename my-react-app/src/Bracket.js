@@ -124,10 +124,11 @@ const MarchMadnessBracket = () => {
       className="matchup-box"
       onClick={onClick}
       style={{ 
-        border: '1px solid #ccc',
+        border: '2px solid black', //new change
         borderRadius: '2px',
         marginBottom: '2px',
         cursor: 'pointer',
+        //backgroundColor: 'black',
         width: '200px'
       }}
     >
@@ -136,6 +137,7 @@ const MarchMadnessBracket = () => {
         padding: '3px 8px',
         display: 'flex',
         height: '22px',
+        
         alignItems: 'center'
       }}>
         <span style={{ 
@@ -175,7 +177,9 @@ const MarchMadnessBracket = () => {
         flexDirection: 'column',
         width: '100%',
         maxWidth: '1600px',
+        backgroundColor: '#c8e6c9', // new change
         margin: '0 auto'
+
       }}>
         <h1 style={{ textAlign: 'center', margin: '20px 0' }}>NCAA March Madness Bracket 2025</h1>
         
@@ -552,12 +556,13 @@ const BracketRegion = ({ region, onMatchupClick, reversed = false }) => {
               left: 0,
               height: '40px',
               width: '100%',
-              border: '1px solid #ccc',
+              border: '2px solid black',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
             }}>
-              <div style={{ width: '100%', height: '1px', backgroundColor: '#ccc', position: 'absolute', left: 0 }}></div>
+                <div style={{ width: '100%', height: '2px', backgroundColor: 'black', position: 'absolute', left: 0 }}></div>
+
             </div>
             
             {/* Round 2 box BETWEEN 5/12 and 4/13 matchups */}
@@ -567,12 +572,12 @@ const BracketRegion = ({ region, onMatchupClick, reversed = false }) => {
               left: 0,
               height: '40px',
               width: '100%',
-              border: '1px solid #ccc',
+              border: '2px solid black',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
             }}>
-              <div style={{ width: '100%', height: '1px', backgroundColor: '#ccc', position: 'absolute', left: 0 }}></div>
+              <div style={{ width: '100%', height: '2px', backgroundColor: 'black', position: 'absolute', left: 0 }}></div>
             </div>
           </div>
           
@@ -589,12 +594,12 @@ const BracketRegion = ({ region, onMatchupClick, reversed = false }) => {
               left: 0,
               height: '40px',
               width: '100%',
-              border: '1px solid #ccc',
+              border: '2px solid black',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
             }}>
-              <div style={{ width: '100%', height: '1px', backgroundColor: '#ccc', position: 'absolute', left: 0 }}></div>
+              <div style={{ width: '100%', height: '2px', backgroundColor: 'black', position: 'absolute', left: 0 }}></div>
             </div>
           </div>
           
@@ -611,12 +616,12 @@ const BracketRegion = ({ region, onMatchupClick, reversed = false }) => {
               left: 0,
               height: '40px',
               width: '100%',
-              border: '1px solid #ccc',
+              border: '2px solid black',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
             }}>
-              <div style={{ width: '100%', height: '1px', backgroundColor: '#ccc', position: 'absolute', left: 0 }}></div>
+              <div style={{ width: '100%', height: '2px', backgroundColor: 'black', position: 'absolute', left: 0 }}></div>
             </div>
           </div>
         </div>
@@ -645,7 +650,7 @@ const BracketRegion = ({ region, onMatchupClick, reversed = false }) => {
           <div style={{ 
             position: 'relative',
             height: '200px',
-            width: '170px'
+            width: '150px'
           }}>
             {/* First Round 2 box - Between 6/11 and 3/14 matchups */}
             <div style={{ 
@@ -654,12 +659,12 @@ const BracketRegion = ({ region, onMatchupClick, reversed = false }) => {
               left: 0,
               height: '40px',
               width: '100%',
-              border: '1px solid #ccc',
+              border: '2px solid black',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
             }}>
-              <div style={{ width: '100%', height: '1px', backgroundColor: '#ccc', position: 'absolute', left: 0 }}></div>
+              <div style={{ width: '100%', height: '2px', backgroundColor: 'black', position: 'absolute', left: 0 }}></div>
             </div>
             
             {/* Second Round 2 box - Between 7/10 and 2/15 matchups */}
@@ -669,12 +674,12 @@ const BracketRegion = ({ region, onMatchupClick, reversed = false }) => {
               left: 0,
               height: '40px',
               width: '100%',
-              border: '1px solid #ccc',
+              border: '2px solid black',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
             }}>
-              <div style={{ width: '100%', height: '1px', backgroundColor: '#ccc', position: 'absolute', left: 0 }}></div>
+              <div style={{ width: '100%', height: '2px', backgroundColor: 'black', position: 'absolute', left: 0 }}></div>
             </div>
           </div>
           
@@ -691,12 +696,12 @@ const BracketRegion = ({ region, onMatchupClick, reversed = false }) => {
               left: 0,
               height: '40px',
               width: '100%',
-              border: '1px solid #ccc',
+              border: '2px solid black',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
             }}>
-              <div style={{ width: '100%', height: '1px', backgroundColor: '#ccc', position: 'absolute', left: 0 }}></div>
+              <div style={{ width: '100%', height: '2px', backgroundColor: 'black', position: 'absolute', left: 0 }}></div>
             </div>
           </div>
         </div>
