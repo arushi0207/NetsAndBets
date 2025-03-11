@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import MarchMadnessBracket from './Bracket'; // Import the standalone bracket component
 
 
 const Login = () => {
@@ -121,10 +120,6 @@ const Login = () => {
         Don't have an account? <Link to="/signup">Signup</Link>
       </p>
     </form>
-    {/* Add bracket component underneath the login form */}
-    <div style={{ marginTop: '40px', borderTop: '1px solid #eee', paddingTop: '20px' }}>
-        <MarchMadnessBracket />
-      </div>
     </div>
     
   );

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Home.css';
+import MarchMadnessBracket from './Bracket'; 
+
 
 const Home = () => {
   return (
@@ -12,7 +14,12 @@ const Home = () => {
           <Link to="/signup" className="button">Sign Up</Link>
         </div>
       </header>
+      {/*  bracket component on main home page */}
+      <div style={{ marginTop: '300px', borderTop: '1px solid #eee', paddingTop: '20px' }}>
+        <MarchMadnessBracket />
+      </div>
     </div>
+    
   );
 };
 
