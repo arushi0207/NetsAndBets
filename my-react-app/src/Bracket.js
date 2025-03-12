@@ -185,7 +185,7 @@ const MarchMadnessBracket = () => {
       }}>
         <h1 style={{ textAlign: 'center', margin: '20px 0' }}>NCAA March Madness Bracket 2025</h1>
         
-      {/* Display Selected Matchup Odds */}
+     {/* Display Selected Matchup Odds */}
 {selectedMatchup && (
   <div style={{ 
     position: 'fixed',
@@ -355,6 +355,26 @@ const MarchMadnessBracket = () => {
             {selectedMatchup.teamB.moneyline > 0 ? '+' : ''}{selectedMatchup.teamB.moneyline}
           </div>
         </div>
+      </div>
+      
+      {/* Added padding section */}
+      <div style={{ padding: '20px', display: 'flex', justifyContent: 'flex-end' }}>
+        <button 
+          style={{
+            backgroundColor: '#4caf50',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            padding: '12px 24px',
+            fontSize: '16px',
+            fontWeight: 'bold',
+            cursor: 'pointer',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+          }}
+          onClick={() => console.log("Checkout clicked")}
+        >
+          CHECKOUT
+        </button>
       </div>
     </div>
   </div>
