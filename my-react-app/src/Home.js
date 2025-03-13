@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from 'react-router-dom';
 import { CircleDollarSign, Calendar, Trophy } from "lucide-react";
+import MarchMadnessBracket from './Bracket'; 
 
 // This removes default padding and margins from the HTML and body elements
 const globalStyles = `
@@ -32,7 +33,6 @@ export default function Home() {
           backgroundColor: "#363636", 
           borderBottom: "1px solid rgba(236, 231, 231, 0.12)"
         }}>
-
           <div style={{ 
             margin: "0 auto", 
             padding: "1rem 1rem", 
@@ -246,18 +246,20 @@ export default function Home() {
         {/* Bracket */}
         <section style={{ 
           backgroundColor: "#001440", 
-          padding: "2rem 0",
           width: "100%",
         }}>
-          <div style={{ width: "100%", minHeight:"95vh", margin: "0 auto", padding: "0 1rem" }}>
+          <div style={{ width: "100%", minHeight:"95vh", margin: "0 auto" }}>
             <h2 style={{ 
               fontSize: "2rem",
               fontFamily: "Arial", 
               fontWeight: "bold", 
               color: "white", 
               textAlign: "center", 
-              margin: "0 2rem 4rem 0"
             }}>Teams</h2>
+            <p style={{ display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontFamily: "Arial", fontSize: "1rem", margin: "0 0 2rem 0" }}> 
+              Click on any match block and place your bets!
+            </p>
+            <MarchMadnessBracket />
           </div>
         </section>
 
