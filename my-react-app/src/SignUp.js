@@ -156,7 +156,7 @@ const Signup = () => {
           <div style={{ margin: '0', padding: '0', display: 'flex', justifyContent: 'center', marginTop: '-5px' }}>
             <p style={{ 
               background: 'linear-gradient(to right, #FF8C00, #FFA500, #FFD700)',
-              fontFamily: "Lucida Handwriting, Cursive", 
+              fontFamily: "Impact, Arial Black, sans-serif", 
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               fontSize: '38px', 
@@ -305,7 +305,7 @@ const Signup = () => {
 
           <div style={{ textAlign: 'center', width: '100%', marginTop: '20px', }}>
             <p style={{ color: 'white', fontFamily: "Arial" }}>
-              <span style={{ display: 'flex', justifyContent: 'center', gap: '6px', marginBottom: '7px' }}>
+              <span style={{ display: 'flex', justifyContent: 'center', gap: '6px', marginBottom: '10px' }}>
                 <Money style={{color: "green", height: "30px", width: "50px"}}/>
                 <Money style={{color: "green", height: "30px", width: "50px"}} />
                 <Money style={{color: "green", height: "30px", width: "50px"}} />
@@ -314,6 +314,12 @@ const Signup = () => {
               Already have an account?{" "}
               <Link to="/login" style={{ color: '#FF5F1F', fontWeight: '600', textDecoration: 'underline', textUnderlineOffset: '4px' }}>
                 Log in
+              </Link>
+            </p>
+            <p style={{ color: 'white', fontFamily: "Arial", marginTop: "2px" }}>
+               Go back?{" "}
+              <Link to="/landingpage" style={{ color: '#FF5F1F', fontWeight: '600', textDecoration: 'underline', textUnderlineOffset: '4px' }}>
+                Home
               </Link>
             </p>
           </div>
