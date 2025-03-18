@@ -4,7 +4,6 @@ import com.example.demo.model.MarchMadnessTeam;
 import com.example.demo.model.User;
 import com.example.demo.repository.MarchMadnessTeamRepository;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.service.MarchMadnessScraper;
 
 import java.util.List;
 
@@ -31,9 +30,6 @@ public class MainController {
     @Autowired
     private MarchMadnessTeamRepository marchMadnessTeamRepository;
 
-    @Autowired
-    private MarchMadnessScraper scraper;
-
     @PostMapping(path="/add") // Map ONLY POST Requests
     public @ResponseBody String addNewUser (@RequestParam String username
             , @RequestParam String password) {
@@ -55,11 +51,25 @@ public class MainController {
 
     // Make get call for specific user
 
+    /**
+     * Endpoint to trigger the web scraping process for March Madness teams.
+     * This method invokes the scraper to fetch team data and save it to the database. However, it is
+     * commented out because we have already saved the data.
+     *
+     * @return A confirmation message indicating that the scraping and saving process has completed.
+     */
+
     // @PostMapping(path="/scrape")
     // public @ResponseBody String scrapeTeams() {
     //     scraper.scrapeAndSave();
     //     return "Scraping and saving teams completed!";
     // }
+
+    /**
+     * Endpoint to return the list of all the March Madness Teams stored in the database.
+     * 
+     * @return A list of teams including their id, name, seed and region
+     */
 
     @GetMapping(path="/teams")
     public @ResponseBody List<MarchMadnessTeam> getAllTeams() {
