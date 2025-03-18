@@ -11,9 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * This class controls Get and Post calls from outside resources. It works by making a call to
- * the specified url (hosted on 8080 by default) using /demo/... per call, then accessing the Database
- * to either store or retrieve information.
+ * This class controls flow to and from the database using GET and POST calls. The backend listens
+ * on port 3306 and uses calls to query and modify the database.
  */
 @Controller // This means that this class is a Controller
 @RequestMapping(path="/demo") // This means URL's start with /demo (after Application path)
@@ -41,5 +40,7 @@ public class MainController {
         // This returns a JSON or XML with the users
         return userRepository.findAll();
     }
+
+    // Make get call for specific user
 
 }
