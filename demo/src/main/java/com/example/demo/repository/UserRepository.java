@@ -4,9 +4,17 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.example.demo.model.User;
 
-// This will be AUTO IMPLEMENTED by Spring into a Bean called userRepository
-// CRUD refers to Create, Read, Update, Delete
-
+/**
+ * This will be AUTO IMPLEMENTED by Spring into a Bean called userRepository
+ * CRUD refers to Create, Read, Update, Delete
+ */
 public interface UserRepository extends CrudRepository<User, Integer> {
 
+    /**
+     * Finds a single user stored in the database based on their unique username.
+     *
+     * @param username the username of the user
+     * @return a User with the given username, null otherwise
+     */
+    User findByUsername(String username);
 }
