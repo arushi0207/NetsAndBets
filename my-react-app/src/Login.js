@@ -96,7 +96,7 @@ const Login = () => {
         overflow: 'hidden'
       }}
     >
-      {/* Signup card */}
+      {/* Login card */}
       <div 
         style={{
           backgroundColor: '#808080CC', 

@@ -129,7 +129,6 @@ const MarchMadnessBracket = () => {
         marginBottom: '2px',
         cursor: 'pointer',
         backgroundColor: 'orange',
-        width: '200px'
       }}
     >
       <div style={{ 
@@ -146,7 +145,12 @@ const MarchMadnessBracket = () => {
           marginRight: '4px',
           fontSize: '14px'
         }}>{teamA.seed}</span>
-        <span style={{ fontSize: '14px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+        <span style={{ 
+          fontSize: '14px', 
+          whiteSpace: 'nowrap', 
+          overflow: 'hidden', 
+          textOverflow: 'ellipsis'
+        }}>
           {teamA.name}
         </span>
       </div>
@@ -162,7 +166,12 @@ const MarchMadnessBracket = () => {
           marginRight: '4px',
           fontSize: '14px'
         }}>{teamB.seed}</span>
-        <span style={{ fontSize: '14px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+        <span style={{ 
+          fontSize: '14px', 
+          whiteSpace: 'nowrap', 
+          overflow: 'hidden', 
+          textOverflow: 'ellipsis'
+        }}>
           {teamB.name}
         </span>
       </div>
@@ -176,10 +185,7 @@ const MarchMadnessBracket = () => {
         display: 'flex', 
         flexDirection: 'column',
         width: '100%',
-        maxWidth: '1600px',
         backgroundColor: '#001440', // new change
-        paddingRight: '15px', 
-        paddingLeft: '10px', 
       }}>
         
      {/* Display Selected Matchup Odds */}
@@ -268,9 +274,9 @@ const MarchMadnessBracket = () => {
           justifyContent: 'center',
           borderLeft: '1px solid #333'
         }}>
-          <div style={{ fontSize: '17px', fontWeight: 'bold' }}>+{Math.abs(selectedMatchup.teamA.spread)}</div>
-          <div style={{ color: '#4caf50', marginTop: '6px', fontSize: '14px' }}>-112</div>
-        </div>
+          <div style={{ fontSize: '17px', fontWeight: 'bold' }}>{Math.abs(selectedMatchup.teamA.spread)}</div>
+          <div style={{ color: '#4caf50', marginTop: '6px', fontSize: '14px' }}>{selectedMatchup.teamA.odds}</div>
+          </div>
         <div style={{ 
           padding: '20px', 
           display: 'flex', 
@@ -322,9 +328,9 @@ const MarchMadnessBracket = () => {
           justifyContent: 'center',
           borderLeft: '1px solid #333'
         }}>
-          <div style={{ fontSize: '17px', fontWeight: 'bold' }}>-{Math.abs(selectedMatchup.teamB.spread)}</div>
-          <div style={{ color: '#4caf50', marginTop: '6px', fontSize: '14px' }}>-108</div>
-        </div>
+          <div style={{ fontSize: '17px', fontWeight: 'bold' }}>{Math.abs(selectedMatchup.teamB.spread)}</div>
+          <div style={{ color: '#4caf50', marginTop: '6px', fontSize: '14px' }}>{selectedMatchup.teamB.odds}</div>
+          </div>
         <div style={{ 
           padding: '20px', 
           display: 'flex', 
@@ -385,8 +391,7 @@ const MarchMadnessBracket = () => {
           {/* Top Section - West & East */}
           <div style={{ 
             display: 'flex',
-            justifyContent: 'space-between',
-            marginBottom: '10px'
+            justifyContent: 'space-between'
           }}>
             {/* West Region */}
             <div style={{ width: '45%' }}>
@@ -509,7 +514,7 @@ const BracketRegion = ({ region, onMatchupClick, reversed = false }) => {
     const direction = reversed ? 'row-reverse' : 'row';
     
     return (
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', padding: '0 2px'}}>
         {/* Round titles */}
         <div style={{ 
           display: 'flex',
@@ -558,7 +563,9 @@ const BracketRegion = ({ region, onMatchupClick, reversed = false }) => {
           {/* First Round */}
           <div style={{ 
             width: '200px',
-            flexShrink: 0
+            flexShrink: 0,
+            paddingRight: reversed ? '2px' : '0', 
+            paddingLeft: reversed ? '0' : '2px'   
           }}>
             {round1MatchupsTop.map((matchup, idx) => (
               <MatchupBox 
@@ -574,7 +581,9 @@ const BracketRegion = ({ region, onMatchupClick, reversed = false }) => {
           <div style={{ 
             position: 'relative',
             height: '200px',
-            width: '170px'
+            width: '170px',
+            marginLeft: reversed ? '0' : '15px',  
+            marginRight: reversed ? '15px' : '0' 
           }}>
             {/* Round 2 box BETWEEN 1/16 and 8/9 matchups */}
             <div style={{ 
@@ -611,7 +620,9 @@ const BracketRegion = ({ region, onMatchupClick, reversed = false }) => {
           <div style={{ 
             position: 'relative',
             height: '200px',
-            width: '170px'
+            width: '170px',
+            marginLeft: reversed ? '0' : '15px',  
+            marginRight: reversed ? '15px' : '0' 
           }}>
             {/* Sweet 16 box - centered between the two Round 2 boxes */}
             <div style={{ 
@@ -633,12 +644,14 @@ const BracketRegion = ({ region, onMatchupClick, reversed = false }) => {
           <div style={{ 
             position: 'relative',
             height: '200px',
-            width: '150px'
+            width: '150px',
+            marginLeft: reversed ? '0' : '15px', 
+            marginRight: reversed ? '15px' : '0' 
           }}>
             {/* Elite 8 box - at same position as Sweet 16 box */}
             <div style={{ 
               position: 'absolute',
-              top: '200px',
+              top: '240px',
               left: 0,
               height: '40px',
               width: '100%',
@@ -660,7 +673,9 @@ const BracketRegion = ({ region, onMatchupClick, reversed = false }) => {
           {/* First Round */}
           <div style={{ 
             width: '200px',
-            flexShrink: 0
+            flexShrink: 0,
+            paddingRight: reversed ? '2px' : '0', 
+            paddingLeft: reversed ? '0' : '2px'  
           }}>
             {round1MatchupsBottom.map((matchup, idx) => (
               <MatchupBox 
@@ -676,7 +691,9 @@ const BracketRegion = ({ region, onMatchupClick, reversed = false }) => {
           <div style={{ 
             position: 'relative',
             height: '200px',
-            width: '150px'
+            width: '150px',
+            marginLeft: reversed ? '0' : '15px', 
+            marginRight: reversed ? '15px' : '0' 
           }}>
             {/* First Round 2 box - Between 6/11 and 3/14 matchups */}
             <div style={{ 
@@ -713,12 +730,14 @@ const BracketRegion = ({ region, onMatchupClick, reversed = false }) => {
           <div style={{ 
             position: 'relative',
             height: '200px',
-            width: '150px'
+            width: '150px',
+            marginLeft: reversed ? '0' : '15px',  
+            marginRight: reversed ? '15px' : '0'  
           }}>
             {/* Sweet 16 box - centered between the two Round 2 boxes */}
             <div style={{ 
               position: 'absolute',
-              top: '95px',
+              top: '105px',
               left: 0,
               height: '40px',
               width: '100%',
