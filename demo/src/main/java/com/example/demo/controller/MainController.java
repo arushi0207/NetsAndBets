@@ -63,7 +63,6 @@ public class MainController {
     }
 
     /**
-<<<<<<< demo/src/main/java/com/example/demo/controller/MainController.java
      * Handles user signup by adding a new username and password to the database.
      * 
      * This endpoint allows a new user to create an account by providing a username and password.
@@ -93,13 +92,11 @@ public class MainController {
         userRepository.save(user);
         return ResponseEntity.ok("User signed up successfully!");
     }
-
-=======
+    /*
      * Finds and returns an iterable of all users and user information stored in the MySQL Database
      *
      * @return an Iterable of all users in the database
      */
->>>>>>> demo/src/main/java/com/example/demo/controller/MainController.java
     @GetMapping(path="/all")
     public @ResponseBody Iterable<User> getAllUsers() {
         // This returns a JSON or XML with the users
@@ -113,7 +110,7 @@ public class MainController {
      * @return the user entity if it exists, or null if there does not exist a user with the given username
      */
     @GetMapping(path="/user")
-    public @ResponseBody User getUserByUsername(@RequestParam String username) {
+    public @ResponseBody Optional<User> getUserByUsername(@RequestParam String username) {
         return userRepository.findByUsername(username);
     }
 
