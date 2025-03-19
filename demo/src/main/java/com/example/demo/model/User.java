@@ -1,18 +1,16 @@
-/**
- * This class represents a single user in the Users repository, holding a user's
- * username, password, and a unique key to identify the user.
- * Using this class, individual user information can be updated and retrieved
- * with the below methods.
- */
-
 package com.example.demo.model;
-
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+/**
+ * This class represents a single user in the Users repository, holding a user's
+ * username, password, and a unique key to identify the user.
+ * Using this class, individual user information can be updated and retrieved
+ * with the below methods.
+ */
 @Entity // This tells Hibernate to make a table out of this class
 public class User {
 
