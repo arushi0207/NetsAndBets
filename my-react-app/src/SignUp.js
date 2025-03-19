@@ -318,7 +318,7 @@ const Signup = () => {
             </p>
             <p style={{ color: 'white', fontFamily: "Arial", marginTop: "2px" }}>
                Go back?{" "}
-              <Link to="/landingpage" style={{ color: '#FF5F1F', fontWeight: '600', textDecoration: 'underline', textUnderlineOffset: '4px' }}>
+              <Link to="/" style={{ color: '#FF5F1F', fontWeight: '600', textDecoration: 'underline', textUnderlineOffset: '4px' }}>
                 Home
               </Link>
             </p>

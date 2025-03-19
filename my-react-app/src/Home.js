@@ -21,6 +21,7 @@ export default function Home() {
         display: "flex", 
         flexDirection: "column", 
         width: "100%",
+        height: "100%",
         padding: 0,
         margin: 0,
       }}>
@@ -248,7 +249,7 @@ export default function Home() {
           backgroundColor: "#001440", 
           width: "100%",
         }}>
-          <div style={{ width: "100%", minHeight:"95vh", margin: "0 auto" }}>
+          <div style={{ width: "100%", minHeight:"95vh" }}>
             <h2 style={{ 
               fontSize: "2rem",
               fontFamily: "Arial", 

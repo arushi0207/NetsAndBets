@@ -8,7 +8,7 @@ function App() {
   return (
     //Define application routes to handle navigation between various pages
     <Routes>
-      <Route path="/landingpage" element={<Home />} />
+      <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
     </Routes>
