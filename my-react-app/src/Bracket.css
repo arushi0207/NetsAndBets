@@ -1,0 +1,389 @@
+/* Main container styles */
+.bracket-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: #001440;
+  }
+  
+  /* Region title styles */
+  .region-title {
+    text-align: center;
+    color: white;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Layout for the entire bracket */
+  .bracket-layout {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Row styling for regions */
+  .bracket-row {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  /* Container for each region */
+  .region-container {
+    width: 45%;
+  }
+  
+  /* Matchup box styling */
+  .matchup-box {
+    border: 2px solid white;
+    border-radius: 2px;
+    margin-bottom: 2px;
+    cursor: pointer;
+    background-color: orange;
+  }
+  
+  /* Team row styling */
+  .team-row {
+    display: flex;
+    height: 22px;
+    align-items: center;
+    padding: 3px 8px;
+  }
+  
+  /* First team in matchup */
+  .team-a {
+    border-bottom: 3px solid brown;
+  }
+  
+  /* Team seed styling */
+  .team-seed {
+    min-width: 20px;
+    font-weight: bold;
+    margin-right: 4px;
+    font-size: 14px;
+  }
+  
+  /* Team name styling */
+  .team-name {
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  /* Region bracket styling */
+  .bracket-region {
+    display: flex;
+    flex-direction: column;
+    padding: 0 2px;
+  }
+  
+  /* Reversed direction for East & Midwest regions */
+  .bracket-region.reversed .round-titles,
+  .bracket-region.reversed .region-half {
+    flex-direction: row-reverse;
+  }
+  
+  /* Round titles container */
+  .round-titles {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 5px;
+  }
+  
+  /* Individual round title */
+  .round-title {
+    width: 190px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+    color: white;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Spacer for alignment */
+  .spacer {
+    width: 200px;
+  }
+  
+  /* Region half (top/bottom) */
+  .region-half {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+  }
+  
+  /* Round container */
+  .round {
+    position: relative;
+  }
+  
+  /* Round 1 specific styles */
+  .round-1 {
+    width: 200px;
+    flex-shrink: 0;
+  }
+  
+  /* Add padding for reversed layout */
+  .bracket-region.reversed .round-1 {
+    padding-right: 2px;
+    padding-left: 0;
+  }
+  
+  .bracket-region:not(.reversed) .round-1 {
+    padding-right: 0;
+    padding-left: 2px;
+  }
+  
+  /* Round 2 specific styles */
+  .round-2 {
+    position: relative;
+    height: 200px;
+    width: 190px;
+  }
+  
+  /* Add margins for reversed layout */
+  .bracket-region.reversed .round-2,
+  .bracket-region.reversed .sweet-16,
+  .bracket-region.reversed .elite-8 {
+    margin-left: 0;
+    margin-right: 15px;
+  }
+  
+  .bracket-region:not(.reversed) .round-2,
+  .bracket-region:not(.reversed) .sweet-16,
+  .bracket-region:not(.reversed) .elite-8 {
+    margin-left: 15px;
+    margin-right: 0;
+  }
+  
+  /* Sweet 16 specific styles */
+  .sweet-16 {
+    position: relative;
+    height: 200px;
+    width: 190px;
+  }
+  
+  /* Elite 8 specific styles */
+  .elite-8 {
+    position: relative;
+    height: 200px;
+    width: 190px;
+  }
+  
+  /* Bracket box styles */
+  .bracket-box {
+    position: absolute;
+    height: 40px;
+    width: 100%;
+    border: 2px solid orange;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Top bracket box in Round 2 */
+  .round-2 .bracket-box.top {
+    top: 38px;
+  }
+  
+  /* Bottom bracket box in Round 2 */
+  .round-2 .bracket-box.bottom {
+    top: 170px;
+  }
+  
+  /* Sweet 16 bracket box */
+  .sweet-16 .bracket-box {
+    top: 105px;
+  }
+  
+  /* Elite 8 bracket box */
+  .elite-8 .bracket-box.elite {
+    top: 240px;
+  }
+  
+  /* Horizontal line in bracket boxes */
+  .bracket-box::before {
+    content: '';
+    width: 100%;
+    height: 2px;
+    background-color: white;
+    position: absolute;
+    left: 0;
+  }
+  
+  /* Final Four section */
+  .final-four-section {
+    width: 100%;
+    text-align: center;
+    margin: 5px 0;
+    color: white;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Finals title styling */
+  .finals-title {
+    margin: 10px 0;
+  }
+  
+  /* Semifinals container */
+  .semifinals-container {
+    display: flex;
+    justify-content: space-around;
+    margin: 5px 0;
+  }
+  
+  /* Semifinal matchup box */
+  .semifinal-box {
+    border: 2px solid orange;
+    padding: 8px;
+    width: 250px;
+  }
+  
+  /* Championship container */
+  .championship-container {
+    margin: 10px 0;
+  }
+  
+  /* Championship box */
+  .championship-box {
+    border: 2px solid orange;
+    padding: 8px;
+    width: 300px;
+    margin: 0 auto;
+  }
+  
+  /* Matchup popup styles */
+  .matchup-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 950px;
+    width: 90%;
+    background-color: black;
+    color: white;
+    border: 1px solid grey;
+    z-index: 100;
+  }
+  
+  /* Close button */
+  .close-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+  }
+  
+  /* Popup content */
+  .popup-content {
+    padding: 0;
+  }
+  
+  /* Popup header */
+  .popup-header {
+    display: grid;
+    grid-template-columns: 35% 20% 20% 25%;
+    border-bottom: 1px solid grey;
+    font-size: 14px;
+  }
+  
+  /* Header cells */
+  .header-teams,
+  .header-spread,
+  .header-total,
+  .header-ml {
+    padding: 15px;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  .header-teams {
+    text-align: left;
+  }
+  
+  .header-spread,
+  .header-total,
+  .header-ml {
+    border-left: 1px solid grey;
+  }
+  
+  /* Team stats row */
+  .team-stats-row {
+    display: grid;
+    grid-template-columns: 35% 20% 20% 25%;
+    border-bottom: 1px solid grey;
+  }
+  
+  /* Team name cell */
+  .team-name-cell {
+    padding: 20px 15px;
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Team name display */
+  .team-name-display {
+    font-weight: bold;
+    font-size: 18px;
+  }
+  
+  /* Spread cell */
+  .spread-cell,
+  .total-cell,
+  .moneyline-cell {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-left: 1px solid grey;
+  }
+  
+  /* Stat value */
+  .stat-value {
+    font-size: 17px;
+    font-weight: bold;
+  }
+  
+  /* Stat odds */
+  .stat-odds {
+    color: lime;
+    margin-top: 6px;
+    font-size: 14px;
+  }
+  
+  /* Moneyline value */
+  .moneyline-value {
+    color: lime;
+    font-size: 17px;
+    font-weight: bold;
+  }
+  
+  /* Checkout section */
+  .checkout-section {
+    padding: 20px;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  /* Checkout button */
+  .checkout-button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }

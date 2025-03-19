@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import './Bracket.css';
 
 const MarchMadnessBracket = () => {
   // Tournament Data with all four regions
@@ -91,15 +92,34 @@ const MarchMadnessBracket = () => {
     ]
   };
 
+  // Function to read backedn API of all teams, work in progress but successfully reads all the teams
+  useEffect(() => {
+    async function fetchTeams() {
+      try {
+        const response = await fetch("http://localhost:8080/demo/teams");
+        if (!response.ok) {
+          throw new Error("Failed to fetch teams");
+        }
+        const data = await response.json();
+        console.log("Fetched Teams:", data);
+        
+      } catch (error) {
+        console.error("Error fetching teams:", error);
+      }
+    }
+    fetchTeams();
+  }, []);
+    
   // State for tracking which matchup is selected
   const [selectedMatchup, setSelectedMatchup] = useState(null);
 
   // Function to create matchup groups (first round: 1-16, 8-9, etc.)
   const createFirstRoundMatchups = (teams) => {
     const matchups = [];
+
+    // For each pair of teams, it creates a matchup object with and takes 2 teams at a time
     for (let i = 0; i < teams.length; i += 2) {
       matchups.push({
-        id: `${teams[i].seed}-${teams[i+1].seed}`,
         teamA: teams[i],
         teamB: teams[i+1]
       });
@@ -107,576 +127,83 @@ const MarchMadnessBracket = () => {
     return matchups;
   };
 
-  // Handle clicking on a matchup
+  // Manages what happens when a user clicks on a matchup in the March Madness bracket
   const handleMatchupClick = (matchup) => {
     setSelectedMatchup(matchup);
   };
 
   // Create first round matchups for each region
-  const regions = tournamentData.regions.map(region => ({
+  const regions = tournamentData.regions.map(region => ({ 
     ...region,
     firstRound: createFirstRoundMatchups(region.teams)
   }));
 
   // Simplified component for displaying a single matchup
   const MatchupBox = ({ teamA, teamB, onClick }) => (
-    <div 
-      className="matchup-box"
-      onClick={onClick}
-      style={{ 
-        border: '2px solid white', 
-        borderRadius: '2px',
-        marginBottom: '2px',
-        cursor: 'pointer',
-        backgroundColor: 'orange',
-      }}
-    >
-      <div style={{ 
-        borderBottom: '3px solid brown', 
-        padding: '3px 8px',
-        display: 'flex',
-        height: '22px',
-        
-        alignItems: 'center'
-      }}>
-        <span style={{ 
-          minWidth: '20px', 
-          fontWeight: 'bold',
-          marginRight: '4px',
-          fontSize: '14px'
-        }}>{teamA.seed}</span>
-        <span style={{ 
-          fontSize: '14px', 
-          whiteSpace: 'nowrap', 
-          overflow: 'hidden', 
-          textOverflow: 'ellipsis'
-        }}>
-          {teamA.name}
-        </span>
+    <div className="matchup-box" onClick={onClick}>
+      <div className="team-row team-a">
+        <span className="team-seed">{teamA.seed}</span>
+        <span className="team-name">{teamA.name}</span>
       </div>
-      <div style={{ 
-        padding: '3px 8px',
-        display: 'flex',
-        height: '22px',
-        alignItems: 'center'
-      }}>
-        <span style={{ 
-          minWidth: '20px', 
-          fontWeight: 'bold',
-          marginRight: '4px',
-          fontSize: '14px'
-        }}>{teamB.seed}</span>
-        <span style={{ 
-          fontSize: '14px', 
-          whiteSpace: 'nowrap', 
-          overflow: 'hidden', 
-          textOverflow: 'ellipsis'
-        }}>
-          {teamB.name}
-        </span>
+      <div className="team-row team-b">
+        <span className="team-seed">{teamB.seed}</span>
+        <span className="team-name">{teamB.name}</span>
       </div>
     </div>
   );
 
-  // Main component for the entire bracket view
-  const BracketView = () => {
-    return (
-      <div style={{ 
-        display: 'flex', 
-        flexDirection: 'column',
-        width: '100%',
-        backgroundColor: '#001440', // new change
-      }}>
-        
-     {/* Display Selected Matchup Odds */}
-{selectedMatchup && (
-  <div style={{ 
-    position: 'fixed',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    maxWidth: '950px',
-    width: '90%',
-    backgroundColor: '#1c1c1c',
-    color: 'white',
-    border: '1px solid #333',
-    borderRadius: '4px',
-    overflow: 'hidden',
-    zIndex: 100,
-    boxShadow: '0 4px 8px rgba(0,0,0,0.5)'
-  }}>
-    {/* Close Button */}
-    <div 
-      onClick={() => setSelectedMatchup(null)}
-      style={{
-        position: 'absolute',
-        top: '00px',
-        right: '00px',
-        width: '40px',
-        height: '40px',
-        borderRadius: '50%',
-        backgroundColor: '#ff5252',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        cursor: 'pointer',
-        zIndex: 10,
-        fontSize: '20px',
-        fontWeight: 'bold',
-        color: 'white',
-        
-      }}
-    >
-      ×
-    </div>
-    
-    <div style={{ padding: '0' }}>
-      <div style={{ 
-        display: 'grid',
-        gridTemplateColumns: '35% 20% 20% 25%',
-        borderBottom: '1px solid #333',
-        fontSize: '14px'
-      }}>
-        <div style={{ padding: '15px', textAlign: 'left', fontWeight: 'bold' }}>
-          TEAMS
-        </div>
-        <div style={{ padding: '15px', textAlign: 'center', fontWeight: 'bold', borderLeft: '1px solid #333' }}>
-          SPREAD
-        </div>
-        <div style={{ padding: '15px', textAlign: 'center', fontWeight: 'bold', borderLeft: '1px solid #333' }}>
-          TOTAL
-        </div>
-        <div style={{ padding: '15px', textAlign: 'center', fontWeight: 'bold', borderLeft: '1px solid #333' }}>
-          ML
-        </div>
-      </div>
-      
-      {/* Team A Row */}
-      <div style={{ 
-        display: 'grid',
-        gridTemplateColumns: '35% 20% 20% 25%',
-        borderBottom: '1px solid #333'
-      }}>
-        <div style={{ 
-          padding: '20px 15px', 
-          display: 'flex', 
-          alignItems: 'center'
-        }}>
-          <div style={{ fontWeight: 'bold', fontSize: '18px' }}>
-            {selectedMatchup.teamA.name}
-          </div>
-        </div>
-        <div style={{ 
-          padding: '20px', 
-          display: 'flex', 
-          flexDirection: 'column', 
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderLeft: '1px solid #333'
-        }}>
-          <div style={{ fontSize: '17px', fontWeight: 'bold' }}>{Math.abs(selectedMatchup.teamA.spread)}</div>
-          <div style={{ color: '#4caf50', marginTop: '6px', fontSize: '14px' }}>{selectedMatchup.teamA.odds}</div>
-          </div>
-        <div style={{ 
-          padding: '20px', 
-          display: 'flex', 
-          flexDirection: 'column', 
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderLeft: '1px solid #333'
-        }}>
-          <div style={{ fontSize: '17px', fontWeight: 'bold' }}>O {selectedMatchup.teamA.overUnder}</div>
-          <div style={{ color: '#4caf50', marginTop: '6px', fontSize: '14px' }}>-108</div>
-        </div>
-        <div style={{ 
-          padding: '20px', 
-          display: 'flex', 
-          flexDirection: 'column', 
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderLeft: '1px solid #333'
-        }}>
-          <div style={{ 
-            color: '#4caf50', 
-            fontSize: '17px', 
-            fontWeight: 'bold' 
-          }}>
-            {selectedMatchup.teamA.moneyline > 0 ? '+' : ''}{selectedMatchup.teamA.moneyline}
-          </div>
-        </div>
-      </div>
-      
-      {/* Team B Row */}
-      <div style={{ 
-        display: 'grid',
-        gridTemplateColumns: '35% 20% 20% 25%'
-      }}>
-        <div style={{ 
-          padding: '20px 15px', 
-          display: 'flex', 
-          alignItems: 'center'
-        }}>
-          <div style={{ fontWeight: 'bold', fontSize: '18px' }}>
-            {selectedMatchup.teamB.name}
-          </div>
-        </div>
-        <div style={{ 
-          padding: '20px', 
-          display: 'flex', 
-          flexDirection: 'column', 
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderLeft: '1px solid #333'
-        }}>
-          <div style={{ fontSize: '17px', fontWeight: 'bold' }}>{Math.abs(selectedMatchup.teamB.spread)}</div>
-          <div style={{ color: '#4caf50', marginTop: '6px', fontSize: '14px' }}>{selectedMatchup.teamB.odds}</div>
-          </div>
-        <div style={{ 
-          padding: '20px', 
-          display: 'flex', 
-          flexDirection: 'column', 
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderLeft: '1px solid #333'
-        }}>
-          <div style={{ fontSize: '17px', fontWeight: 'bold' }}>U {selectedMatchup.teamB.overUnder}</div>
-          <div style={{ color: '#4caf50', marginTop: '6px', fontSize: '14px' }}>-112</div>
-        </div>
-        <div style={{ 
-          padding: '20px', 
-          display: 'flex', 
-          flexDirection: 'column', 
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderLeft: '1px solid #333'
-        }}>
-          <div style={{ 
-            color: '#4caf50', 
-            fontSize: '17px', 
-            fontWeight: 'bold' 
-          }}>
-            {selectedMatchup.teamB.moneyline > 0 ? '+' : ''}{selectedMatchup.teamB.moneyline}
-          </div>
-        </div>
-      </div>
-      
-      {/* Added padding section */}
-      <div style={{ padding: '20px', display: 'flex', justifyContent: 'flex-end' }}>
-        <button 
-          style={{
-            backgroundColor: '#4caf50',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            padding: '12px 24px',
-            fontSize: '16px',
-            fontWeight: 'bold',
-            cursor: 'pointer',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
-          }}
-          onClick={() => console.log("Checkout clicked")}
-        >
-          CHECKOUT
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-        
-        {/* Main Bracket Layout - Using horizontal arrangement */}
-        <div style={{ 
-          display: 'flex',
-          flexDirection: 'column'
-        }}>
-          {/* Top Section - West & East */}
-          <div style={{ 
-            display: 'flex',
-            justifyContent: 'space-between'
-          }}>
-            {/* West Region */}
-            <div style={{ width: '45%' }}>
-              <h3 style={{ textAlign: 'center', color: "white", fontFamily: "Arial" }}>{regions[0].name} Region</h3>
-              <BracketRegion 
-                region={regions[0]} 
-                onMatchupClick={handleMatchupClick} 
-              />
-            </div>
-            
-            {/* East Region */}
-            <div style={{ width: '45%' }}>
-              <h3 style={{ textAlign: 'center', color: "white", fontFamily: "Arial" }}>{regions[1].name} Region</h3>
-              <BracketRegion 
-                region={regions[1]} 
-                onMatchupClick={handleMatchupClick}
-                reversed={true}
-              />
-            </div>
-          </div>
-          
-          {/* Center Section - Final Four & Championship */}
-          <div style={{ 
-            width: '100%', 
-            textAlign: 'center',
-            margin: '5px 0',
-            color: "white", 
-            fontFamily: "Arial"
-          }}>
-            <h2>FINAL FOUR</h2>
-            
-            <div style={{ 
-              display: 'flex',
-              justifyContent: 'space-around',
-              margin: '5px 0'
-            }}>
-              <div style={{ 
-                border: '2px solid orange',
-                padding: '8px',
-                width: '250px'
-              }}>
-                <p>{regions[0].name} Winner</p>
-                <p>vs</p>
-                <p>{regions[3].name} Winner</p>
-              </div>
-              <div style={{ 
-                border: '2px solid orange',
-                padding: '8px',
-                width: '250px'
-              }}>
-                <p>{regions[1].name} Winner</p>
-                <p>vs</p>
-                <p>{regions[2].name} Winner</p>
-              </div>
-            </div>
-            <div style={{ margin: '10px 0' }}>
-              <h2>NATIONAL CHAMPIONSHIP</h2>
-              
-              <div style={{ 
-                border: '2px solid orange',
-                padding: '8px',
-                width: '300px',
-                margin: '0 auto'
-              }}>
-                <p>Semifinal #1 Winner</p>
-                <p>vs</p>
-                <p>Semifinal #2 Winner</p>
-              </div>
-            </div>
-          </div>
-          
-          {/* Bottom Section - South & Midwest */}
-          <div style={{ 
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginTop: '10px'
-          }}>
-            {/* South Region */}
-            <div style={{ width: '45%' }}>
-              <h3 style={{ textAlign: 'center', color: "white", fontFamily: "Arial" }}>{regions[2].name} Region</h3>
-              <BracketRegion 
-                region={regions[2]} 
-                onMatchupClick={handleMatchupClick} 
-              />
-            </div>
-            
-            {/* Midwest Region */}
-            <div style={{ width: '45%' }}>
-              <h3 style={{ textAlign: 'center', color: "white", fontFamily: "Arial" }}>{regions[3].name} Region</h3>
-              <BracketRegion 
-                region={regions[3]} 
-                onMatchupClick={handleMatchupClick}
-                reversed={true}
-              />
-            </div>
-          </div>
-        </div>
-        
-        {!selectedMatchup && (
-          <div style={{ 
-            textAlign: 'center',
-            margin: '20px 0',
-            color: '#666'
-          }}>
-            Click on any first round matchup to view betting odds
-          </div>
-        )}
-      </div>
-    );
-  };
-
-
-// Component for a single region's bracket
-const BracketRegion = ({ region, onMatchupClick, reversed = false }) => {
+  // Component is responsible for creating the visual layout of a single region's tournament bracket
+  const BracketRegion = ({ region, onMatchupClick, reversed = false }) => {
+     
     // Groups of matchups
     const round1MatchupsTop = region.firstRound.slice(0, 4);
     const round1MatchupsBottom = region.firstRound.slice(4, 8);
     
-    // Layout direction
-    const direction = reversed ? 'row-reverse' : 'row';
-    
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', padding: '0 2px'}}>
-        {/* Round titles */}
-        <div style={{ 
-          display: 'flex',
-          flexDirection: direction,
-          marginBottom: '5px'
-        }}>
-          <div style={{ width: '200px' }}></div>
-          <div style={{ 
-            width: '170px', 
-            textAlign: 'center', 
-            fontWeight: 'bold',
-            fontSize: '14px',
-            color: "white", 
-            fontFamily: "Arial"
-          }}>
-            Round 2
-          </div>
-          <div style={{ 
-            width: '170px', 
-            textAlign: 'center', 
-            fontWeight: 'bold',
-            fontSize: '14px',
-            color: "white", 
-            fontFamily: "Arial"
-          }}>
-            Sweet 16
-          </div>
-          <div style={{ 
-            width: '150px', 
-            textAlign: 'center', 
-            fontWeight: 'bold',
-            fontSize: '14px',
-            color: "white", 
-            fontFamily: "Arial"
-          }}>
-            Elite 8
-          </div>
+      <div className={`bracket-region ${reversed ? 'reversed' : ''}`}>
+        {/* Round titles names in the top section of the bracket*/}
+        <div className="round-titles">
+          <div className="spacer"></div>
+          <div className="round-title">Round 2</div>
+          <div className="round-title">Sweet 16</div>
+          <div className="round-title">Elite 8</div>
         </div>
 
         {/* Top Half of Region */}
-        <div style={{ 
-          display: 'flex',
-          flexDirection: direction,
-          marginBottom: '10px'
-        }}>
+        <div className="region-half top-half">
           {/* First Round */}
-          <div style={{ 
-            width: '200px',
-            flexShrink: 0,
-            paddingRight: reversed ? '2px' : '0', 
-            paddingLeft: reversed ? '0' : '2px'   
-          }}>
+          <div className="round round-1">
             {round1MatchupsTop.map((matchup, idx) => (
               <MatchupBox 
                 key={`${region.name}-top-${idx}`}
                 teamA={matchup.teamA}
                 teamB={matchup.teamB}
-                onClick={() => onMatchupClick(matchup)}
+                onClick={() => onMatchupClick(matchup)} 
               />
             ))}
           </div>
           
           {/* Second Round - Tournament flow */}
-          <div style={{ 
-            position: 'relative',
-            height: '200px',
-            width: '170px',
-            marginLeft: reversed ? '0' : '15px',  
-            marginRight: reversed ? '15px' : '0' 
-          }}>
-            {/* Round 2 box BETWEEN 1/16 and 8/9 matchups */}
-            <div style={{ 
-              position: 'absolute',
-              top: '38px',
-              height: '40px',
-              width: '100%',
-              border: '2px solid orange',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-                <div style={{ width: '100%', height: '2px', backgroundColor: 'white', position: 'absolute', left: 0 }}></div>
-
-            </div>
-            
-            {/* Round 2 box BETWEEN 5/12 and 4/13 matchups */}
-            <div style={{ 
-              position: 'absolute',
-              top: '170px',
-              left: 0,
-              height: '40px',
-              width: '100%',
-              border: '2px solid orange',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              <div style={{ width: '100%', height: '2px', backgroundColor: 'white', position: 'absolute', left: 0 }}></div>
-            </div>
+          <div className="round round-2">
+            <div className="bracket-box top"></div>
+            <div className="bracket-box bottom"></div>
           </div>
           
           {/* Sweet 16 */}
-          <div style={{ 
-            position: 'relative',
-            height: '200px',
-            width: '170px',
-            marginLeft: reversed ? '0' : '15px',  
-            marginRight: reversed ? '15px' : '0' 
-          }}>
-            {/* Sweet 16 box - centered between the two Round 2 boxes */}
-            <div style={{ 
-              position: 'absolute',
-              top: '105px',
-              left: 0,
-              height: '40px',
-              width: '100%',
-              border: '2px solid orange',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              <div style={{ width: '100%', height: '2px', backgroundColor: 'white', position: 'absolute', left: 0 }}></div>
-            </div>
+          <div className="round sweet-16">
+            <div className="bracket-box"></div>
           </div>
           
           {/* Elite 8 */}
-          <div style={{ 
-            position: 'relative',
-            height: '200px',
-            width: '150px',
-            marginLeft: reversed ? '0' : '15px', 
-            marginRight: reversed ? '15px' : '0' 
-          }}>
-            {/* Elite 8 box - at same position as Sweet 16 box */}
-            <div style={{ 
-              position: 'absolute',
-              top: '240px',
-              left: 0,
-              height: '40px',
-              width: '100%',
-              border: '2px solid orange',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              <div style={{ width: '100%', height: '2px', backgroundColor: 'white', position: 'absolute', left: 0 }}></div>
-            </div>
+          <div className="round elite-8">
+            <div className="bracket-box elite"></div>
           </div>
         </div>
         
         {/* Bottom Half of Region */}
-        <div style={{ 
-          display: 'flex',
-          flexDirection: direction
-        }}>
+        <div className="region-half bottom-half">
           {/* First Round */}
-          <div style={{ 
-            width: '200px',
-            flexShrink: 0,
-            paddingRight: reversed ? '2px' : '0', 
-            paddingLeft: reversed ? '0' : '2px'  
-          }}>
+          <div className="round round-1">
             {round1MatchupsBottom.map((matchup, idx) => (
               <MatchupBox 
                 key={`${region.name}-bottom-${idx}`}
@@ -688,65 +215,165 @@ const BracketRegion = ({ region, onMatchupClick, reversed = false }) => {
           </div>
           
           {/* Second Round - Tournament flow */}
-          <div style={{ 
-            position: 'relative',
-            height: '200px',
-            width: '150px',
-            marginLeft: reversed ? '0' : '15px', 
-            marginRight: reversed ? '15px' : '0' 
-          }}>
-            {/* First Round 2 box - Between 6/11 and 3/14 matchups */}
-            <div style={{ 
-              position: 'absolute',
-              top: '35px',
-              left: 0,
-              height: '40px',
-              width: '100%',
-              border: '2px solid orange',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              <div style={{ width: '100%', height: '2px', backgroundColor: 'white', position: 'absolute', left: 0 }}></div>
-            </div>
-            
-            {/* Second Round 2 box - Between 7/10 and 2/15 matchups */}
-            <div style={{ 
-              position: 'absolute',
-              top: '170px',
-              left: 0,
-              height: '40px',
-              width: '100%',
-              border: '2px solid orange',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              <div style={{ width: '100%', height: '2px', backgroundColor: 'white', position: 'absolute', left: 0 }}></div>
-            </div>
+          <div className="round round-2">
+            <div className="bracket-box top"></div>
+            <div className="bracket-box bottom"></div>
           </div>
           
           {/* Sweet 16 */}
-          <div style={{ 
-            position: 'relative',
-            height: '200px',
-            width: '150px',
-            marginLeft: reversed ? '0' : '15px',  
-            marginRight: reversed ? '15px' : '0'  
-          }}>
-            {/* Sweet 16 box - centered between the two Round 2 boxes */}
-            <div style={{ 
-              position: 'absolute',
-              top: '105px',
-              left: 0,
-              height: '40px',
-              width: '100%',
-              border: '2px solid orange',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              <div style={{ width: '100%', height: '2px', backgroundColor: 'white', position: 'absolute', left: 0 }}></div>
+          <div className="round sweet-16">
+            <div className="bracket-box"></div>
+          </div>
+          
+          {/* Elite 8 placeholder - maintains layout consistency but no actual box */}
+          <div className="round elite-8">
+            {/* No box */}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // Main component for the entire bracket view
+  const BracketView = () => {
+    return (
+      <div className="bracket-container">
+        {/* Betting odds popup when a matchup is selected */}
+        {selectedMatchup && (
+          <div className="matchup-popup">
+            {/* Close Button */}
+            <div className="close-button" onClick={() => setSelectedMatchup(null)}>×</div>
+            
+            <div className="popup-content">
+              {/* Header row */}
+              <div className="popup-header">
+                <div className="header-teams">TEAMS</div>
+                <div className="header-spread">SPREAD</div>
+                <div className="header-total">TOTAL</div>
+                <div className="header-ml">ML</div>
+              </div>
+              
+              {/* Team A Row */}
+              <div className="team-stats-row">
+                <div className="team-name-cell">
+                  <div className="team-name-display">{selectedMatchup.teamA.name}</div>
+                </div>
+                <div className="spread-cell">
+                  <div className="stat-value">{selectedMatchup.teamA.spread}</div>
+                  <div className="stat-odds">{selectedMatchup.teamA.odds}</div>
+                </div>
+                <div className="total-cell">
+                  <div className="stat-value">O {selectedMatchup.teamA.overUnder}</div>
+                  <div className="stat-odds">-108</div>
+                </div>
+                <div className="moneyline-cell">
+                  <div className="moneyline-value">
+                    {selectedMatchup.teamA.moneyline > 0 ? '+' : ''}{selectedMatchup.teamA.moneyline}
+                  </div>
+                </div>
+              </div>
+              
+              {/* Team B Row */}
+              <div className="team-stats-row">
+                <div className="team-name-cell">
+                  <div className="team-name-display">{selectedMatchup.teamB.name}</div>
+                </div>
+                <div className="spread-cell">
+                  <div className="stat-value">{Math.abs(selectedMatchup.teamB.spread)}</div>
+                  <div className="stat-odds">{selectedMatchup.teamB.odds}</div>
+                </div>
+                <div className="total-cell">
+                  <div className="stat-value">U {selectedMatchup.teamB.overUnder}</div>
+                  <div className="stat-odds">-112</div>
+                </div>
+                <div className="moneyline-cell">
+                  <div className="moneyline-value">
+                    {selectedMatchup.teamB.moneyline > 0 ? '+' : ''}{selectedMatchup.teamB.moneyline}
+                  </div>
+                </div>
+              </div>
+              
+              {/* Checkout button */}
+              <div className="checkout-section">
+                <button className="checkout-button" onClick={() => console.log("Checkout clicked")}>
+                  CHECKOUT
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {/* Main Bracket Layout */}
+        <div className="bracket-layout">
+          {/* Top Section - West & East */}
+          <div className="bracket-row">
+            {/* West Region */}
+            <div className="region-container">
+              <h3 className="region-title">{regions[0].name} Region</h3>
+              <BracketRegion
+                region={regions[0]}
+                onMatchupClick={handleMatchupClick}
+              />
+            </div>
+            
+            {/* East Region */}
+            <div className="region-container">
+              <h3 className="region-title">{regions[1].name} Region</h3>
+              <BracketRegion 
+                region={regions[1]}
+                onMatchupClick={handleMatchupClick}
+                reversed={true}
+              />
+            </div>
+          </div>
+          
+          {/* Center Section - Final Four & Championship */}
+          <div className="final-four-section">
+            <h2 className="finals-title">FINAL FOUR</h2>
+            
+            <div className="semifinals-container">
+              <div className="semifinal-box">
+                <p>{regions[0].name} Winner</p>
+                <p>vs</p>
+                <p>{regions[3].name} Winner</p>
+              </div>
+              <div className="semifinal-box">
+                <p>{regions[1].name} Winner</p>
+                <p>vs</p>
+                <p>{regions[2].name} Winner</p>
+              </div>
+            </div>
+            
+            <div className="championship-container">
+              <h2 className="finals-title">NATIONAL CHAMPIONSHIP</h2>
+              
+              <div className="championship-box">
+                <p>Semifinal #1 Winner</p>
+                <p>vs</p>
+                <p>Semifinal #2 Winner</p>
+              </div>
+            </div>
+          </div>
+          
+          {/* Bottom Section - South & Midwest */}
+          <div className="bracket-row">
+            {/* South Region */}
+            <div className="region-container">
+              <h3 className="region-title">{regions[2].name} Region</h3>
+              <BracketRegion
+                region={regions[2]}
+                onMatchupClick={handleMatchupClick}
+              />
+            </div>
+            
+            {/* Midwest Region */}
+            <div className="region-container">
+              <h3 className="region-title">{regions[3].name} Region</h3>
+              <BracketRegion 
+                region={regions[3]}
+                onMatchupClick={handleMatchupClick}
+                reversed={true}
+              />
             </div>
           </div>
         </div>
