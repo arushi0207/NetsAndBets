@@ -3,6 +3,9 @@ import './Bracket.css';
 
 const MarchMadnessBracket = () => {
   // Tournament Data with all four regions
+
+
+  /*
   const tournamentData = {
     regions: [
       {
@@ -109,6 +112,79 @@ const MarchMadnessBracket = () => {
     }
     fetchTeams();
   }, []);
+
+  */
+  // State for tournament data
+    const [tournamentData, setTournamentData] = useState({
+      regions: [
+        { name: 'West', teams: [] },
+        { name: 'East', teams: [] },
+        { name: 'South', teams: [] },
+        { name: 'Midwest', teams: [] }
+      ]
+    });
+
+
+    // Fetch teams from the backend API
+    useEffect(() => {
+      async function fetchTeams() {
+        try {
+          const response = await fetch("http://localhost:8080/demo/teams");
+          if (!response.ok) {
+            throw new Error("Failed to fetch teams");
+          }
+          const data = await response.json();
+          console.log("Fetched Teams:", data);
+          
+          // Process the data and update tournament data state
+          const processedData = processTeamData(data);
+          setTournamentData(processedData);
+          
+        } catch (error) {
+          console.error("Error fetching teams:", error);
+          // Keep using default data if fetch fails
+        }
+      }
+      fetchTeams();
+    }, []);
+
+
+    // Function to process team data from the backend
+    const processTeamData = (data) => {
+      // Group teams by region
+      const regionGroups = {
+        'West': [],
+        'East': [],
+        'South': [],
+        'Midwest': []
+      };
+  
+      // Sort teams into regions
+    data.forEach(team => {
+      if (regionGroups[team.region]) {
+        // Add betting info to each team
+        const isFavored = team.seed < 9 || (team.seed % 8 < 4);
+        const teamWithOdds = {
+          ...team,
+          spread: isFavored ? -5.5 : 5.5,
+          moneyline: isFavored ? -240 : 200,
+          overUnder: 140.5,
+          odds: isFavored ? -112 : -108
+        };
+        regionGroups[team.region].push(teamWithOdds);
+      }
+    });
+    
+    return {
+      regions: [
+        { name: 'West', teams: regionGroups['West'] },
+        { name: 'East', teams: regionGroups['East'] },
+        { name: 'South', teams: regionGroups['South'] },
+        { name: 'Midwest', teams: regionGroups['Midwest'] }
+      ]
+    };
+  };
+  
     
   // State for tracking which matchup is selected
   const [selectedMatchup, setSelectedMatchup] = useState(null);
