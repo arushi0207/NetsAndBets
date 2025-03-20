@@ -1,6 +1,10 @@
-# Net Bets Specification Document
+<p align="center" style="font-size: 30px;">
+  <b>Net Bets Specification Document<b>
+</p>
 
-* This is a living document and will need to be updated regularly.
+<!--# Net Bets Specification Document-->
+
+This is a living document and will need to be updated regularly.
 
 <!--Please fill out this document to reflect your team's project. This is a living document and will need to be updated regularly. You may also remove any section to its own document (e.g. a separate standards and conventions document), however you must keep the header and provide a link to that other document under the header.
 * Also, be sure to check out the Wiki for information on how to maintain your team's requirements.-->
@@ -26,6 +30,8 @@ The example sections included in this document are not necessarily all the secti
 <!--A brief description of the customer for this software, both in general (the population who might eventually use such a system) and specifically for this document (the customer(s) who informed this document). Every project will have a customer from the CS506 instructional staff. Requirements should not be derived simply from discussion among team members. Ideally your customer should not only talk to you about requirements but also be excited later in the semester to use the system.-->
 
 An archetypal customer is a student that is an avid fan of college basketball and would like to engage in March Madness predictions with peers on an easy-to-use platform. 
+
+This customer will also have baseline knowledge of sports betting and the March Madness Bracket. 
 
 ### Specification
 
@@ -64,8 +70,8 @@ Backend:
 * Java Spring Boot
 
 Data: 
-* Relational Database
-* Python for data scraping and analytics
+* Relational MySQL Database
+* JavaScript for data scraping for up-to-date data
 
 
 #### Database
@@ -76,15 +82,23 @@ title: Entity Relationships
 ---
 erDiagram
     User 
+    Teams
     Odds 
 
     User {
         int user_id PK
-        string username
-        string password
+        varchar(255) username
+        varchar(255) password
     }
 
-    Lines {
+    Teams {
+        int id PK
+        varchar(255) team_name
+        varchar(255) region
+        int seed
+    }
+
+    Odds {
         int odds_id PK
     }
 
@@ -105,6 +119,29 @@ graph TD;
     Process_Valid_Data --> End([End]);
     Error_Message --> End;
 ```
+
+### How To Run (TODO update)
+
+#### Requirements
+* Java v23
+  * Relevant JDK
+* node v23
+* npm 10.9
+
+#### Start frontend and backend 
+* Backend
+  * `npm start`
+* Frontend
+  * Use IDE or `./mvnw spring-boot:run`
+
+
+### Contributors
+Sohalliya Jain
+Aditya Mehrotra
+Arushi Taneja
+Revanth Madineni
+Tyler Grim
+Kevin Yuan
 
 ### Standards & Conventions
 
