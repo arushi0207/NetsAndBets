@@ -131,6 +131,7 @@ graph TD;
 #### Start frontend and backend 
 * Backend
   * `npm start`
+  * may have to install additional packages such as lucide-react and create-react-app ex: `npm install lucide-react`
 * Frontend
   * Use IDE or `./mvnw spring-boot:run`
 
