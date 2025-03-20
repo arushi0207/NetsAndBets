@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Bracket.css';
 
 const MarchMadnessBracket = () => {
-  // Tournament Data with all four regions
-
-
+  // Tournament Data with all four regions- OLD implementation
   /*
   const tournamentData = {
     regions: [
@@ -94,26 +92,10 @@ const MarchMadnessBracket = () => {
       }
     ]
   };
-
-  // Function to read backedn API of all teams, work in progress but successfully reads all the teams
-  useEffect(() => {
-    async function fetchTeams() {
-      try {
-        const response = await fetch("http://localhost:8080/demo/teams");
-        if (!response.ok) {
-          throw new Error("Failed to fetch teams");
-        }
-        const data = await response.json();
-        console.log("Fetched Teams:", data);
-        
-      } catch (error) {
-        console.error("Error fetching teams:", error);
-      }
-    }
-    fetchTeams();
-  }, []);
-
   */
+
+
+
   // State for tournament data
     const [tournamentData, setTournamentData] = useState({
       regions: [
@@ -160,19 +142,18 @@ const MarchMadnessBracket = () => {
       };
   
       // Sort teams into regions
-    data.forEach(team => {
-      if (regionGroups[team.region]) {
-        // Add betting info to each team
-        const isFavored = team.seed < 9 || (team.seed % 8 < 4);
-        const teamWithOdds = {
-          ...team,
-          spread: isFavored ? -5.5 : 5.5,
-          moneyline: isFavored ? -240 : 200,
-          overUnder: 140.5,
-          odds: isFavored ? -112 : -108
-        };
-        regionGroups[team.region].push(teamWithOdds);
-      }
+      data.forEach(team => {
+        if (regionGroups[team.region]) {
+          // Add betting info to each team - same for everyone
+          const teamWithOdds = {
+            ...team,
+            spread: -5.5,
+            moneyline: -240,
+            overUnder: 140.5,
+            odds: -112
+          };
+          regionGroups[team.region].push(teamWithOdds);
+        }
     });
     
     return {
