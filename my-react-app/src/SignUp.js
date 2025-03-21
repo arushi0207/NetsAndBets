@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {CircleDollarSign as Money} from 'lucide-react';
+import { AuthContext } from './Context/AuthContext';
 
 const Signup = () => {
 
-  //Stores the username, password and confirm password as a form to dynamically track as the user inputs data
-  const [formData, setFormData] = useState({ username: '', password: '', confirmPassword: '' });
+  //Stores the user form data
+  const [formData, setFormData] = useState({ 
+    name: '',
+    username: '', 
+    password: '', 
+    confirmPassword: '',
+    amount: 1000 // Default starting amount
+  });
 
   //Track password strength to provide the user with feedback on security
   const [passwordStrength, setPasswordStrength] = useState('');
@@ -46,7 +53,6 @@ const Signup = () => {
 
   //Determines password strength and assigns keywords and colors accordingly
   const checkPasswordStrength = (password) => {
-
     // Default strength is set to "Weak" with red color
     let strength = {
       text: "Weak",
@@ -82,19 +88,26 @@ const Signup = () => {
     return strength;
   };
 
+  const { login } = useContext(AuthContext);
+
   //Handles validation checks when the user submits the form
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    //Removes the whitespaces within the username field to ensure that the field is not empty
+    //Validate form data
+    if (formData.name.trim() === "") {
+      alert("Name can't be empty! Please enter your name.");
+      return;
+    }
+
     if (formData.username.trim() === "") {
-      alert("Username can't be empty! Please enter a username :}")
+      alert("Username can't be empty! Please enter a username.");
       return;
     }
 
     //Prevents submission if the passwords do not match
     if (!passwordMatch) {
-      alert("Your passwords do not match! Please check again :)");
+      alert("Your passwords do not match! Please check again.");
       return;
     }
 
@@ -107,32 +120,37 @@ const Signup = () => {
     //Sets the state as true to allow successful submission and disabling of the signup button to prevent further submissions
     setIsSigningUp(true);
 
-    //Sends a POST request to the backend to register a new user.
-    //The request includes the username and password from the form input.
     try {
-      const response = await fetch("http://localhost:8080/demo/signup", {
+      // Send request to create user endpoint
+      const response = await fetch("http://localhost:8080/api/user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          name: formData.name,
           username: formData.username,
           password: formData.password,
+          amount: formData.amount
         }),
       });
 
-      //Waiting for a response from the backend
-      const data = await response.text();
-      console.log("Response from backend:", data);
-
-      //Alerting the user with the message received from backend
-      alert(data);
-
+      const data = await response.json();
+      
       if (response.ok) {
+        // Auto-login the user after successful registration
+        login({
+          username: formData.username,
+          name: formData.name,
+          amount: formData.amount
+        });
 
-        // Store username in local storage
+        alert("Account created successfully!");
+        
+        // Store username in local storage for auto-fill on login page
         localStorage.setItem("signupUsername", formData.username);
         
-        // Redirect to login page
-        navigate("/login");
+        navigate("/");
+      } else {
+        alert(data || "Failed to create account. Please try again.");
       }
     } catch (error) {
       console.error("Error signing up:", error);
@@ -142,11 +160,8 @@ const Signup = () => {
     }
   };
 
-
-// Styling for the signup page
-
+  // Return UI
   return (
-    // Background image for the signup page
     <div 
       style={{ 
         backgroundImage: `url('https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=2070')`, 
@@ -208,6 +223,30 @@ const Signup = () => {
           </div>
 
           <form onSubmit={handleSubmit} style={{ marginTop: '26px', marginRight:"20px", width: '100%' }}>
+            {/* Name field - NEW */}
+            <div style={{ marginBottom: '16px' }}>
+              <label htmlFor="name" style={{ color: 'white', fontWeight: '700', fontFamily: "Arial", marginBottom: '6px', display: 'block' }}>
+                Full Name
+              </label>
+              <input
+                id="name"
+                name="name"
+                placeholder="Enter your full name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                style={{
+                  backgroundColor: 'rgba(22, 28, 39, 0.8)',
+                  fontFamily: "Arial",
+                  color: 'white',
+                  padding: '12px',
+                  borderRadius: '10px',
+                  width: '100%',
+                  border: '1px solid rgb(211, 87, 9)',
+                }}
+              />
+            </div>
+
             <div style={{ marginBottom: '16px' }}>
               <label htmlFor="username" style={{ color: 'white', fontWeight: '700', fontFamily: "Arial", marginBottom: '6px', display: 'block' }}>
                 Username
@@ -311,6 +350,31 @@ const Signup = () => {
               {formData.confirmPassword && !passwordMatch && (
                 <p style={{ color: 'red', fontFamily: "Arial", fontSize: '16px', marginTop: '6px' }}>Passwords do not match</p>
               )}
+            </div>
+
+            {/* Initial amount */}
+            <div style={{ marginBottom: '16px' }}>
+              <label htmlFor="amount" style={{ color: 'white', fontWeight: '700', fontFamily: "Arial", marginBottom: '6px', display: 'block' }}>
+                Initial Balance ($)
+              </label>
+              <input
+                id="amount"
+                name="amount"
+                type="number"
+                placeholder="Starting balance"
+                value={formData.amount}
+                onChange={handleChange}
+                required
+                style={{
+                  backgroundColor: 'rgba(22, 28, 39, 0.8)',
+                  fontFamily: "Arial",
+                  color: 'white',
+                  padding: '12px',
+                  borderRadius: '10px',
+                  width: '100%',
+                  border: '1px solid rgb(211, 87, 9)',
+                }}
+              />
             </div>
 
             <button 
