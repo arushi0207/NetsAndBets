@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {CircleDollarSign as Money} from 'lucide-react';
+import { AuthContext } from './Context/AuthContext';
 
 const Login = () => {
+  const { login } = useContext(AuthContext);
 
-    //Stores the username and password as a form to dynamically track as the user inputs data
+  //Stores the username and password as a form to dynamically track as the user inputs data
   const [formData, setFormData] = useState({ username: '', password: '' });
 
   //Toggle visibility of password
@@ -53,24 +55,35 @@ const Login = () => {
     //Sends a POST request to the backend to login.
     //The request includes the username and password from the form input.
     try {
-      const response = await fetch("http://localhost:8080/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.text();
-
-      if (response.ok) {
-        alert("Login successful!");
-        navigate("/dashboard"); // Redirect after successful login
-      } else {
-        alert(data); // Show error message from backend
+      // First, check if the user exists and get their information
+      const userResponse = await fetch(`http://localhost:8080/api/user/${formData.username}`);
+      
+      if (!userResponse.ok) {
+        alert("User not found. Please check your username.");
+        setIsLoggingIn(false);
+        return;
       }
+      
+      const userData = await userResponse.json();
+      
+      // Verify password
+      if (userData.password !== formData.password) {
+        alert("Incorrect password. Please try again.");
+        setIsLoggingIn(false);
+        return;
+      }
+      
+      // Login successful
+      alert("Login successful!");
+      
+      // Call login function from context to update app-wide state
+      login(userData);
+      
+      // Redirect to home page
+      navigate("/");
     } catch (error) {
+      console.error("Error logging in:", error);
       alert("Login failed! Please try again.");
-      console.error("Login error:", error);
-    } finally {
       setIsLoggingIn(false);
     }
   };

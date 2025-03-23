@@ -1,7 +1,8 @@
-import React from "react";
-import { Link } from 'react-router-dom';
-import { CircleDollarSign, Calendar, Trophy } from "lucide-react";
+import React, { useContext } from "react";
+import { Link, useNavigate } from 'react-router-dom';
+import { CircleDollarSign, Calendar, Trophy, LogOut, User } from "lucide-react";
 import MarchMadnessBracket from './Bracket'; 
+import { AuthContext } from './Context/AuthContext';
 
 // This removes default padding and margins from the HTML and body elements
 const globalStyles = `
@@ -13,6 +14,14 @@ const globalStyles = `
 `;
 
 export default function Home() {
+  const { isLoggedIn, user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+  
+  const handleLogout = () => {
+    logout();
+    alert("You have been logged out successfully!");
+  };
+
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: globalStyles }} />
@@ -46,35 +55,66 @@ export default function Home() {
               <span style={{ fontWeight: "bold", fontFamily: "Arial", fontSize: "1.5rem", color: "white" }}>Nets and Bets</span>
             </div>
 
-            {/* Nav Links */}
+            {/* Conditional Nav Links */}
             <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <Link to="/signup">
-                <button style={{ 
-                  backgroundColor: "#f97316", 
-                  color: "white", 
-                  padding: "0.5rem 1rem", 
-                  borderRadius: "0.3rem",
-                  border: "none",
-                }}
-                onMouseOver={(e) => e.target.style.backgroundColor = "#BE5504"}
-                onMouseOut={(e) => e.target.style.backgroundColor = "#ED7014"}>
-                  Sign Up
-                </button>
-              </Link>
-              <Link to="/login">
-                <button style={{ 
-                  backgroundColor: "#ED7014",
-                  color: "white", 
-                  padding: "0.5rem 1rem", 
-                  borderRadius: "0.3rem",
-                  border: "none",
-                }}
-                onMouseOver={(e) => e.target.style.backgroundColor = "#BE5504"}
-                onMouseOut={(e) => e.target.style.backgroundColor = "#ED7014"}
-                >
-                  Log In
-                </button>
-              </Link>
+              {isLoggedIn ? (
+                <>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.8rem", marginRight: "1rem" }}>
+                    <User style={{ height: "1.2rem", width: "1.2rem", color: "white" }} />
+                    <span style={{ color: "white", fontFamily: "Arial" }}>
+                      {user?.name || user?.username} - ${user?.amount}
+                    </span>
+                  </div>
+                  <button 
+                    onClick={handleLogout}
+                    style={{ 
+                      backgroundColor: "#f97316", 
+                      color: "white", 
+                      padding: "0.5rem 1rem", 
+                      borderRadius: "0.3rem",
+                      border: "none",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.3rem"
+                    }}
+                    onMouseOver={(e) => e.target.style.backgroundColor = "#BE5504"}
+                    onMouseOut={(e) => e.target.style.backgroundColor = "#ED7014"}
+                  >
+                    <LogOut style={{ height: "1rem", width: "1rem" }} />
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link to="/signup">
+                    <button style={{ 
+                      backgroundColor: "#f97316", 
+                      color: "white", 
+                      padding: "0.5rem 1rem", 
+                      borderRadius: "0.3rem",
+                      border: "none",
+                    }}
+                    onMouseOver={(e) => e.target.style.backgroundColor = "#BE5504"}
+                    onMouseOut={(e) => e.target.style.backgroundColor = "#ED7014"}>
+                      Sign Up
+                    </button>
+                  </Link>
+                  <Link to="/login">
+                    <button style={{ 
+                      backgroundColor: "#ED7014",
+                      color: "white", 
+                      padding: "0.5rem 1rem", 
+                      borderRadius: "0.3rem",
+                      border: "none",
+                    }}
+                    onMouseOver={(e) => e.target.style.backgroundColor = "#BE5504"}
+                    onMouseOut={(e) => e.target.style.backgroundColor = "#ED7014"}
+                    >
+                      Log In
+                    </button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </nav>
