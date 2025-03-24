@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,12 +16,29 @@ import jakarta.persistence.Id;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id; // User's uniquely-identifying id in the Users table
 
+    @Column(name = "name", nullable = false)
+    private String name; // User's full name
+
+    @Column(name = "username", nullable = false)
     private String username; // User-chosen username
 
+    @Column(name = "password", nullable = false)
     private String password; // User-chosen password
+
+    @Column(name = "amount", nullable = false)
+    private double amount; // Initial money that the user starts with
+
+    public User() {}
+
+    public User(String name, String username, String password, double amount) {
+        this.name = name;
+        this.username = username;
+        this.password = password;
+        this.amount = amount;
+    }
 
     /**
      * Getter method for the id field
@@ -81,4 +99,20 @@ public class User {
         this.password = password;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+  
 }

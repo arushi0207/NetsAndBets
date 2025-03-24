@@ -122,7 +122,7 @@ const Signup = () => {
 
     try {
       // Send request to create user endpoint
-      const response = await fetch("http://localhost:8080/api/user", {
+      const response = await fetch("http://localhost:8080/demo/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -150,7 +150,7 @@ const Signup = () => {
         
         navigate("/");
       } else {
-        alert(data || "Failed to create account. Please try again.");
+        alert(data.message || "Failed to create account. Please try again.");
       }
     } catch (error) {
       console.error("Error signing up:", error);

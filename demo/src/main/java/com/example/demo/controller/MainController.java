@@ -6,6 +6,7 @@ import com.example.demo.repository.MarchMadnessTeamRepository;
 import com.example.demo.repository.UserRepository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,7 +74,7 @@ public class MainController {
      * @return A ResponseEntity indicating success or failure while signing up.
      */
     @PostMapping(path = "/signup")
-    public ResponseEntity<String> signUpUser(@RequestBody User user) {
+    public ResponseEntity<?> signUpUser(@RequestBody User user) {
 
         String username = user.getUsername();
         String password = user.getPassword();
@@ -81,7 +82,7 @@ public class MainController {
         // Check if the username is already taken
         Optional<User> existingUser = userRepository.findByUsername(username);
         if (existingUser.isPresent()) {
-            return ResponseEntity.badRequest().body("Error: Username is already taken!");
+            return ResponseEntity.badRequest().body(Map.of("message", "Error: Username is already taken!"));
         }
 
         // Encode the password before saving it in the database
@@ -90,7 +91,7 @@ public class MainController {
 
         // Save the user to the database
         userRepository.save(user);
-        return ResponseEntity.ok("User signed up successfully!");
+        return ResponseEntity.ok(Map.of("message", "User signed up successfully!"));
     }
     /*
      * Finds and returns an iterable of all users and user information stored in the MySQL Database
