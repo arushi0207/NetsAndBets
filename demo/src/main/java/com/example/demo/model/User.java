@@ -31,6 +31,7 @@ public class User {
     @Column(name = "amount", nullable = false)
     private double amount; // Initial money that the user starts with
 
+    // Default constructor
     public User() {}
 
     public User(String name, String username, String password, double amount) {
@@ -99,18 +100,39 @@ public class User {
         this.password = password;
     }
 
+    /**
+     * Getter method for the name field
+     *
+     * @return the user's name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Changes the user's name to the specified string.
+     *
+     * @param name - the user's new string password
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Getter method for the amount field
+     *
+     * @return the user's initial amount
+     */
     public double getAmount() {
         return amount;
     }
 
+    /**
+     * Changes the user's amount to the specified string. Use this if the user 
+     * updates their balance
+     *
+     * @param amount - the user's new string password
+     */
     public void setAmount(double amount) {
         this.amount = amount;
     }
