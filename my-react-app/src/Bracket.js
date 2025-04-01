@@ -165,7 +165,78 @@ const MarchMadnessBracket = () => {
       ]
     };
   };
+
+// Don't forget to add this in your component
+// Reset selected bet when opening a new matchup or closing the popup
+// In handleMatchupClick:
+const handleMatchupClick = (matchup) => {
+  setSelectedMatchup(matchup);
+  setSelectedBet(null);
+};
+
+// And in the close button handler:
+<div className="close-button" onClick={() => {
+  setSelectedMatchup(null);
+  setSelectedBet(null);
+}}>×</div>
+
+  /*
+    New code
+  */
   
+  // Add this state to your component
+const [selectedBet, setSelectedBet] = useState(null);
+
+// Add this handler function
+const handleBetClick = (betType, team, value) => {
+  // If clicking the same bet button, toggle it off
+  if (selectedBet && 
+      selectedBet.betType === betType && 
+      selectedBet.team === team && 
+      selectedBet.value === value) {
+    setSelectedBet(null);
+  } else {
+    // Otherwise, set the new bet selection
+    setSelectedBet({
+      betType,
+      team,
+      value
+    });
+  }
+};
+
+// Create a helper function to determine if a button is selected
+const isBetSelected = (betType, team, value) => {
+  return selectedBet && 
+         selectedBet.betType === betType && 
+         selectedBet.team === team && 
+         selectedBet.value === value;
+};
+
+// Create a helper function to determine if buttons should be disabled
+const shouldDisableBet = (betType, team, value) => {
+  return selectedBet && 
+         !isBetSelected(betType, team, value);
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
   // State for tracking which matchup is selected
   const [selectedMatchup, setSelectedMatchup] = useState(null);
@@ -184,10 +255,7 @@ const MarchMadnessBracket = () => {
     return matchups;
   };
 
-  // Manages what happens when a user clicks on a matchup in the March Madness bracket
-  const handleMatchupClick = (matchup) => {
-    setSelectedMatchup(matchup);
-  };
+
 
   // Create first round matchups for each region
   const regions = tournamentData.regions.map(region => ({ 
@@ -291,6 +359,8 @@ const MarchMadnessBracket = () => {
     );
   };
 
+  
+
   // Main component for the entire bracket view
   const BracketView = () => {
     return (
@@ -316,37 +386,73 @@ const MarchMadnessBracket = () => {
                   <div className="team-name-display">{selectedMatchup.teamA.name}</div>
                 </div>
                 <div className="spread-cell">
-                  <div className="stat-value">{selectedMatchup.teamA.spread}</div>
-                  <div className="stat-odds">{selectedMatchup.teamA.odds}</div>
+                  <button 
+                    className={`bet-button ${isBetSelected('spread', 'A', selectedMatchup.teamA.spread) ? 'selected' : ''}`}
+                    disabled={shouldDisableBet('spread', 'A', selectedMatchup.teamA.spread)}
+                    onClick={() => handleBetClick('spread', 'A', selectedMatchup.teamA.spread)}
+                  >
+                    <div className="stat-value">{selectedMatchup.teamA.spread}</div>
+                    <div className="stat-odds">{selectedMatchup.teamA.odds}</div>
+                  </button>
                 </div>
                 <div className="total-cell">
-                  <div className="stat-value">O {selectedMatchup.teamA.overUnder}</div>
-                  <div className="stat-odds">-108</div>
+                  <button 
+                    className={`bet-button ${isBetSelected('total', 'A', 'O') ? 'selected' : ''}`}
+                    disabled={shouldDisableBet('total', 'A', 'O')}
+                    onClick={() => handleBetClick('total', 'A', 'O')}
+                  >
+                    <div className="stat-value">O {selectedMatchup.teamA.overUnder}</div>
+                    <div className="stat-odds">-108</div>
+                  </button>
                 </div>
                 <div className="moneyline-cell">
-                  <div className="moneyline-value">
-                    {selectedMatchup.teamA.moneyline > 0 ? '+' : ''}{selectedMatchup.teamA.moneyline}
-                  </div>
+                  <button 
+                    className={`bet-button ${isBetSelected('moneyline', 'A', selectedMatchup.teamA.moneyline) ? 'selected' : ''}`}
+                    disabled={shouldDisableBet('moneyline', 'A', selectedMatchup.teamA.moneyline)}
+                    onClick={() => handleBetClick('moneyline', 'A', selectedMatchup.teamA.moneyline)}
+                  >
+                    <div className="moneyline-value">
+                      {selectedMatchup.teamA.moneyline > 0 ? '+' : ''}{selectedMatchup.teamA.moneyline}
+                    </div>
+                  </button>
                 </div>
               </div>
-              
-              {/* Team B Row */}
+
+              {/* Team B */}
               <div className="team-stats-row">
                 <div className="team-name-cell">
                   <div className="team-name-display">{selectedMatchup.teamB.name}</div>
                 </div>
                 <div className="spread-cell">
-                  <div className="stat-value">{Math.abs(selectedMatchup.teamB.spread)}</div>
-                  <div className="stat-odds">{selectedMatchup.teamB.odds}</div>
+                  <button 
+                    className={`bet-button ${isBetSelected('spread', 'B', selectedMatchup.teamB.spread) ? 'selected' : ''}`}
+                    disabled={shouldDisableBet('spread', 'B', selectedMatchup.teamB.spread)}
+                    onClick={() => handleBetClick('spread', 'B', selectedMatchup.teamB.spread)}
+                  >
+                    <div className="stat-value">{Math.abs(selectedMatchup.teamB.spread)}</div>
+                    <div className="stat-odds">{selectedMatchup.teamB.odds}</div>
+                  </button>
                 </div>
                 <div className="total-cell">
-                  <div className="stat-value">U {selectedMatchup.teamB.overUnder}</div>
-                  <div className="stat-odds">-112</div>
+                  <button 
+                    className={`bet-button ${isBetSelected('total', 'B', 'U') ? 'selected' : ''}`}
+                    disabled={shouldDisableBet('total', 'B', 'U')}
+                    onClick={() => handleBetClick('total', 'B', 'U')}
+                  >
+                    <div className="stat-value">U {selectedMatchup.teamB.overUnder}</div>
+                    <div className="stat-odds">-112</div>
+                  </button>
                 </div>
                 <div className="moneyline-cell">
-                  <div className="moneyline-value">
-                    {selectedMatchup.teamB.moneyline > 0 ? '+' : ''}{selectedMatchup.teamB.moneyline}
-                  </div>
+                  <button 
+                    className={`bet-button ${isBetSelected('moneyline', 'B', selectedMatchup.teamB.moneyline) ? 'selected' : ''}`}
+                    disabled={shouldDisableBet('moneyline', 'B', selectedMatchup.teamB.moneyline)}
+                    onClick={() => handleBetClick('moneyline', 'B', selectedMatchup.teamB.moneyline)}
+                  >
+                    <div className="moneyline-value">
+                      {selectedMatchup.teamB.moneyline > 0 ? '+' : ''}{selectedMatchup.teamB.moneyline}
+                    </div>
+                  </button>
                 </div>
               </div>
               
@@ -437,6 +543,8 @@ const MarchMadnessBracket = () => {
       </div>
     );
   };
+
+  
 
   return <BracketView />;
 };

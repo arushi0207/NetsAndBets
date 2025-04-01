@@ -387,3 +387,38 @@
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
   }
+
+  .bet-button {
+    width: 100%;
+    padding: 5px;
+    background: none;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .bet-button:hover:not(:disabled) {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .bet-button.selected {
+    border-color: #4CAF50;
+    background-color: rgba(76, 175, 80, 0.2);
+    box-shadow: 0 0 5px #4CAF50;
+  }
+  
+  .bet-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .bet-button .stat-value,
+  .bet-button .stat-odds,
+  .bet-button .moneyline-value {
+    pointer-events: none;
+  }
