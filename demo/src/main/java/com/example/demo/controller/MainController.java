@@ -93,6 +93,37 @@ public class MainController {
         userRepository.save(user);
         return ResponseEntity.ok(Map.of("message", "User signed up successfully!"));
     }
+
+    /**
+     * Handles user login by verifying the username and password from the database.
+     * 
+     * This endpoint allows a new user to create an account by providing a username and password.
+     * The password is securely hashed before being stored in the database. If the username 
+     * is already taken, an error message is returned.
+     * 
+     * @param loginRequest The user object containing the username and password in the login form.
+     * @return A ResponseEntity indicating success or failure while logging up.
+     */
+    @PostMapping(path = "/login")
+    public ResponseEntity<?> loginUser(@RequestBody User loginRequest) {
+
+        // Find the username in the database
+        Optional<User> user = userRepository.findByUsername(loginRequest.getUsername());
+
+        // If the user is not found then return an error
+        if (user.isEmpty()) {
+            return ResponseEntity.status(404).body("User not found.");
+        }
+
+        // If the user's password does not match then return an error
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.get().getPassword())) {
+            return ResponseEntity.status(401).body("Incorrect password.");
+        }
+
+        // Return successful login
+        return ResponseEntity.ok(user);
+    }
+    
     /*
      * Finds and returns an iterable of all users and user information stored in the MySQL Database
      *

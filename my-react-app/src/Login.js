@@ -57,22 +57,17 @@ const Login = () => {
     //The request includes the username and password from the form input.
     try {
       // First, check if the user exists and get their information
-      const userResponse = await fetch(`http://localhost:8080/api/user/${formData.username}`);
+      const userResponse = await fetch(`http://localhost:8080/demo/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: formData.username, password: formData.password })
+      });
       
       if (!userResponse.ok) {
-        alert("User not found. Please check your username.");
-        setIsLoggingIn(false);
-        return;
+        throw new Error(await userResponse.text());
       }
       
       const userData = await userResponse.json();
-      
-      // Verify password
-      if (userData.password !== formData.password) {
-        alert("Incorrect password. Please try again.");
-        setIsLoggingIn(false);
-        return;
-      }
       
       // Login successful
       alert("Login successful!");
