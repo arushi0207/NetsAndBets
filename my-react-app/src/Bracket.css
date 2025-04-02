@@ -387,3 +387,34 @@
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
   }
+
+  /* bet hover button */
+  .bet-button {
+    width: 100%;
+    padding: 5px;
+    color: white;
+    background-color: rgb(63, 57, 61); 
+    border: 2px solid #555555;  
+    border-radius: 4px;
+    cursor: pointer;
+    
+  }
+  
+  /* bet selected button */
+  .bet-button.selected {
+    background-color: rgb(116, 69, 233);
+  }
+  
+  /* disabled bet button */
+  .bet-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* disbaled checkout */
+  .checkout-button:disabled {
+    background-color: #24b03c;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+ 
