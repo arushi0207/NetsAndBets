@@ -36,7 +36,7 @@
     border-radius: 2px;
     margin-bottom: 2px;
     cursor: pointer;
-    background-color: orange;
+    background-color: #f96c07f5;
   }
   
   /* Team row styling */
@@ -173,7 +173,7 @@
     position: absolute;
     height: 40px;
     width: 100%;
-    border: 2px solid orange;
+    border: 2px solid #f96c07f5;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -221,6 +221,7 @@
   /* Finals title styling */
   .finals-title {
     margin: 10px 0;
+    margin-top: 30px;
   }
   
   /* Semifinals container */
@@ -232,7 +233,7 @@
   
   /* Semifinal matchup box */
   .semifinal-box {
-    border: 2px solid orange;
+    border: 2px solid #f96c07f5;
     padding: 8px;
     width: 250px;
   }
@@ -244,7 +245,7 @@
   
   /* Championship box */
   .championship-box {
-    border: 2px solid orange;
+    border: 2px solid #f96c07f5;
     padding: 8px;
     width: 300px;
     margin: 0 auto;
@@ -386,4 +387,25 @@
     font-weight: bold;
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+  
+  .bracket-view {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .bracket-view button {
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: rgb(180, 161, 161);
+  }
+  
+  .bracket-view button.active {
+    background-color: #ff6a00;
+    color: white;
+    border-color: #ff6a00;
   }

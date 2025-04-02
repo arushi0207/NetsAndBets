@@ -95,6 +95,7 @@ const MarchMadnessBracket = () => {
   */
 
 
+  const [active, setActive] = useState('WestEast');
 
   // State for tournament data
     const [tournamentData, setTournamentData] = useState({
@@ -292,10 +293,117 @@ const MarchMadnessBracket = () => {
   };
 
   // Main component for the entire bracket view
+
   const BracketView = () => {
+    const renderActive = () => {
+      switch(active) {
+        case 'WestEast':
+          return (
+            <div className="bracket-row">
+              {/* West Region */}
+              <div className="region-container">
+                <h3 className="region-title">{regions[0].name} Region</h3>
+                <BracketRegion
+                  region={regions[0]}
+                  onMatchupClick={handleMatchupClick}
+                />
+              </div>
+              
+              {/* East Region */}
+              <div className="region-container">
+                <h3 className="region-title">{regions[1].name} Region</h3>
+                <BracketRegion 
+                  region={regions[1]}
+                  onMatchupClick={handleMatchupClick}
+                  reversed={true}
+                />
+              </div>
+            </div>
+          );
+        
+        case 'SouthMidwest':
+          return (
+            <div className="bracket-row">
+              {/* South Region */}
+              <div className="region-container">
+                <h3 className="region-title">{regions[2].name} Region</h3>
+                <BracketRegion
+                  region={regions[2]}
+                  onMatchupClick={handleMatchupClick}
+                />
+              </div>
+              
+              {/* Midwest Region */}
+              <div className="region-container">
+                <h3 className="region-title">{regions[3].name} Region</h3>
+                <BracketRegion 
+                  region={regions[3]}
+                  onMatchupClick={handleMatchupClick}
+                  reversed={true}
+                />
+              </div>
+            </div>
+          );
+        
+        case 'FinalFour':
+          return (
+            <div className="final-four-section">
+              <h2 className="finals-title">FINAL FOUR</h2>
+              
+              <div className="semifinals-container">
+                <div className="semifinal-box">
+                  <p>{regions[0].name} Winner</p>
+                  <p>vs</p>
+                  <p>{regions[3].name} Winner</p>
+                </div>
+                <div className="semifinal-box">
+                  <p>{regions[1].name} Winner</p>
+                  <p>vs</p>
+                  <p>{regions[2].name} Winner</p>
+                </div>
+              </div>
+              
+              <div className="championship-container">
+                <h2 className="finals-title">NATIONAL CHAMPIONSHIP</h2>
+                
+                <div className="championship-box">
+                  <p>Semifinal #1 Winner</p>
+                  <p>vs</p>
+                  <p>Semifinal #2 Winner</p>
+                </div>
+              </div>
+            </div>
+          );
+        default:
+          return null;
+      }
+    };
+
     return (
       <div className="bracket-container">
-        {/* Betting odds popup when a matchup is selected */}
+        {/* View selection buttons */}
+        <div className="bracket-view">
+          <button 
+            onClick={() => setActive('WestEast')}
+            className={active === 'WestEast' ? 'active' : ''}
+          >
+            West & East Regions
+          </button>
+          <button 
+            onClick={() => setActive('SouthMidwest')}
+            className={active === 'SouthMidwest' ? 'active' : ''}
+          >
+            South & Midwest Regions
+          </button>
+          <button 
+            onClick={() => setActive('FinalFour')}
+            className={active === 'FinalFour' ? 'active' : ''}
+          >
+            Final Four & Championship
+          </button>
+        </div>
+
+        {/* Betting odds popup */}
         {selectedMatchup && (
           <div className="matchup-popup">
             {/* Close Button */}
@@ -362,77 +470,7 @@ const MarchMadnessBracket = () => {
         
         {/* Main Bracket Layout */}
         <div className="bracket-layout">
-          {/* Top Section - West & East */}
-          <div className="bracket-row">
-            {/* West Region */}
-            <div className="region-container">
-              <h3 className="region-title">{regions[0].name} Region</h3>
-              <BracketRegion
-                region={regions[0]}
-                onMatchupClick={handleMatchupClick}
-              />
-            </div>
-            
-            {/* East Region */}
-            <div className="region-container">
-              <h3 className="region-title">{regions[1].name} Region</h3>
-              <BracketRegion 
-                region={regions[1]}
-                onMatchupClick={handleMatchupClick}
-                reversed={true}
-              />
-            </div>
-          </div>
-          
-          {/* Center Section - Final Four & Championship */}
-          <div className="final-four-section">
-            <h2 className="finals-title">FINAL FOUR</h2>
-            
-            <div className="semifinals-container">
-              <div className="semifinal-box">
-                <p>{regions[0].name} Winner</p>
-                <p>vs</p>
-                <p>{regions[3].name} Winner</p>
-              </div>
-              <div className="semifinal-box">
-                <p>{regions[1].name} Winner</p>
-                <p>vs</p>
-                <p>{regions[2].name} Winner</p>
-              </div>
-            </div>
-            
-            <div className="championship-container">
-              <h2 className="finals-title">NATIONAL CHAMPIONSHIP</h2>
-              
-              <div className="championship-box">
-                <p>Semifinal #1 Winner</p>
-                <p>vs</p>
-                <p>Semifinal #2 Winner</p>
-              </div>
-            </div>
-          </div>
-          
-          {/* Bottom Section - South & Midwest */}
-          <div className="bracket-row">
-            {/* South Region */}
-            <div className="region-container">
-              <h3 className="region-title">{regions[2].name} Region</h3>
-              <BracketRegion
-                region={regions[2]}
-                onMatchupClick={handleMatchupClick}
-              />
-            </div>
-            
-            {/* Midwest Region */}
-            <div className="region-container">
-              <h3 className="region-title">{regions[3].name} Region</h3>
-              <BracketRegion 
-                region={regions[3]}
-                onMatchupClick={handleMatchupClick}
-                reversed={true}
-              />
-            </div>
-          </div>
+          {renderActive()}
         </div>
       </div>
     );
