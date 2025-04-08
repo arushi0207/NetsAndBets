@@ -30,6 +30,9 @@ public class MarchMadnessTeam {
     @Column(name = "region", nullable = false)
     private String region;
 
+    @Column(name = "winsPerRound")
+    private String winsPerRound;
+
     /*
      * Default required constructor.
      */
@@ -90,4 +93,16 @@ public class MarchMadnessTeam {
      * Sets the region for the team
      */
     public void setRegion(String region) { this.region = region; }
+
+    /**
+     * Gets the bit-wise string depicting wins per round for the team
+     * 
+     * @return Bit-wise string
+     */
+    public String getWinsPerRound() {  return winsPerRound;  }
+    
+    /**
+     * Sets the wins per round for the team
+     */
+    public void setWinsPerRound(String winsPerRound) {  this.winsPerRound = winsPerRound;  }
 }
