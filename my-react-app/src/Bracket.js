@@ -2,97 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Bracket.css';
 
 const MarchMadnessBracket = () => {
-  // Tournament Data with all four regions- OLD implementation
-  /*
-  const tournamentData = {
-    regions: [
-      {
-        name: 'West',
-        teams: [
-          { seed: 1, name: 'UW Madison', spread: -19.5, moneyline: -5000, overUnder: 140.5, odds: -112 },
-          { seed: 16, name: 'Purdue', spread: 19.5, moneyline: 1600, overUnder: 140.5, odds: -108 },
-          { seed: 8, name: 'Placeholder team', spread: -2.5, moneyline: -145, overUnder: 133.5, odds: -112 },
-          { seed: 9, name: 'Placeholder team', spread: 2.5, moneyline: 125, overUnder: 133.5, odds: -108 },
-          { seed: 5, name: 'Placeholder team', spread: -4.5, moneyline: -200, overUnder: 126.5, odds: -112 },
-          { seed: 12, name: 'Placeholder team', spread: 4.5, moneyline: 170, overUnder: 126.5, odds: -108 },
-          { seed: 4, name: 'Placeholder team', spread: -10.5, moneyline: -600, overUnder: 172.5, odds: -112 },
-          { seed: 13, name: 'Placeholder team', spread: 10.5, moneyline: 450, overUnder: 172.5, odds: -108 },
-          { seed: 6, name: 'Placeholder team', spread: -5.5, moneyline: -245, overUnder: 139.5, odds: -112 },
-          { seed: 11, name: 'Placeholder team', spread: 5.5, moneyline: 205, overUnder: 139.5, odds: -108 },
-          { seed: 3, name: 'Placeholder team', spread: -12.5, moneyline: -900, overUnder: 145.5, odds: -112 },
-          { seed: 14, name: 'Placeholder team', spread: 12.5, moneyline: 600, overUnder: 145.5, odds: -108 },
-          { seed: 7, name: 'Placeholder team', spread: -1.5, moneyline: -125, overUnder: 143.5, odds: -112 },
-          { seed: 10, name: 'Placeholder team', spread: 1.5, moneyline: 105, overUnder: 143.5, odds: -108 },
-          { seed: 2, name: 'Placeholder team', spread: -14.5, moneyline: -1600, overUnder: 163.5, odds: -112 },
-          { seed: 15, name: 'Placeholder team', spread: 14.5, moneyline: 900, overUnder: 163.5, odds: -108 },
-        ]
-      },
-      {
-        name: 'East',
-        teams: [
-          { seed: 1, name: 'Placeholder team', spread: -8.5, moneyline: -400, overUnder: 145.5, odds: -112 },
-          { seed: 16, name: 'Placeholder team', spread: 8.5, moneyline: 320, overUnder: 145.5, odds: -108 },
-          { seed: 8, name: 'Placeholder team', spread: -1.5, moneyline: -125, overUnder: 142.5, odds: -112 },
-          { seed: 9, name: 'Placeholder team', spread: 1.5, moneyline: 105, overUnder: 142.5, odds: -108 },
-          { seed: 5, name: 'Placeholder team', spread: -6.5, moneyline: -275, overUnder: 137.5, odds: -112 },
-          { seed: 12, name: 'Placeholder team', spread: 6.5, moneyline: 235, overUnder: 137.5, odds: -108 },
-          { seed: 4, name: 'Placeholder team', spread: -13.5, moneyline: -1100, overUnder: 147.5, odds: -112 },
-          { seed: 13, name: 'Placeholder team', spread: 13.5, moneyline: 700, overUnder: 147.5, odds: -108 },
-          { seed: 6, name: 'Placeholder team', spread: -2.5, moneyline: -145, overUnder: 147.5, odds: -112 },
-          { seed: 11, name: 'Placeholder team', spread: 2.5, moneyline: 125, overUnder: 147.5, odds: -108 },
-          { seed: 3, name: 'Placeholder team', spread: -7.5, moneyline: -350, overUnder: 152.5, odds: -112 },
-          { seed: 14, name: 'Placeholder teamPlaceholder team', spread: 7.5, moneyline: 290, overUnder: 152.5, odds: -108 },
-          { seed: 7, name: 'Placeholder team', spread: -1.5, moneyline: -120, overUnder: 133.5, odds: -112 },
-          { seed: 10, name: 'Placeholder team', spread: 1.5, moneyline: 100, overUnder: 133.5, odds: -108 },
-          { seed: 2, name: 'Placeholder team', spread: -15.5, moneyline: -2000, overUnder: 127.5, odds: -112 },
-          { seed: 15, name: 'Placeholder team', spread: 15.5, moneyline: 1000, overUnder: 127.5, odds: -108 },
-        ]
-      },
-      {
-        name: 'South',
-        teams: [
-          { seed: 1, name: 'Placeholder team', spread: -23.5, moneyline: -8000, overUnder: 134.5, odds: -112 },
-          { seed: 16, name: 'Placeholder team', spread: 23.5, moneyline: 2000, overUnder: 134.5, odds: -108 },
-          { seed: 8, name: 'Placeholder team', spread: -2.5, moneyline: -140, overUnder: 142.5, odds: -112 },
-          { seed: 9, name: 'Placeholder team', spread: 2.5, moneyline: 120, overUnder: 142.5, odds: -108 },
-          { seed: 5, name: 'Placeholder team', spread: -5.5, moneyline: -240, overUnder: 131.5, odds: -112 },
-          { seed: 12, name: 'Placeholder team', spread: 5.5, moneyline: 200, overUnder: 131.5, odds: -108 },
-          { seed: 4, name: 'Placeholder team', spread: -11.5, moneyline: -750, overUnder: 135.5, odds: -112 },
-          { seed: 13, name: 'Placeholder team', spread: 11.5, moneyline: 525, overUnder: 135.5, odds: -108 },
-          { seed: 6, name: 'Placeholder team', spread: -5.5, moneyline: -240, overUnder: 132.5, odds: -112 },
-          { seed: 11, name: 'Placeholder team', spread: 5.5, moneyline: 200, overUnder: 132.5, odds: -108 },
-          { seed: 3, name: 'Placeholder team', spread: -13.5, moneyline: -1100, overUnder: 149.5, odds: -112 },
-          { seed: 14, name: 'Placeholder team', spread: 13.5, moneyline: 700, overUnder: 149.5, odds: -108 },
-          { seed: 7, name: 'Placeholder team', spread: -1.5, moneyline: -120, overUnder: 151.5, odds: -112 },
-          { seed: 10, name: 'Placeholder team', spread: 1.5, moneyline: 100, overUnder: 151.5, odds: -108 },
-          { seed: 2, name: 'Placeholder team', spread: -13.5, moneyline: -1200, overUnder: 158.5, odds: -112 },
-          { seed: 15, name: 'Placeholder team', spread: 13.5, moneyline: 750, overUnder: 158.5, odds: -108 },
-        ]
-      },
-      {
-        name: 'Midwest',
-        teams: [
-          { seed: 1, name: 'Placeholder team', spread: -19.5, moneyline: -4500, overUnder: 133.5, odds: -112 },
-          { seed: 16, name: 'Placeholder team', spread: 19.5, moneyline: 1500, overUnder: 133.5, odds: -108 },
-          { seed: 8, name: 'Placeholder team', spread: -1.5, moneyline: -125, overUnder: 147.5, odds: -112 },
-          { seed: 9, name: 'Placeholder team', spread: 1.5, moneyline: 105, overUnder: 147.5, odds: -108 },
-          { seed: 5, name: 'Placeholder team', spread: -6.5, moneyline: -275, overUnder: 152.5, odds: -112 },
-          { seed: 12, name: 'Placeholder team', spread: 6.5, moneyline: 235, overUnder: 152.5, odds: -108 },
-          { seed: 4, name: 'Placeholder team', spread: -7.5, moneyline: -350, overUnder: 141.5, odds: -112 },
-          { seed: 13, name: 'Placeholder team', spread: 7.5, moneyline: 290, overUnder: 141.5, odds: -108 },
-          { seed: 6, name: 'Placeholder team', spread: -2.5, moneyline: -145, overUnder: 137.5, odds: -112 },
-          { seed: 11, name: 'Placeholder team', spread: 2.5, moneyline: 125, overUnder: 137.5, odds: -108 },
-          { seed: 3, name: 'Placeholder team', spread: -7.5, moneyline: -350, overUnder: 144.5, odds: -112 },
-          { seed: 14, name: 'Placeholder team', spread: 7.5, moneyline: 290, overUnder: 144.5, odds: -108 },
-          { seed: 7, name: 'Placeholder team', spread: -3.5, moneyline: -165, overUnder: 145.5, odds: -112 },
-          { seed: 10, name: 'Placeholder team', spread: 3.5, moneyline: 145, overUnder: 145.5, odds: -108 },
-          { seed: 2, name: 'Placeholder team', spread: -21.5, moneyline: -5000, overUnder: 131.5, odds: -112 },
-          { seed: 15, name: 'Placeholder team', spread: 21.5, moneyline: 1600, overUnder: 131.5, odds: -108 },
-        ]
-      }
-    ]
-  };
-  */
+ 
 
 
   const [active, setActive] = useState('WestEast');
@@ -258,58 +168,118 @@ const shouldDisableBet = (betType, team, value) => {
 
   // Component is responsible for creating the visual layout of a single region's tournament bracket
   const BracketRegion = ({ region, onMatchupClick, reversed = false }) => {
-     
-    // Groups of matchups
+  
+    // First round matchups
     const round1MatchupsTop = region.firstRound.slice(0, 4);
     const round1MatchupsBottom = region.firstRound.slice(4, 8);
-    
+  
+    // Helper to determine who won between two teams
+    const getWinner = (teamA, teamB, roundIndex) => {
+      const teamAWins = teamA.winsPerRound.split(',').map(Number);
+      const teamBWins = teamB.winsPerRound.split(',').map(Number);
+  
+      if (teamAWins[roundIndex] === 1) {
+        return teamA;
+      } else if (teamBWins[roundIndex] === 1) {
+        return teamB;
+      }
+      return null;
+    };
+  
+    // Build second round matchups (Round of 32)
+    const secondRoundTop = [
+      {
+        teamA: getWinner(round1MatchupsTop[0].teamA, round1MatchupsTop[0].teamB, 0),
+        teamB: getWinner(round1MatchupsTop[1].teamA, round1MatchupsTop[1].teamB, 0),
+      }
+    ];
+    const secondRoundBottom = [
+      {
+        teamA: getWinner(round1MatchupsTop[2].teamA, round1MatchupsTop[2].teamB, 0),
+        teamB: getWinner(round1MatchupsTop[3].teamA, round1MatchupsTop[3].teamB, 0),
+      }
+    ];
+    const secondRoundTopBottom = [
+      {
+        teamA: getWinner(round1MatchupsBottom[0].teamA, round1MatchupsBottom[0].teamB, 0),
+        teamB: getWinner(round1MatchupsBottom[1].teamA, round1MatchupsBottom[1].teamB, 0),
+      }
+    ];
+    const secondRoundBottomBottom = [
+      {
+        teamA: getWinner(round1MatchupsBottom[2].teamA, round1MatchupsBottom[2].teamB, 0),
+        teamB: getWinner(round1MatchupsBottom[3].teamA, round1MatchupsBottom[3].teamB, 0),
+      }
+    ];
+  
+    // Build sweet 16 matchups (from second round winners)
+    const sweet16Top = getWinner(secondRoundTop[0].teamA, secondRoundTop[0].teamB, 1);
+    const sweet16Bottom = getWinner(secondRoundBottom[0].teamA, secondRoundBottom[0].teamB, 1);
+    const sweet16TopBottom = getWinner(secondRoundTopBottom[0].teamA, secondRoundTopBottom[0].teamB, 1);
+    const sweet16BottomBottom = getWinner(secondRoundBottomBottom[0].teamA, secondRoundBottomBottom[0].teamB, 1);
+  
+  const elite8Matchup = {
+    teamA: sweet16Top,
+    teamB: sweet16TopBottom
+  };
+    // Build Elite 8 matchup
+    const elite8Top = getWinner(sweet16Top, sweet16Bottom, 2);
+    const elite8Bottom = getWinner(sweet16TopBottom, sweet16BottomBottom, 2);
+  
     return (
       <div className={`bracket-region ${reversed ? 'reversed' : ''}`}>
-        {/* Round titles names in the top section of the bracket*/}
         <div className="round-titles">
           <div className="spacer"></div>
           <div className="round-title">Round 2</div>
           <div className="round-title">Sweet 16</div>
           <div className="round-title">Elite 8</div>
         </div>
-
-        {/* Top Half of Region */}
+  
+        {/* Top Half */}
         <div className="region-half top-half">
-          {/* First Round */}
+          {/* Round 1 */}
           <div className="round round-1">
             {round1MatchupsTop.map((matchup, idx) => (
-              <MatchupBox 
+              <MatchupBox
                 key={`${region.name}-top-${idx}`}
                 teamA={matchup.teamA}
                 teamB={matchup.teamB}
-                onClick={() => onMatchupClick(matchup)} 
+                onClick={() => onMatchupClick(matchup)}
               />
             ))}
           </div>
-          
-          {/* Second Round - Tournament flow */}
+  
+          {/* Round 2 */}
           <div className="round round-2">
-            <div className="bracket-box top"></div>
-            <div className="bracket-box bottom"></div>
+            <div className="bracket-box top">
+              {secondRoundTop[0].teamA?.name} <br /> {secondRoundTop[0].teamB?.name}
+            </div>
+            <div className="bracket-box bottom">
+              {secondRoundBottom[0].teamA?.name} <br /> {secondRoundBottom[0].teamB?.name}
+            </div>
           </div>
-          
+  
           {/* Sweet 16 */}
           <div className="round sweet-16">
-            <div className="bracket-box"></div>
+            <div className="bracket-box">
+              {sweet16Top?.name} <br /> {sweet16Bottom?.name}
+            </div>
           </div>
-          
-          {/* Elite 8 */}
-          <div className="round elite-8">
-            <div className="bracket-box elite"></div>
+  
+        {/* Elite 8 */}
+        <div className="round elite-8">
+          <div className="bracket-box elite">
+            {elite8Matchup.teamA?.name} <br /> {elite8Matchup.teamB?.name}
           </div>
         </div>
-        
-        {/* Bottom Half of Region */}
+        </div>
+  
+        {/* Bottom Half */}
         <div className="region-half bottom-half">
-          {/* First Round */}
+          {/* Round 1 */}
           <div className="round round-1">
             {round1MatchupsBottom.map((matchup, idx) => (
-              <MatchupBox 
+              <MatchupBox
                 key={`${region.name}-bottom-${idx}`}
                 teamA={matchup.teamA}
                 teamB={matchup.teamB}
@@ -317,21 +287,28 @@ const shouldDisableBet = (betType, team, value) => {
               />
             ))}
           </div>
-          
-          {/* Second Round - Tournament flow */}
+  
+          {/* Round 2 */}
           <div className="round round-2">
-            <div className="bracket-box top"></div>
-            <div className="bracket-box bottom"></div>
+            <div className="bracket-box top">
+              {secondRoundTopBottom[0].teamA?.name} <br /> {secondRoundTopBottom[0].teamB?.name}
+            </div>
+            <div className="bracket-box bottom">
+              {secondRoundBottomBottom[0].teamA?.name} <br /> {secondRoundBottomBottom[0].teamB?.name}
+            </div>
           </div>
-          
+  
           {/* Sweet 16 */}
           <div className="round sweet-16">
-            <div className="bracket-box"></div>
+            <div className="bracket-box">
+              {sweet16TopBottom?.name} <br /> {sweet16BottomBottom?.name}
+            </div>
           </div>
-          
-          {/* Elite 8 placeholder - maintains layout consistency but no actual box */}
+          {/* Spacer for Elite 8 (bottom half) */}
           <div className="round elite-8">
-            {/* No box */}
+            <div className="bracket-box elite" style={{ visibility: 'hidden' }}>
+              spacer
+            </div>
           </div>
         </div>
       </div>
