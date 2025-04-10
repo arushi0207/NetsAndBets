@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -178,5 +179,96 @@ public class UserController {
         userDatabase.put(username, newUser);
 
         return ResponseEntity.ok(newUser);
+    }
+
+    /**
+     * Endpoint to place a bet by decreasing a user's balance
+     * 
+     * @param userId The ID of the user placing the bet
+     * @param requestBody Contains betAmount (to decrease) and potentialWin (to track potential winnings)
+     * @return ResponseEntity with updated user info or error message
+     */
+    @PostMapping("/{username}/placeBet")
+    public ResponseEntity<?> placeBet(@PathVariable String username, @RequestBody Map<String, Double> requestBody) {
+        Double betAmount = requestBody.get("betAmount");
+        Double potentialWin = requestBody.get("potentialWin");
+        
+        // Validate the to make sure neither value is invalid
+        if (betAmount == null || potentialWin == null) {
+            return ResponseEntity.badRequest().body("Both betAmount and potentialWin must be provided");
+        }
+        
+        if (betAmount <= 0) {
+            return ResponseEntity.badRequest().body("Bet amount must be greater than zero");
+        }
+        
+        // Find the user
+        if (!userDatabase.containsKey(username)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+        
+        Map<String, Object> user = userDatabase.get(username);
+        
+        Double currentAmount = (Double) user.get("amount");
+        if (currentAmount < betAmount) {
+            return ResponseEntity.badRequest().body("Insufficient funds");
+        }
+        
+        Double newBalance = currentAmount - betAmount;
+        user.put("amount", newBalance);
+        
+        // Return updated user information and potential win amount
+        Map<String, Object> response = new HashMap<>();
+        response.put("username", username);
+        response.put("newBalance", newBalance);
+        response.put("betAmount", betAmount);
+        response.put("potentialWin", potentialWin);
+        
+        return ResponseEntity.ok(response);
+    }
+    
+    /**
+     * Endpoint to handle win/loss outcomes
+     * 
+     * @param userId The ID of the user who placed the bet
+     * @param requestBody Contains win status and win amount
+     * @return ResponseEntity with updated user info
+     */
+    @PostMapping("/{username}/betResult")
+    public ResponseEntity<?> processBetResult(@PathVariable String username, @RequestBody Map<String, Object> requestBody) {
+        Boolean won = (Boolean) requestBody.get("won");
+        Double winAmount = won ? (Double) requestBody.get("winAmount") : 0.0;
+        
+        // Validate the to make sure neither value is invalid
+        if (won == null) {
+            return ResponseEntity.badRequest().body("Won status must be provided");
+        }
+        
+        if (won && (winAmount == null || winAmount <= 0)) {
+            return ResponseEntity.badRequest().body("Win amount must be greater than zero");
+        }
+        
+        // Find the user
+        if (!userDatabase.containsKey(username)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+        
+        Map<String, Object> user = userDatabase.get(username);
+        
+        Double currentAmount = (Double) user.get("amount");
+        
+        if (won) {
+            Double newBalance = currentAmount + winAmount;
+            user.put("amount", newBalance);
+        }
+        
+        // Return updated user information
+        Map<String, Object> response = new HashMap<>();
+        response.put("username", username);
+        response.put("newBalance", user.get("amount"));
+        response.put("won", won);
+        response.put("winAmount", won ? winAmount : 0.0);
+        
+        return ResponseEntity.ok(response);
     }
 }
