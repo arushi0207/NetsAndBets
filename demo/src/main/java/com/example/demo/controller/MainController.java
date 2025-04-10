@@ -175,4 +175,58 @@ public class MainController {
     public @ResponseBody List<MarchMadnessTeam> getAllTeams() {
         return marchMadnessTeamRepository.findAll();
     }
+
+
+    /**
+     * Place a bet and updates the balance accordingly.
+     * 
+     * @param betInfo conatins bet information including username, amount, and bet details
+     * @return A ResponseEntity indicating success or failure of the bet placement
+     */
+    @PostMapping(path="/bets")
+    public @ResponseBody ResponseEntity<?> bets(@RequestBody Map<String, Object> betInfo) {
+        try {
+            // Get the username from betInfo
+            String username = (String) betInfo.get("username");
+            if (username == null) {
+                return ResponseEntity.badRequest().body("No username found. Username is required");
+            }
+
+            // Find the user by their username
+            Optional<User> userObt = userRepository.findByUsername(username);
+            if (userObt.isEmpty()) {
+                return ResponseEntity.badRequest().body("Could not find the user. Username does not exist");
+            }
+
+            User user = userObt.get(); // Get the user object
+            // Get bet amt from betInfo
+            if (betInfo.get("amount") == null) {
+                return ResponseEntity.badRequest().body("No bet amount found. Bet amount is required");
+            }
+            // Check if bet amt is valid
+            if (!(betInfo.get("amount") instanceof Number)) {
+                return ResponseEntity.badRequest().body("Bet amount is invalid");
+            }
+            // Converting the bet amt to double
+            double betAmt = ((Number) betInfo.get("amount")).doubleValue();
+
+            // Check if user has enough balance
+            if (user.getAmount() < betAmt) {
+                return ResponseEntity.badRequest().body("You don't have sufficient balance");
+            }
+
+            // Update the user balance accordingly
+            user.setAmount(user.getAmount() - betAmt);
+            userRepository.save(user);
+
+            // TODO: Save the bet to a table 
+
+            return ResponseEntity.ok(Map.of(
+                "message", "Bet placed successfully",
+                "newBalance", user.getAmount()
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error placing bet: " + e.getMessage());
+        }
+    }
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './Bracket.css';
 
 const MarchMadnessBracket = () => {
@@ -78,8 +79,20 @@ const MarchMadnessBracket = () => {
   const handleBetClick = (betType, team, value) => {
     if (selectedBet && selectedBet.betType === betType && selectedBet.team === team && selectedBet.value === value) {
       setSelectedBet(null);
+      localStorage.removeItem('selectedBet');
     } else {
-      setSelectedBet({ betType, team, value });
+      const newSelectedBet = {
+        betType,
+        team,
+        value,
+        matchup: `${selectedMatchup.teamA?.name} vs ${selectedMatchup.teamB?.name}`,
+        teamA: selectedMatchup.teamA?.name,
+        teamB: selectedMatchup.teamB?.name,
+        odds: team === 'A' ? selectedMatchup.teamA?.odds : selectedMatchup.teamB?.odds,
+        overUnder: betType === 'total' ? selectedMatchup.teamA?.overUnder : undefined
+      };
+      setSelectedBet(newSelectedBet);
+      localStorage.setItem('selectedBet', JSON.stringify(newSelectedBet));
     }
   };
 
@@ -425,9 +438,11 @@ const MarchMadnessBracket = () => {
 
               {/* Checkout button */}
               <div className="checkout-section">
-                <button className="checkout-button" disabled={!selectedBet}>
-                  CHECKOUT
-                </button>
+                <Link to="/checkout">
+                  <button className="checkout-button" disabled={!selectedBet}>
+                    CHECKOUT
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
