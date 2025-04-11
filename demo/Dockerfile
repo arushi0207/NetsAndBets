@@ -9,8 +9,4 @@ RUN ./mvnw dependency:go-offline
 
 COPY src ./src
 
-RUN apt-get update && apt-get install -y openssh-client
-
-
-
 CMD ["./mvnw", "spring-boot:run"]
