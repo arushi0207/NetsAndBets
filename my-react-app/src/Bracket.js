@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Bracket.css';
+import { AuthContext } from './Context/AuthContext';
 
 const MarchMadnessBracket = () => {
   const [active, setActive] = useState('WestEast');
   const [selectedBet, setSelectedBet] = useState(null);
   const [selectedMatchup, setSelectedMatchup] = useState(null);
+  const { isLoggedIn } = useContext(AuthContext);
 
   const [tournamentData, setTournamentData] = useState({
     regions: [
@@ -438,11 +440,21 @@ const MarchMadnessBracket = () => {
 
               {/* Checkout button */}
               <div className="checkout-section">
-                <Link to="/checkout">
-                  <button className="checkout-button" disabled={!selectedBet}>
-                    CHECKOUT
+              {isLoggedIn ? (
+                <>
+                  <Link to="/checkout">
+                    <button className="checkout-button" disabled={!selectedBet}>
+                      CHECKOUT
+                    </button>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <button className="checkout-button" disabled={selectedBet}>
+                    Signup or Login To Place Bets!
                   </button>
-                </Link>
+                </>
+              )}
               </div>
             </div>
           </div>
