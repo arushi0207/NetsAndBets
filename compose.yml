@@ -1,12 +1,12 @@
 services:
   frontend:
-    image: "my-react-app:latest"
+    build: ./my-react-app
     ports:
       - "3000:3000"
     depends_on:
       - backend
   backend:
-    image: "demo:latest"
+    build: ./demo
     environment:
       - DB_HOST=db
     ports:
