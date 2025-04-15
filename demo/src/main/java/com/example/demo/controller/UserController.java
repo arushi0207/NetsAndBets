@@ -13,38 +13,40 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 /**
  * REST controller for handling user-related operations.
  *
- * <p>
  * This controller provides endpoints to manage user information including
  * retrieval of user details such as name, username, password, and account
  * balance.
  * The @RestController annotation indicates that this class will handle HTTP
  * requests and return JSON responses.
- * </p>
  *
- * <p>
  * It exposes the following endpoints:
- * </p>
- * <ul>
- * <li>GET {@code /user/{username}} - Retrieves all user information for a
- * specific username.</li>
- * <li>GET {@code /user/{username}/name} - Retrieves the name of a specific
- * user.</li>
- * <li>GET {@code /user/{username}/username} - Retrieves the username of a
- * specific user.</li>
- * <li>GET {@code /user/{username}/password} - Retrieves the password of a
- * specific user (for demonstration only).</li>
- * <li>GET {@code /user/{username}/amount} - Retrieves the account balance of a
- * specific user.</li>
- * <li>PUT {@code /user/{username}/amount} - Updates the account balance of a
- * specific user.</li>
- * </ul>
+ * - GET {@code /user/{username}} - Retrieves all user information for a
+ * specific username.
+ * - GET {@code /user/{username}/name} - Retrieves the name of a specific
+ * user.
+ * - GET {@code /user/{username}/username} - Retrieves the username of a
+ * specific user.
+ * - GET {@code /user/{username}/password} - Retrieves the password of a
+ * specific user (for demonstration only).
+ * - GET {@code /user/{username}/amount} - Retrieves the account balance of a
+ * specific user.
+ * - PUT {@code /user/{username}/amount} - Updates the account balance of a
+ * specific user.
  */
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/user")
+@Tag(name = "User Management", description = "API endpoints for managing user information and account balances")
 public class UserController {
     // Stores user data temporarily (in a real application, use a database)
     private final Map<String, Map<String, Object>> userDatabase = new HashMap<>();
@@ -76,6 +78,15 @@ public class UserController {
      * @param username The username of the user.
      * @return A ResponseEntity containing user information or an error message.
      */
+    @Operation(summary = "Get user information", description = "Retrieves all information for a specific user by username")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "User found", 
+                    content = @Content(mediaType = "application/json", 
+                    schema = @Schema(implementation = Map.class))),
+        @ApiResponse(responseCode = "400", description = "User not found", 
+                    content = @Content(mediaType = "text/plain", 
+                    schema = @Schema(implementation = String.class)))
+    })
     @GetMapping("/{username}")
     public ResponseEntity<?> getUserInfo(@PathVariable String username) {
         if (userDatabase.containsKey(username)) {
@@ -90,6 +101,15 @@ public class UserController {
      * @param username The username of the user.
      * @return A ResponseEntity containing the user's name or an error message.
      */
+    @Operation(summary = "Get user name", description = "Retrieves the name of a specific user by username")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Name retrieved successfully", 
+                    content = @Content(mediaType = "application/json", 
+                    schema = @Schema(implementation = String.class))),
+        @ApiResponse(responseCode = "400", description = "User not found", 
+                    content = @Content(mediaType = "text/plain", 
+                    schema = @Schema(implementation = String.class)))
+    })
     @GetMapping("/{username}/name")
     public ResponseEntity<?> getUserName(@PathVariable String username) {
         if (userDatabase.containsKey(username)) {
@@ -104,6 +124,15 @@ public class UserController {
      * @param username The username of the user.
      * @return A ResponseEntity containing the username or an error message.
      */
+    @Operation(summary = "Get username", description = "Confirms the username of a specific user")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Username retrieved successfully", 
+                    content = @Content(mediaType = "application/json", 
+                    schema = @Schema(implementation = String.class))),
+        @ApiResponse(responseCode = "400", description = "User not found", 
+                    content = @Content(mediaType = "text/plain", 
+                    schema = @Schema(implementation = String.class)))
+    })
     @GetMapping("/{username}/username")
     public ResponseEntity<?> getUsername(@PathVariable String username) {
         if (userDatabase.containsKey(username)) {
@@ -120,6 +149,15 @@ public class UserController {
      * @param username The username of the user.
      * @return A ResponseEntity containing the user's password or an error message.
      */
+    @Operation(summary = "Get user password", description = "Retrieves the password of a specific user (demo only)")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Password retrieved successfully", 
+                    content = @Content(mediaType = "application/json", 
+                    schema = @Schema(implementation = String.class))),
+        @ApiResponse(responseCode = "400", description = "User not found", 
+                    content = @Content(mediaType = "text/plain", 
+                    schema = @Schema(implementation = String.class)))
+    })
     @GetMapping("/{username}/password")
     public ResponseEntity<?> getUserPassword(@PathVariable String username) {
         if (userDatabase.containsKey(username)) {
@@ -135,6 +173,15 @@ public class UserController {
      * @return A ResponseEntity containing the user's account balance or an error
      *         message.
      */
+    @Operation(summary = "Get account balance", description = "Retrieves the account balance of a specific user")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Balance retrieved successfully", 
+                    content = @Content(mediaType = "application/json", 
+                    schema = @Schema(implementation = Double.class))),
+        @ApiResponse(responseCode = "400", description = "User not found", 
+                    content = @Content(mediaType = "text/plain", 
+                    schema = @Schema(implementation = String.class)))
+    })
     @GetMapping("/{username}/amount")
     public ResponseEntity<?> getUserAmount(@PathVariable String username) {
         if (userDatabase.containsKey(username)) {
@@ -151,6 +198,15 @@ public class UserController {
      * @return A ResponseEntity containing the created user information or an error
      *         message.
      */
+    @Operation(summary = "Create user", description = "Creates a new user with the provided information")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "User created successfully", 
+                    content = @Content(mediaType = "application/json", 
+                    schema = @Schema(implementation = Map.class))),
+        @ApiResponse(responseCode = "400", description = "Username already exists or missing required fields", 
+                    content = @Content(mediaType = "text/plain", 
+                    schema = @Schema(implementation = String.class)))
+    })
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody Map<String, Object> userData) {
         String username = (String) userData.get("username");

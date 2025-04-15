@@ -1,0 +1,29 @@
+services:
+  frontend:
+    build: ./my-react-app
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on:
+      - backend
+  backend:
+    build: ./demo
+    environment:
+      - DB_HOST=db
+    ports:
+      - "127.0.0.1:8080:8080"
+    depends_on:
+      - db
+  db:
+    image: mysql/mysql-server:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: P14MySQL
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: splunge
+    volumes:
+      - my-db:/var/lib/mysql
+    ports:
+      - "127.0.0.1:3306:3306"
+
+volumes:
+  my-db:
