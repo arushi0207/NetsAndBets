@@ -72,10 +72,13 @@ const Checkout = () => {
 
     try {
       // Prepare the bet info
+      const amountToWin = payout(betAmt, selectedBet?.odds);
+
       const betInfo = {
         ...selectedBet,
         amount: betAmt,
-        username: user.username
+        username: user.username,
+        amountToWin: parseFloat(amountToWin.toFixed(2))
       };
 
       // Send the bet to the backend

@@ -17,7 +17,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id; // User's uniquely-identifying id in the Users table
+    private Long id; // User's uniquely-identifying id in the Users table
 
     @Column(name = "name", nullable = false)
     private String name; // User's full name
@@ -46,7 +46,7 @@ public class User {
      *
      * @return the user's id
      */
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -58,7 +58,7 @@ public class User {
      *
      * @param id - the user's unique integer id
      */
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
