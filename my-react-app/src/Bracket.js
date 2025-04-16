@@ -36,19 +36,20 @@ const MarchMadnessBracket = () => {
 
   const processTeamData = (data) => {
     const regionGroups = { 'West': [], 'East': [], 'South': [], 'Midwest': [] };
+    
     data.forEach(team => {
       if (regionGroups[team.region]) {
         const teamWithOdds = {
           ...team,
           spread: -5.5,
-          moneyline: -240,
+          moneyline: -112, // This will be calculated correctly in the matchup logic
           overUnder: 140.5,
           odds: -112
         };
         regionGroups[team.region].push(teamWithOdds);
       }
     });
-
+  
     return {
       regions: [
         { name: 'West', teams: regionGroups['West'] },
@@ -56,6 +57,31 @@ const MarchMadnessBracket = () => {
         { name: 'South', teams: regionGroups['South'] },
         { name: 'Midwest', teams: regionGroups['Midwest'] }
       ]
+    };
+  };
+
+
+  const calculateMoneyline = (teamA, teamB) => {
+    if (!teamA || !teamB) return { teamAMoneyline: -110, teamBMoneyline: -110 };
+    
+    const seedDifference = Math.abs(teamA.seed - teamB.seed);
+    
+    if (seedDifference === 0) {
+      return { teamAMoneyline: -110, teamBMoneyline: -110 };
+    }
+    
+    const lowerSeedTeam = teamA.seed < teamB.seed ? 'A' : 'B';
+    const higherSeedTeam = lowerSeedTeam === 'A' ? 'B' : 'A';
+    
+    // Calculate moneylines based on seed difference
+    // Lower seed gets -110 - (seedDifference * 20)
+    // Higher seed gets 100 + (seedDifference * 10)
+    const lowerSeedMoneyline = -110 - (seedDifference * 20);
+    const higherSeedMoneyline = 100 + (seedDifference * 10);
+    
+    return {
+      teamAMoneyline: lowerSeedTeam === 'A' ? lowerSeedMoneyline : higherSeedMoneyline,
+      teamBMoneyline: lowerSeedTeam === 'B' ? lowerSeedMoneyline : higherSeedMoneyline
     };
   };
 
@@ -74,6 +100,23 @@ const MarchMadnessBracket = () => {
 
 
   const handleMatchupClick = (matchup) => {
+    if (matchup.teamA && matchup.teamB) {
+      const { teamAMoneyline, teamBMoneyline } = calculateMoneyline(matchup.teamA, matchup.teamB);
+      
+      // Update the moneyline values for the selected matchup
+      matchup = {
+        ...matchup,
+        teamA: {
+          ...matchup.teamA,
+          moneyline: teamAMoneyline
+        },
+        teamB: {
+          ...matchup.teamB,
+          moneyline: teamBMoneyline
+        }
+      };
+    }
+    
     setSelectedMatchup(matchup);
     setSelectedBet(null);
   };
