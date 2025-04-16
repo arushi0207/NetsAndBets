@@ -183,10 +183,12 @@ const MarchMadnessBracket = () => {
 
           <div className="round round-2">
           <div className="bracket-box top" onClick={() => onMatchupClick(secondRoundTop[0])}>
-            {secondRoundTop?.[0]?.teamA?.name} <br /> {secondRoundTop?.[0]?.teamB?.name}
+          {secondRoundTop?.[0]?.teamA ? `${secondRoundTop[0].teamA.seed}. ${secondRoundTop[0].teamA.name}` : ''} <br />
+          {secondRoundTop?.[0]?.teamB ? `${secondRoundTop[0].teamB.seed}. ${secondRoundTop[0].teamB.name}` : ''}
           </div>
           <div className="bracket-box bottom" onClick={() => onMatchupClick(secondRoundBottom[0])}>
-            {secondRoundBottom?.[0]?.teamA?.name} <br /> {secondRoundBottom?.[0]?.teamB?.name}
+          {secondRoundBottom?.[0]?.teamA ? `${secondRoundBottom[0].teamA.seed}. ${secondRoundBottom[0].teamA.name}` : ''} <br />
+          {secondRoundBottom?.[0]?.teamB ? `${secondRoundBottom[0].teamB.seed}. ${secondRoundBottom[0].teamB.name}` : ''}
           </div>
         </div>
 
@@ -195,14 +197,16 @@ const MarchMadnessBracket = () => {
             teamA: sweet16Top,
             teamB: sweet16Bottom
           })}>
-            {sweet16Top?.name} <br /> {sweet16Bottom?.name}
+            {sweet16Top ? `${sweet16Top.seed}. ${sweet16Top.name}` : ''} <br />
+            {sweet16Bottom ? `${sweet16Bottom.seed}. ${sweet16Bottom.name}` : ''}
           </div>
         </div>
 
 
         <div className="round elite-8">
           <div className="bracket-box elite" onClick={() => onMatchupClick(elite8Matchup)}>
-            {elite8Matchup?.teamA?.name} <br /> {elite8Matchup?.teamB?.name}
+          {elite8Matchup?.teamA ? `${elite8Matchup.teamA.seed}. ${elite8Matchup.teamA.name}` : ''} <br />
+          {elite8Matchup?.teamB ? `${elite8Matchup.teamB.seed}. ${elite8Matchup.teamB.name}` : ''}
           </div>
         </div>
         </div>
@@ -218,10 +222,12 @@ const MarchMadnessBracket = () => {
          
           <div className="round round-2">
             <div className="bracket-box top" onClick={() => onMatchupClick(secondRoundTopBottom[0])}>
-              {secondRoundTopBottom?.[0]?.teamA?.name} <br /> {secondRoundTopBottom?.[0]?.teamB?.name}
+            {secondRoundTopBottom?.[0]?.teamA ? `${secondRoundTopBottom[0].teamA.seed}. ${secondRoundTopBottom[0].teamA.name}` : ''} <br />
+            {secondRoundTopBottom?.[0]?.teamB ? `${secondRoundTopBottom[0].teamB.seed}. ${secondRoundTopBottom[0].teamB.name}` : ''}
             </div>
             <div className="bracket-box bottom" onClick={() => onMatchupClick(secondRoundBottomBottom[0])}>
-              {secondRoundBottomBottom?.[0]?.teamA?.name} <br /> {secondRoundBottomBottom?.[0]?.teamB?.name}
+            {secondRoundBottomBottom?.[0]?.teamA ? `${secondRoundBottomBottom[0].teamA.seed}. ${secondRoundBottomBottom[0].teamA.name}` : ''} <br />
+            {secondRoundBottomBottom?.[0]?.teamB ? `${secondRoundBottomBottom[0].teamB.seed}. ${secondRoundBottomBottom[0].teamB.name}` : ''}
             </div>
           </div>
 
@@ -230,7 +236,8 @@ const MarchMadnessBracket = () => {
             teamA: sweet16TopBottom,
             teamB: sweet16BottomBottom
           })}>
-            {sweet16TopBottom?.name} <br /> {sweet16BottomBottom?.name}
+            {sweet16TopBottom ? `${sweet16TopBottom.seed}. ${sweet16TopBottom.name}` : ''} <br />
+            {sweet16BottomBottom ? `${sweet16BottomBottom.seed}. ${sweet16BottomBottom.name}` : ''}
           </div>
         </div>
 
