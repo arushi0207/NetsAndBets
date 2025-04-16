@@ -2,6 +2,7 @@ package com.example.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * The main entry point for the Spring Boot application.
@@ -13,6 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * {@link SpringApplication#run(Class, String...)}.</p>
  */
 @SpringBootApplication
+@EnableScheduling
 public class DemoApplication {
 
 	/**
