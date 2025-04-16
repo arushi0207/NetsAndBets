@@ -109,6 +109,19 @@ const MarchMadnessBracket = () => {
     };
   };
 
+  const calculateOverUnder = (teamA, teamB) => {
+    if (!teamA || !teamB) return 140.5;
+    
+    const seedAddition = teamA.seed + teamB.seed;
+    
+    // Base case - start at 172 and decrease by 2 for each seed point
+    // Starting with seedAddition of 2 (e.g., 1 seed vs 1 seed) = 170
+    if (seedAddition <= 2) return 170;
+    
+    // For seed additions of 3 and higher, subtract 2 points for each additional seed point
+    return 172 - seedAddition;
+  };
+
   const getWinner = (teamA, teamB) => {
     const teamAWins = teamA?.winsPerRound?.split(',').map(Number) || [];
     const teamBWins = teamB?.winsPerRound?.split(',').map(Number) || [];
@@ -127,20 +140,23 @@ const MarchMadnessBracket = () => {
     if (matchup.teamA && matchup.teamB) {
       const { teamAMoneyline, teamBMoneyline } = calculateMoneyline(matchup.teamA, matchup.teamB);
       const { teamASpread, teamBSpread } = calculateSpread(matchup.teamA, matchup.teamB);
+      const overUnderValue = calculateOverUnder(matchup.teamA, matchup.teamB);
       
-      // Update the moneyline and spread values for the selected matchup
+      // Update all values for the selected matchup
       matchup = {
         ...matchup,
         teamA: {
           ...matchup.teamA,
           moneyline: teamAMoneyline,
           spread: teamASpread,
+          overUnder: overUnderValue,
           odds: -112
         },
         teamB: {
           ...matchup.teamB,
           moneyline: teamBMoneyline,
           spread: teamBSpread,
+          overUnder: overUnderValue,
           odds: -112
         }
       };
@@ -463,7 +479,7 @@ const MarchMadnessBracket = () => {
                     onClick={() => handleBetClick('total', 'A', 'O')}
                   >
                     <div className="stat-value">O {selectedMatchup.teamA?.overUnder}</div>
-                    <div className="stat-odds">-108</div>
+                    <div className="stat-odds">-115</div>
                   </button>
                 </div>
                 <div className="moneyline-cell">
@@ -503,7 +519,7 @@ const MarchMadnessBracket = () => {
                     onClick={() => handleBetClick('total', 'B', 'U')}
                   >
                     <div className="stat-value">U {selectedMatchup.teamB?.overUnder}</div>
-                    <div className="stat-odds">-112</div>
+                    <div className="stat-odds">-115</div>
                   </button>
                 </div>
                 <div className="moneyline-cell">
