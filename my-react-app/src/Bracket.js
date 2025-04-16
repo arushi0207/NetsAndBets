@@ -41,8 +41,8 @@ const MarchMadnessBracket = () => {
       if (regionGroups[team.region]) {
         const teamWithOdds = {
           ...team,
-          spread: -5.5,
-          moneyline: -112, // This will be calculated correctly in the matchup logic
+          spread: -0.5, // Default spread value
+          moneyline: -112, // Default moneyline value
           overUnder: 140.5,
           odds: -112
         };
@@ -85,6 +85,30 @@ const MarchMadnessBracket = () => {
     };
   };
 
+
+  const calculateSpread = (teamA, teamB) => {
+    if (!teamA || !teamB) return { teamASpread: -0.5, teamBSpread: 0.5 };
+    
+    const seedDifference = Math.abs(teamA.seed - teamB.seed);
+    
+    if (seedDifference === 0) {
+      return { teamASpread: -0.5, teamBSpread: 0.5 };
+    }
+    
+    const lowerSeedTeam = teamA.seed < teamB.seed ? 'A' : 'B';
+    
+    // Calculate spreads based on seed difference
+    // Lower seed gets -0.5 - seedDifference
+    // Higher seed gets +0.5 + seedDifference
+    const lowerSeedSpread = -0.5 - seedDifference;
+    const higherSeedSpread = 0.5 + seedDifference;
+    
+    return {
+      teamASpread: lowerSeedTeam === 'A' ? lowerSeedSpread : higherSeedSpread,
+      teamBSpread: lowerSeedTeam === 'B' ? lowerSeedSpread : higherSeedSpread
+    };
+  };
+
   const getWinner = (teamA, teamB) => {
     const teamAWins = teamA?.winsPerRound?.split(',').map(Number) || [];
     const teamBWins = teamB?.winsPerRound?.split(',').map(Number) || [];
@@ -102,17 +126,22 @@ const MarchMadnessBracket = () => {
   const handleMatchupClick = (matchup) => {
     if (matchup.teamA && matchup.teamB) {
       const { teamAMoneyline, teamBMoneyline } = calculateMoneyline(matchup.teamA, matchup.teamB);
+      const { teamASpread, teamBSpread } = calculateSpread(matchup.teamA, matchup.teamB);
       
-      // Update the moneyline values for the selected matchup
+      // Update the moneyline and spread values for the selected matchup
       matchup = {
         ...matchup,
         teamA: {
           ...matchup.teamA,
-          moneyline: teamAMoneyline
+          moneyline: teamAMoneyline,
+          spread: teamASpread,
+          odds: -112
         },
         teamB: {
           ...matchup.teamB,
-          moneyline: teamBMoneyline
+          moneyline: teamBMoneyline,
+          spread: teamBSpread,
+          odds: -112
         }
       };
     }
@@ -461,7 +490,9 @@ const MarchMadnessBracket = () => {
                     disabled={shouldDisableBet('spread', 'B', selectedMatchup.teamB?.spread)}
                     onClick={() => handleBetClick('spread', 'B', selectedMatchup.teamB?.spread)}
                   >
-                    <div className="stat-value">{Math.abs(selectedMatchup.teamB?.spread)}</div>
+                    <div className="stat-value">
+                      {selectedMatchup.teamB?.spread > 0 ? '+' : ''}{Math.abs(selectedMatchup.teamB?.spread)}
+                    </div>
                     <div className="stat-odds">{selectedMatchup.teamB?.odds}</div>
                   </button>
                 </div>
