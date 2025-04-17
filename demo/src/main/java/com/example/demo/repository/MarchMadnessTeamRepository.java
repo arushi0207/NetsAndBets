@@ -1,6 +1,9 @@
 package com.example.demo.repository;
 
 import com.example.demo.model.MarchMadnessTeam;
+
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -21,4 +24,13 @@ public interface MarchMadnessTeamRepository extends JpaRepository<MarchMadnessTe
      * @return {@code true} if a team with the given name exists, otherwise {@code false}.
      */
     boolean existsByName(String name);
+
+    /**
+     * Retrieves a team by its name.
+     *
+     * @param name The name of the team to retrieve.
+     * @return An {@link Optional} containing the team if found, or null if not found.
+     */
+    Optional<MarchMadnessTeam> findByName(String name);
+
 }

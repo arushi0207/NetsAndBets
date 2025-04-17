@@ -1,0 +1,194 @@
+.checkout-background {
+    background-image: url('https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=2070');
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+  }
+  
+  .checkout-card {
+    width: 800px;
+    margin: 2rem auto;
+    padding: 3rem;
+    background-color: #808080CC;
+    box-shadow: 0 28px 52px -10px rgba(0, 0, 0, 0.9);
+    border: 2px solid #9CA3AF;
+    border-radius: 18px;
+  }
+  
+  .checkout-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .checkout-topbar h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to right, #FF8C00, #FFA500, #FFD700);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .balance {
+    font-size: 1.5rem;
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    color: #4CAF50;
+  }
+  
+  .bet-card {
+    background-color: #2a2a2a;
+    padding: 1.5rem;
+    border-radius: 18px;
+    color: white;
+    font-family: 'Arial', sans-serif;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s;
+  }
+  
+  .matchup {
+    font-size: 1.1rem;
+  }
+  
+  .info {
+    display: grid;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .info > div {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .title {
+    color: #858484;
+    font-size: 1rem;
+    margin-bottom: 0.4rem;
+  }
+  
+  .bet-info {
+    font-size: 1.1rem;
+    color: white;
+  }
+  
+  .bet-amt {
+    margin: 1rem 0;
+  }
+  
+  .bet-amt label {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.5rem;
+    color: #858484;
+  }
+  
+  .bet-amt input {
+    width: 96.2%;
+    padding: 0.8rem;
+    border: 1px solid #565353;
+    border-radius: 14px;
+    background-color: #383737;
+    color: white;
+    font-size: 1rem;
+  }
+  
+  .potential-bet {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #383737;
+    border: 1px solid #565353;
+    border-radius: 14px;
+    margin-top: 1rem;
+  }
+  
+  .potential-bet-title {
+    color: #858484;
+    font-size: 1rem;
+  }
+  
+  .checkout-summary {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 2rem;
+  }
+  
+  /* .total-bets,
+  .remaining-balance {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  } */
+  
+  /* .remaining-balance {
+    color: #4caf50;
+    font-weight: bold;
+  } */
+  
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2.5rem;
+  }
+  
+  .home-button,
+  .place-bet-button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .home-button {
+    background-color: #f3701f;
+    color: rgb(238, 238, 238);
+  }
+  
+  .home-button:hover {
+    background-color: #d86e1d;
+  }
+  
+  .place-bet-button {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .place-bet-button:hover:not(:disabled) {
+    background-color: #45a049;
+  }
+  
+  .place-bet-button:disabled {
+    background-color: #383737;
+    border: 1px solid #565353;
+    cursor: not-allowed;
+  }
+  
+  .no-bet {
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  .no-bet h2 {
+    color: #ec6815;
+    margin-bottom: 1rem;
+  }

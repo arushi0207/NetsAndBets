@@ -1,12 +1,22 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.MarchMadnessElo;
+import com.example.demo.model.Bet;
 import com.example.demo.model.MarchMadnessTeam;
 import com.example.demo.model.User;
+import com.example.demo.repository.BetRepository;
 import com.example.demo.repository.MarchMadnessTeamRepository;
 import com.example.demo.repository.MarchMadnessEloRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.MarchMadnessScraper;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
 import java.util.Map;
@@ -17,6 +27,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+//import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,6 +60,9 @@ public class MainController {
     @Autowired
     private MarchMadnessScraper scraper;
 
+    @Autowired
+    private BetRepository betRepository;
+
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     /**
@@ -59,6 +73,13 @@ public class MainController {
      * @return a "saved" string if the user was successfully added to the Database
      */
 
+    @Operation(summary = "Add a new user", description = "Creates a new user in the database with the provided username and password")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "User successfully created",
+                    content = @Content(mediaType = "text/plain", schema = @Schema(implementation = String.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid input",
+                    content = @Content)
+    })
     @PostMapping(path="/add") // Map ONLY POST Requests
     public @ResponseBody String addNewUser (@RequestParam String username
             , @RequestParam String password) {
@@ -164,6 +185,10 @@ public class MainController {
      * @return A confirmation message indicating that the scraping and saving process has completed.
      */
 
+    @Operation(summary = "Scrape March Madness teams", description = "Triggers web scraping to fetch and save team data")
+    @ApiResponse(responseCode = "200", description = "Scraping completed",
+                content = @Content(mediaType = "text/plain",
+                schema = @Schema(implementation = String.class)))
     @PostMapping(path="/scrape")
     public @ResponseBody String scrapeTeams() {
         scraper.runScraper();
@@ -175,7 +200,10 @@ public class MainController {
      * 
      * @return A list of teams including their id, name, seed and region
      */
-
+    @Operation(summary = "Get all teams", description = "Retrieves all March Madness teams from the database")
+    @ApiResponse(responseCode = "200", description = "List of all teams",
+                content = @Content(mediaType = "application/json",
+                array = @ArraySchema(schema = @Schema(implementation = MarchMadnessTeam.class))))
     @GetMapping(path="/teams")
     public @ResponseBody List<MarchMadnessTeam> getAllTeams() {
         return marchMadnessTeamRepository.findAll();
@@ -190,6 +218,73 @@ public class MainController {
     @GetMapping(path="/teamElo")
     public @ResponseBody Optional<MarchMadnessElo> getEloById(@RequestParam Long id) {
         return marchMadnessTeamEloRepository.findEloById(id);
+    }
+
+
+
+    /**
+     * Place a bet and updates the balance accordingly.
+     *
+     * @param betInfo conatins bet information including username, amount, and bet details
+     * @return A ResponseEntity indicating success or failure of the bet placement
+     */
+    @PostMapping(path="/bets")
+    public @ResponseBody ResponseEntity<?> bets(@RequestBody Map<String, Object> betInfo) {
+        try {
+            // Get the username from betInfo
+            String username = (String) betInfo.get("username");
+            if (username == null) {
+                return ResponseEntity.badRequest().body("No username found. Username is required");
+            }
+
+            // Find the user by their username
+            Optional<User> userObt = userRepository.findByUsername(username);
+            if (userObt.isEmpty()) {
+                return ResponseEntity.badRequest().body("Could not find the user. Username does not exist");
+            }
+
+            User user = userObt.get(); // Get the user object
+            // Get bet amt from betInfo
+            if (betInfo.get("amount") == null) {
+                return ResponseEntity.badRequest().body("No bet amount found. Bet amount is required");
+            }
+            // Check if bet amt is valid
+            if (!(betInfo.get("amount") instanceof Number)) {
+                return ResponseEntity.badRequest().body("Bet amount is invalid");
+            }
+            // Converting the bet amt to double
+            double betAmt = ((Number) betInfo.get("amount")).doubleValue();
+
+            // Check if user has enough balance
+            if (user.getAmount() < betAmt) {
+                return ResponseEntity.badRequest().body("You don't have sufficient balance");
+            }
+
+            // Update the user balance accordingly
+            user.setAmount(user.getAmount() - betAmt);
+            userRepository.save(user);
+
+            double odds = ((Number) betInfo.get("odds")).doubleValue();
+            double amountToWin = ((Number) betInfo.get("amountToWin")).doubleValue();
+
+            // Make a new Bet object and set its appropriate fields
+            Bet bet = new Bet();
+            bet.setUserId(user.getId());
+            bet.setTeamsPlaying((String) betInfo.get("matchup"));
+            bet.setBettingOdds(odds);
+            bet.setAmountBet(betAmt);
+            bet.setAmountToWin(amountToWin);
+            bet.setStatus("In Progress");
+
+            betRepository.save(bet); // Save the bet
+
+            return ResponseEntity.ok(Map.of(
+                "message", "Bet placed successfully",
+                "newBalance", user.getAmount()
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error placing bet: " + e.getMessage());
+        }
     }
 
 }
