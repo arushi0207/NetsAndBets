@@ -22,5 +22,13 @@ public interface BetRepository extends JpaRepository<Bet, Long> {
      * @return A list of bets matching the given status.
      */
     List<Bet> findByStatus(String status);
+    
+    /**
+     * Gets a list of bets for a user.
+     *
+     * @param userId The user whose bets need to be retrieved
+     * @return A list of bets placed by user
+     */
+    List<Bet> findByUserId(Long userId);
 }
 

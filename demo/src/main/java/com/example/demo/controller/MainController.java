@@ -277,8 +277,10 @@ public class MainController {
                 return ResponseEntity.badRequest().body("You don't have sufficient balance");
             }
 
-            // Update the user balance accordingly
-            user.setAmount(user.getAmount() - betAmt);
+            // Update the user balance
+            double currAmt = user.getAmount();
+            double updatedAmt = Math.round((currAmt - betAmt) * 100.0) / 100.0; // Rounding to 2 dec places
+            user.setAmount(updatedAmt);
             userRepository.save(user);
 
             double odds = ((Number) betInfo.get("odds")).doubleValue();
@@ -302,6 +304,21 @@ public class MainController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error placing bet: " + e.getMessage());
         }
+    }
+
+    /**
+     * Gets bets placed by user.
+     *
+     * @param userId The user whose bets need to be retrieved
+     * @return A list of bets placed by user
+     */
+    @Operation(summary = "Get bets", description = "Gets all the bets placed by a user")
+    @ApiResponse(responseCode = "200", description = "All of user's bets", 
+                content = @Content(mediaType = "application/json", 
+                array = @ArraySchema(schema = @Schema(implementation = Bet.class))))
+    @GetMapping(path="/userbets")
+    public @ResponseBody List<Bet> getBets(@RequestParam Long userId) {
+        return betRepository.findByUserId(userId);
     }
 
 }

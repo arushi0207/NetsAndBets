@@ -44,6 +44,14 @@ export default function Home() {
                       {user?.name || user?.username} - ${user?.amount}
                     </span>
                   </div>
+                  {/* My Bets Page*/}
+                  <Link to="/mybets" className="nav-link">
+                    <button className="button-orange">
+                      My Bets
+                    </button>
+                  </Link>
+                  
+                  {/* Logout button */}
                   <button 
                     onClick={handleLogout}
                     className="button-orange"
