@@ -46,6 +46,19 @@ public class Bet {
     @Column(name = "status", nullable = false)
     private String status;
 
+    /**  The current round number */
+    @Column(name = "round_index", nullable = false)
+    private Integer roundIndex;
+
+    /**  The team selected by the user to bet on */
+    @Column(name = "selected_team", nullable = false)
+    private String selectedTeam;
+
+    /**  Team A or Team B sent to the backend by frontend */
+    @Column(name = "team", nullable = false)
+    private String team;
+
+
     // Default constructor 
     public Bet() { }
 
@@ -58,14 +71,20 @@ public class Bet {
      * @param amountBet Amount of money bet
      * @param amountToWin Amount of moneyt that could be win
      * @param status Current status of the matchup
+     * @param roundIndex Current round number
+     * @param selectedTeam User's selected team
+     * @param team Team A or Team B
      */
-    public Bet(Long userId, String teamsPlaying, double bettingOdds, double amountBet, double amountToWin, String status) {
+    public Bet(Long userId, String teamsPlaying, double bettingOdds, double amountBet, double amountToWin, String status, Integer roundIndex, String selectedTeam, String team) {
         this.userId = userId;
         this.teamsPlaying = teamsPlaying;
         this.bettingOdds = bettingOdds;
         this.amountBet = amountBet;
         this.amountToWin = amountToWin;
         this.status = status;
+        this.roundIndex = roundIndex;
+        this.selectedTeam = selectedTeam;
+        this.team = team;
     }
 
 
@@ -172,6 +191,54 @@ public class Bet {
      */
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    /**
+     * Gets the round number
+     * 
+     * @return The unique identifier of the team
+     */
+    public Integer getRoundIndex() {
+        return roundIndex;
+    }
+
+    /**
+     * Sets the round number 
+     */
+    public void setRoundIndex(Integer roundIndex) {
+        this.roundIndex = roundIndex;
+    }
+
+    /**
+     * Gets the selected team to place a bet on
+     * 
+     * @return The unique identifier of the team
+     */
+    public String getSelectedTeam() {
+        return selectedTeam;
+    }
+
+    /**
+     * Sets the selected team while placing bet
+     */
+    public void setSelectedTeam(String selectedTeam) {
+        this.selectedTeam = selectedTeam;
+    }
+
+    /**
+     * Gets either Team A or Team B
+     * 
+     * @return The unique identifier of the team
+     */
+    public String getTeam() {
+        return team;
+    }
+
+    /**
+     * Sets the team as either A or B
+     */
+    public void setTeam(String team) {
+        this.team = team;
     }
 }
 

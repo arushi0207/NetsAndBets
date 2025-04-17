@@ -78,7 +78,7 @@ const MarchMadnessBracket = () => {
     setSelectedBet(null);
   };
 
-  const handleBetClick = (betType, team, value) => {
+  const handleBetClick = (betType, team, value, roundIndex) => {
     if (selectedBet && selectedBet.betType === betType && selectedBet.team === team && selectedBet.value === value) {
       setSelectedBet(null);
       localStorage.removeItem('selectedBet');
@@ -91,7 +91,8 @@ const MarchMadnessBracket = () => {
         teamA: selectedMatchup.teamA?.name,
         teamB: selectedMatchup.teamB?.name,
         odds: team === 'A' ? selectedMatchup.teamA?.odds : selectedMatchup.teamB?.odds,
-        overUnder: betType === 'total' ? selectedMatchup.teamA?.overUnder : undefined
+        overUnder: betType === 'total' ? selectedMatchup.teamA?.overUnder : undefined,
+        roundIndex: roundIndex ?? 0
       };
       setSelectedBet(newSelectedBet);
       localStorage.setItem('selectedBet', JSON.stringify(newSelectedBet));
@@ -177,15 +178,15 @@ const MarchMadnessBracket = () => {
         <div className="region-half top-half">
           <div className="round round-1">
             {round1MatchupsTop.map((matchup, idx) => (
-              <MatchupBox key={`${region.name}-top-${idx}`} teamA={matchup.teamA} teamB={matchup.teamB} onClick={() => onMatchupClick(matchup)} />
+              <MatchupBox key={`${region.name}-top-${idx}`} teamA={matchup.teamA} teamB={matchup.teamB} onClick={() => onMatchupClick({...matchup, roundIndex: 0})} />
             ))}
           </div>
 
           <div className="round round-2">
-          <div className="bracket-box top" onClick={() => onMatchupClick(secondRoundTop[0])}>
+          <div className="bracket-box top" onClick={() => onMatchupClick({...secondRoundTop[0], roundIndex: 1})}>
             {secondRoundTop?.[0]?.teamA?.name} <br /> {secondRoundTop?.[0]?.teamB?.name}
           </div>
-          <div className="bracket-box bottom" onClick={() => onMatchupClick(secondRoundBottom[0])}>
+          <div className="bracket-box bottom" onClick={() => onMatchupClick({...secondRoundBottom[0], roundIndex: 1})}>
             {secondRoundBottom?.[0]?.teamA?.name} <br /> {secondRoundBottom?.[0]?.teamB?.name}
           </div>
         </div>
@@ -193,7 +194,8 @@ const MarchMadnessBracket = () => {
         <div className="round sweet-16">
           <div className="bracket-box" onClick={() => onMatchupClick({
             teamA: sweet16Top,
-            teamB: sweet16Bottom
+            teamB: sweet16Bottom,
+            roundIndex: 2
           })}>
             {sweet16Top?.name} <br /> {sweet16Bottom?.name}
           </div>
@@ -201,7 +203,7 @@ const MarchMadnessBracket = () => {
 
 
         <div className="round elite-8">
-          <div className="bracket-box elite" onClick={() => onMatchupClick(elite8Matchup)}>
+          <div className="bracket-box elite" onClick={() => onMatchupClick({...elite8Matchup, roundIndex: 3})}>
             {elite8Matchup?.teamA?.name} <br /> {elite8Matchup?.teamB?.name}
           </div>
         </div>
@@ -211,16 +213,16 @@ const MarchMadnessBracket = () => {
         <div className="region-half bottom-half">
           <div className="round round-1">
             {round1MatchupsBottom.map((matchup, idx) => (
-              <MatchupBox key={`${region.name}-bottom-${idx}`} teamA={matchup.teamA} teamB={matchup.teamB} onClick={() => onMatchupClick(matchup)} />
+              <MatchupBox key={`${region.name}-bottom-${idx}`} teamA={matchup.teamA} teamB={matchup.teamB} onClick={() => onMatchupClick({...matchup, roundIndex: 0})} />
             ))}
           </div>
 
          
           <div className="round round-2">
-            <div className="bracket-box top" onClick={() => onMatchupClick(secondRoundTopBottom[0])}>
+            <div className="bracket-box top" onClick={() => onMatchupClick({...secondRoundTopBottom[0], roundIndex: 1})}>
               {secondRoundTopBottom?.[0]?.teamA?.name} <br /> {secondRoundTopBottom?.[0]?.teamB?.name}
             </div>
-            <div className="bracket-box bottom" onClick={() => onMatchupClick(secondRoundBottomBottom[0])}>
+            <div className="bracket-box bottom" onClick={() => onMatchupClick({...secondRoundBottomBottom[0], roundIndex: 1})}>
               {secondRoundBottomBottom?.[0]?.teamA?.name} <br /> {secondRoundBottomBottom?.[0]?.teamB?.name}
             </div>
           </div>
@@ -228,7 +230,8 @@ const MarchMadnessBracket = () => {
           <div className="round sweet-16">
           <div className="bracket-box" onClick={() => onMatchupClick({
             teamA: sweet16TopBottom,
-            teamB: sweet16BottomBottom
+            teamB: sweet16BottomBottom,
+            roundIndex: 2
           })}>
             {sweet16TopBottom?.name} <br /> {sweet16BottomBottom?.name}
           </div>
@@ -253,10 +256,27 @@ const MarchMadnessBracket = () => {
   
 
   const BracketView = () => {
-    const westRegion = BracketRegion({ region: regions[0], onMatchupClick: handleMatchupClick });
-      const eastRegion = BracketRegion({ region: regions[1], onMatchupClick: handleMatchupClick, reversed: true });
-      const southRegion = BracketRegion({ region: regions[2], onMatchupClick: handleMatchupClick });
-      const midwestRegion = BracketRegion({ region: regions[3], onMatchupClick: handleMatchupClick, reversed: true });
+    const westRegion = BracketRegion({ 
+      region: regions[0], 
+      onMatchupClick: (matchup) => handleMatchupClick({ ...matchup, roundIndex: matchup.roundIndex || 0 }) 
+    });
+    
+    const eastRegion = BracketRegion({ 
+      region: regions[1], 
+      onMatchupClick: (matchup) => handleMatchupClick({ ...matchup, roundIndex: matchup.roundIndex || 0 }), 
+      reversed: true 
+    });
+    
+    const southRegion = BracketRegion({ 
+      region: regions[2], 
+      onMatchupClick: (matchup) => handleMatchupClick({ ...matchup, roundIndex: matchup.roundIndex || 0 }) 
+    });
+    
+    const midwestRegion = BracketRegion({ 
+      region: regions[3], 
+      onMatchupClick: (matchup) => handleMatchupClick({ ...matchup, roundIndex: matchup.roundIndex || 0 }), 
+      reversed: true 
+    });
     
     const renderActive = () => {
       
@@ -290,17 +310,20 @@ const MarchMadnessBracket = () => {
           case 'FinalFour':
           const semifinal1Matchup = {
             teamA: southRegion.winner,
-            teamB: westRegion.winner
+            teamB: westRegion.winner,
+            roundIndex: 4,
           };
 
           const semifinal2Matchup = {
             teamA: eastRegion.winner,
-            teamB: midwestRegion.winner
+            teamB: midwestRegion.winner,
+            roundIndex: 4,
           };
 
           const finalMatchup = {
             teamA: getWinner(semifinal1Matchup.teamA, semifinal1Matchup.teamB),
-            teamB: getWinner(semifinal2Matchup.teamA, semifinal2Matchup.teamB)
+            teamB: getWinner(semifinal2Matchup.teamA, semifinal2Matchup.teamB),
+            roundIndex: 4,
           };
 
           return (
@@ -371,7 +394,7 @@ const MarchMadnessBracket = () => {
                   <button
                     className={`bet-button ${isBetSelected('spread', 'A', selectedMatchup.teamA?.spread) ? 'selected' : ''}`}
                     disabled={shouldDisableBet('spread', 'A', selectedMatchup.teamA?.spread)}
-                    onClick={() => handleBetClick('spread', 'A', selectedMatchup.teamA?.spread)}
+                    onClick={() => handleBetClick('spread', 'A', selectedMatchup.teamA?.spread, selectedMatchup.roundIndex)}
                   >
                     <div className="stat-value">{selectedMatchup.teamA?.spread}</div>
                     <div className="stat-odds">{selectedMatchup.teamA?.odds}</div>
@@ -381,7 +404,7 @@ const MarchMadnessBracket = () => {
                   <button
                     className={`bet-button ${isBetSelected('total', 'A', 'O') ? 'selected' : ''}`}
                     disabled={shouldDisableBet('total', 'A', 'O')}
-                    onClick={() => handleBetClick('total', 'A', 'O')}
+                    onClick={() => handleBetClick('total', 'A', 'O', selectedMatchup.roundIndex)}
                   >
                     <div className="stat-value">O {selectedMatchup.teamA?.overUnder}</div>
                     <div className="stat-odds">-108</div>
@@ -391,7 +414,7 @@ const MarchMadnessBracket = () => {
                   <button
                     className={`bet-button ${isBetSelected('moneyline', 'A', selectedMatchup.teamA?.moneyline) ? 'selected' : ''}`}
                     disabled={shouldDisableBet('moneyline', 'A', selectedMatchup.teamA?.moneyline)}
-                    onClick={() => handleBetClick('moneyline', 'A', selectedMatchup.teamA?.moneyline)}
+                    onClick={() => handleBetClick('moneyline', 'A', selectedMatchup.teamA?.moneyline, selectedMatchup.roundIndex)}
                   >
                     <div className="moneyline-value">
                       {selectedMatchup.teamA?.moneyline > 0 ? '+' : ''}{selectedMatchup.teamA?.moneyline}
@@ -409,7 +432,7 @@ const MarchMadnessBracket = () => {
                   <button
                     className={`bet-button ${isBetSelected('spread', 'B', selectedMatchup.teamB?.spread) ? 'selected' : ''}`}
                     disabled={shouldDisableBet('spread', 'B', selectedMatchup.teamB?.spread)}
-                    onClick={() => handleBetClick('spread', 'B', selectedMatchup.teamB?.spread)}
+                    onClick={() => handleBetClick('spread', 'B', selectedMatchup.teamB?.spread, selectedMatchup.roundIndex)}
                   >
                     <div className="stat-value">{Math.abs(selectedMatchup.teamB?.spread)}</div>
                     <div className="stat-odds">{selectedMatchup.teamB?.odds}</div>
@@ -419,7 +442,7 @@ const MarchMadnessBracket = () => {
                   <button
                     className={`bet-button ${isBetSelected('total', 'B', 'U') ? 'selected' : ''}`}
                     disabled={shouldDisableBet('total', 'B', 'U')}
-                    onClick={() => handleBetClick('total', 'B', 'U')}
+                    onClick={() => handleBetClick('total', 'B', 'U', selectedMatchup.roundIndex)}
                   >
                     <div className="stat-value">U {selectedMatchup.teamB?.overUnder}</div>
                     <div className="stat-odds">-112</div>
@@ -429,7 +452,7 @@ const MarchMadnessBracket = () => {
                   <button
                     className={`bet-button ${isBetSelected('moneyline', 'B', selectedMatchup.teamB?.moneyline) ? 'selected' : ''}`}
                     disabled={shouldDisableBet('moneyline', 'B', selectedMatchup.teamB?.moneyline)}
-                    onClick={() => handleBetClick('moneyline', 'B', selectedMatchup.teamB?.moneyline)}
+                    onClick={() => handleBetClick('moneyline', 'B', selectedMatchup.teamB?.moneyline, selectedMatchup.roundIndex)}
                   >
                     <div className="moneyline-value">
                       {selectedMatchup.teamB?.moneyline > 0 ? '+' : ''}{selectedMatchup.teamB?.moneyline}

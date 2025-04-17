@@ -228,6 +228,27 @@ public class MainController {
             double odds = ((Number) betInfo.get("odds")).doubleValue();
             double amountToWin = ((Number) betInfo.get("amountToWin")).doubleValue();
 
+            // Get the round number
+            Object roundObj = betInfo.get("roundIndex");
+            Integer roundIndex = (roundObj instanceof Integer) ? (Integer) roundObj : ((Number) roundObj).intValue();
+
+            // Get either Team A or Team B
+            String teamSide = (String) betInfo.get("team");
+
+            // Get the team name for A and B
+            String teamA = (String) betInfo.get("teamA");
+            String teamB = (String) betInfo.get("teamB");
+
+            // Check the selected team and assign it the team name
+            String selectedTeam;
+            if ("A".equals(teamSide)) {
+                selectedTeam = teamA;
+            } else if ("B".equals(teamSide)) {
+                selectedTeam = teamB;
+            } else {
+                return ResponseEntity.badRequest().body("Invalid team side. Must be 'A' or 'B'");
+            }
+
             // Make a new Bet object and set its appropriate fields
             Bet bet = new Bet();
             bet.setUserId(user.getId());
@@ -236,6 +257,9 @@ public class MainController {
             bet.setAmountBet(betAmt);
             bet.setAmountToWin(amountToWin);
             bet.setStatus("In Progress");
+            bet.setRoundIndex(roundIndex);
+            bet.setSelectedTeam(selectedTeam);
+            bet.setTeam(teamSide);
 
             betRepository.save(bet); // Save the bet
 
