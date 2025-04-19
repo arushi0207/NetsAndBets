@@ -74,6 +74,8 @@ const Checkout = () => {
       // Prepare the bet info
       const amountToWin = payout(betAmt, selectedBet?.odds);
 
+      console.log("Selected team:", selectedBet.team === 'A' ? selectedBet.teamA : selectedBet.teamB);
+
       const betInfo = {
         ...selectedBet,
         amount: betAmt,
