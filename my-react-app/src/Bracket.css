@@ -179,6 +179,7 @@
     justify-content: center;
   }
   
+  
   /* Top bracket box in Round 2 */
   .round-2 .bracket-box.top {
     top: 38px;
@@ -460,5 +461,10 @@
     opacity: 0.6;
   }
 
+  .bracket-box {
+    justify-content: flex-start; 
+    padding-left: 10px;
+    text-align: left; 
+  }
   
 

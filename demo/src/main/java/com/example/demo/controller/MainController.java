@@ -1,10 +1,20 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.Bet;
 import com.example.demo.model.MarchMadnessTeam;
 import com.example.demo.model.User;
+import com.example.demo.repository.BetRepository;
 import com.example.demo.repository.MarchMadnessTeamRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.MarchMadnessScraper;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
 import java.util.Map;
@@ -15,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+//import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +43,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller // This means that this class is a Controller
 @RequestMapping(path="/demo") // This means URL's start with /demo (after Application path)
+@Tag(name = "User and Team Management", description = "APIs for user authentication and March Madness team data")
 public class MainController {
 
     @Autowired // This means to get the bean called userRepository
@@ -44,6 +56,9 @@ public class MainController {
     @Autowired
     private MarchMadnessScraper scraper;
 
+    @Autowired
+    private BetRepository betRepository;
+
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     /**
@@ -54,6 +69,13 @@ public class MainController {
      * @return a "saved" string if the user was successfully added to the Database
      */
 
+    @Operation(summary = "Add a new user", description = "Creates a new user in the database with the provided username and password")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "User successfully created", 
+                    content = @Content(mediaType = "text/plain", schema = @Schema(implementation = String.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid input", 
+                    content = @Content)
+    })
     @PostMapping(path="/add") // Map ONLY POST Requests
     public @ResponseBody String addNewUser (@RequestParam String username
             , @RequestParam String password) {
@@ -77,6 +99,15 @@ public class MainController {
      * @param user The user object containing the username and password in the request body.
      * @return A ResponseEntity indicating success or failure while signing up.
      */
+    @Operation(summary = "User signup", description = "Register a new user with securely hashed password")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "User signed up successfully", 
+                    content = @Content(mediaType = "application/json", 
+                    schema = @Schema(implementation = Map.class))),
+        @ApiResponse(responseCode = "400", description = "Username already taken", 
+                    content = @Content(mediaType = "application/json", 
+                    schema = @Schema(implementation = Map.class)))
+    })
     @PostMapping(path = "/signup")
     public ResponseEntity<?> signUpUser(@RequestBody User user) {
 
@@ -108,6 +139,18 @@ public class MainController {
      * @param loginRequest The user object containing the username and password in the login form.
      * @return A ResponseEntity indicating success or failure while logging up.
      */
+    @Operation(summary = "User login", description = "Authenticate user by verifying username and password")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Login successful", 
+                    content = @Content(mediaType = "application/json", 
+                    schema = @Schema(implementation = User.class))),
+        @ApiResponse(responseCode = "401", description = "Incorrect password", 
+                    content = @Content(mediaType = "text/plain", 
+                    schema = @Schema(implementation = String.class))),
+        @ApiResponse(responseCode = "404", description = "User not found", 
+                    content = @Content(mediaType = "text/plain", 
+                    schema = @Schema(implementation = String.class)))
+    })
     @PostMapping(path = "/login")
     public ResponseEntity<?> loginUser(@RequestBody User loginRequest) {
 
@@ -133,6 +176,10 @@ public class MainController {
      *
      * @return an Iterable of all users in the database
      */
+    @Operation(summary = "Get all users", description = "Retrieves a list of all users in the database")
+    @ApiResponse(responseCode = "200", description = "List of all users", 
+                content = @Content(mediaType = "application/json", 
+                array = @ArraySchema(schema = @Schema(implementation = User.class))))
     @GetMapping(path="/all")
     public @ResponseBody Iterable<User> getAllUsers() {
         // This returns a JSON or XML with the users
@@ -145,7 +192,15 @@ public class MainController {
      * @param username the username of the given user
      * @return the user entity if it exists, or null if there does not exist a user with the given username
      */
-    @GetMapping(path="/user")
+    @Operation(summary = "Get user by username", description = "Retrieves a specific user by their username")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "User found", 
+                    content = @Content(mediaType = "application/json", 
+                    schema = @Schema(implementation = User.class))),
+        @ApiResponse(responseCode = "404", description = "User not found", 
+                    content = @Content)
+    })
+    @GetMapping(path="/user/{username}")
     public @ResponseBody Optional<User> getUserByUsername(@RequestParam String username) {
         return userRepository.findByUsername(username);
     }
@@ -159,6 +214,10 @@ public class MainController {
      * @return A confirmation message indicating that the scraping and saving process has completed.
      */
 
+    @Operation(summary = "Scrape March Madness teams", description = "Triggers web scraping to fetch and save team data")
+    @ApiResponse(responseCode = "200", description = "Scraping completed", 
+                content = @Content(mediaType = "text/plain", 
+                schema = @Schema(implementation = String.class)))
     @PostMapping(path="/scrape")
     public @ResponseBody String scrapeTeams() {
         scraper.runScraper();
@@ -170,7 +229,10 @@ public class MainController {
      * 
      * @return A list of teams including their id, name, seed and region
      */
-
+    @Operation(summary = "Get all teams", description = "Retrieves all March Madness teams from the database")
+    @ApiResponse(responseCode = "200", description = "List of all teams", 
+                content = @Content(mediaType = "application/json", 
+                array = @ArraySchema(schema = @Schema(implementation = MarchMadnessTeam.class))))
     @GetMapping(path="/teams")
     public @ResponseBody List<MarchMadnessTeam> getAllTeams() {
         return marchMadnessTeamRepository.findAll();
@@ -215,11 +277,49 @@ public class MainController {
                 return ResponseEntity.badRequest().body("You don't have sufficient balance");
             }
 
-            // Update the user balance accordingly
-            user.setAmount(user.getAmount() - betAmt);
+            // Update the user balance
+            double currAmt = user.getAmount();
+            double updatedAmt = Math.round((currAmt - betAmt) * 100.0) / 100.0; // Rounding to 2 dec places
+            user.setAmount(updatedAmt);
             userRepository.save(user);
 
-            // TODO: Save the bet to a table 
+            double odds = ((Number) betInfo.get("odds")).doubleValue();
+            double amountToWin = ((Number) betInfo.get("amountToWin")).doubleValue();
+
+            // Get the round number
+            Object roundObj = betInfo.get("roundIndex");
+            Integer roundIndex = (roundObj instanceof Integer) ? (Integer) roundObj : ((Number) roundObj).intValue();
+
+            // Get either Team A or Team B
+            String teamSide = (String) betInfo.get("team");
+
+            // Get the team name for A and B
+            String teamA = (String) betInfo.get("teamA");
+            String teamB = (String) betInfo.get("teamB");
+
+            // Check the selected team and assign it the team name
+            String selectedTeam;
+            if ("A".equals(teamSide)) {
+                selectedTeam = teamA;
+            } else if ("B".equals(teamSide)) {
+                selectedTeam = teamB;
+            } else {
+                return ResponseEntity.badRequest().body("Invalid team side. Must be 'A' or 'B'");
+            }
+
+            // Make a new Bet object and set its appropriate fields
+            Bet bet = new Bet();
+            bet.setUserId(user.getId());
+            bet.setTeamsPlaying((String) betInfo.get("matchup"));
+            bet.setBettingOdds(odds);
+            bet.setAmountBet(betAmt);
+            bet.setAmountToWin(amountToWin);
+            bet.setStatus("In Progress");
+            bet.setRoundIndex(roundIndex);
+            bet.setSelectedTeam(selectedTeam);
+            bet.setTeam(teamSide);
+
+            betRepository.save(bet); // Save the bet
 
             return ResponseEntity.ok(Map.of(
                 "message", "Bet placed successfully",
@@ -229,4 +329,20 @@ public class MainController {
             return ResponseEntity.badRequest().body("Error placing bet: " + e.getMessage());
         }
     }
+
+    /**
+     * Gets bets placed by user.
+     *
+     * @param userId The user whose bets need to be retrieved
+     * @return A list of bets placed by user
+     */
+    @Operation(summary = "Get bets", description = "Gets all the bets placed by a user")
+    @ApiResponse(responseCode = "200", description = "All of user's bets", 
+                content = @Content(mediaType = "application/json", 
+                array = @ArraySchema(schema = @Schema(implementation = Bet.class))))
+    @GetMapping(path="/userbets")
+    public @ResponseBody List<Bet> getBets(@RequestParam Long userId) {
+        return betRepository.findByUserId(userId);
+    }
+
 }

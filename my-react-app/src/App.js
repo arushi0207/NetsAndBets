@@ -4,6 +4,7 @@ import Home from './Home';
 import Login from './Login';
 import Signup from './SignUp';
 import Checkout from './Checkout';
+import MyBets from './MyBets';
 import { AuthProvider } from './Context/AuthContext';
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/mybets" element={<MyBets />} />
       </Routes>
     </AuthProvider>
   );

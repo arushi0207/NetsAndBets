@@ -72,10 +72,15 @@ const Checkout = () => {
 
     try {
       // Prepare the bet info
+      const amountToWin = payout(betAmt, selectedBet?.odds);
+
+      console.log("Selected team:", selectedBet.team === 'A' ? selectedBet.teamA : selectedBet.teamB);
+
       const betInfo = {
         ...selectedBet,
         amount: betAmt,
-        username: user.username
+        username: user.username,
+        amountToWin: parseFloat(amountToWin.toFixed(2))
       };
 
       // Send the bet to the backend
@@ -98,7 +103,7 @@ const Checkout = () => {
       // Update the user state with the new balance
       const updatedUserBalance = {
         ...user,
-        amount: responseData.newBalance
+        amount: parseFloat(responseData.newBalance.toFixed(2)) // Round to 2 dec places
       };
 
       // Update localStorage with the new user data
@@ -142,7 +147,7 @@ const Checkout = () => {
             <div className="checkout-topbar">
                 <h1>Checkout</h1>
                 <div className="balance">
-                    Balance: ${user?.amount || 0}
+                    Balance: ${user?.amount ? user.amount.toFixed(2) : '0.00'}
                 </div>
             </div>
 
