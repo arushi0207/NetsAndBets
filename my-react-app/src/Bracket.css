@@ -85,7 +85,6 @@
   .round-titles {
     display: flex;
     flex-direction: row;
-    margin-bottom: 5px;
   }
   
   /* Individual round title */
@@ -183,7 +182,6 @@
   /* Top bracket box in Round 2 */
   .round-2 .bracket-box.top {
     top: 38px;
-   
   }
 
   .bracket-box {
@@ -194,15 +192,16 @@
   .round-2 .bracket-box,
   .sweet-16 .bracket-box,
   .elite-8 .bracket-box {
-    background-color: green;
+    background-color: #f96c07f5;
     border: 2px solid white; 
     color: white; 
-   
+    font-family: Arial, sans-serif;
+    font-size: 14px;
   }
 
   .semifinal-box, .championship-box {
     cursor: pointer;
-    background-color: green;
+    background-color: #f96c07f5;
   }
 
   /* Bottom bracket box in Round 2 */
@@ -225,7 +224,7 @@
     content: '';
     width: 100%;
     height: 2px;
-    background-color: white;
+    background-color: brown;
     position: absolute;
     left: 0;
   }
@@ -254,7 +253,7 @@
   
   /* Semifinal matchup box */
   .semifinal-box {
-    border: 2px solid #f96c07f5;
+    border: 2px solid white;
     padding: 8px;
     width: 250px;
   }
@@ -266,7 +265,7 @@
   
   /* Championship box */
   .championship-box {
-    border: 2px solid #f96c07f5;
+    border: 2px solid white;
     padding: 8px;
     width: 300px;
     margin: 0 auto;
