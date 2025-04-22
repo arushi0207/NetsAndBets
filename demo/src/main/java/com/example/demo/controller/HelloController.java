@@ -112,4 +112,8 @@ public class HelloController {
         return ResponseEntity.badRequest().body("Invalid username or password.");
     }
 
+    public void addUserForTesting(String username, String password) {
+        users.put(username, password);
+    }
+
 }

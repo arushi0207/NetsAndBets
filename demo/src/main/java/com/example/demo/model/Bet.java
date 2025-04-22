@@ -87,7 +87,6 @@ public class Bet {
         this.team = team;
     }
 
-
     /**
      * Gets the id of the bet
      * 

@@ -11,10 +11,11 @@ const MyBets = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!user || !user.id) return;
     // Fetch all the user bets
     const fetchBets = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/demo/user-bets?userId=${user.id}`);
+        const response = await fetch(`http://localhost:8080/demo/userbets?userId=${user.id}`);
         console.log('Response:', response);
         
         if (!response.ok) {
