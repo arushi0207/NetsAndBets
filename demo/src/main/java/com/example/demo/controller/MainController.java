@@ -61,6 +61,9 @@ public class MainController {
     @Autowired
     private BetRepository betRepository;
 
+    @Autowired
+    private MarchMadnessEloRepository marchMadnessTeamEloRepository;
+
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     /**
