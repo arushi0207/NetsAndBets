@@ -156,15 +156,15 @@ const Checkout = () => {
             <div className="info">
                 <div>
                     <span className="title">Matchup:</span>
-                    <span className="bet-info">{selectedBet.matchup}</span>
+                    <span className="betinfo">{selectedBet.matchup}</span>
                 </div>
                 <div>
                     <span className="title">Bet Type:</span>
-                    <span className="bet-info">{selectedBet.betType}</span>
+                    <span className="betinfo">{selectedBet.betType}</span>
                 </div>
                 <div>
                     <span className="title">Selected Bet:</span>
-                    <span className="bet-info">
+                    <span className="betinfo">
                     {selectedBet.betType === 'spread' ? 
                         `${selectedBet.team === 'A' ? selectedBet.teamA : selectedBet.teamB} ${selectedBet.value}` :
                     selectedBet.betType === 'moneyline' ?
@@ -176,7 +176,7 @@ const Checkout = () => {
                 </div>
                 <div>
                     <span className="title">Odds:</span>
-                    <span className="bet-info">{selectedBet.odds > 0 ? '+' : ''}{selectedBet.odds}</span>
+                    <span className="betinfo">{selectedBet.odds > 0 ? '+' : ''}{selectedBet.odds}</span>
                 </div>
             </div>
 
@@ -194,7 +194,7 @@ const Checkout = () => {
 
             <div className="potential-bet">
                 <span className="potential-bet-title">Bet being placed:</span>
-                <span className="bet-info">
+                <span className="betinfo">
                     ${betAmt} to win ${payout(betAmt, selectedBet?.odds).toFixed(2)}
                 </span>
             </div>

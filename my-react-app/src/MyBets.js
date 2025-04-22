@@ -68,7 +68,7 @@ const MyBets = () => {
       </nav>
 
       <div className="betpage-content">
-        <h1 className="title">My Bets</h1>
+        <h1 className="bettitle">My Bets</h1>
         
         {isLoading ? (
           <div className="loading">Loading your bets, be patient!</div>
