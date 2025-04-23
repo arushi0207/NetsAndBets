@@ -487,9 +487,17 @@ const MarchMadnessBracket = () => {
                 <h3 className="region-title">{regions[3].name} Region</h3>
                 {midwestRegion.element}
               </div>
+              <div className="ncaa-logo-container">
+              <img 
+                src="/logos/ncaa.png" 
+                alt="NCAA Logo" 
+                className="ncaa-logo"
+              />
+            </div>
             </div>
           );
           case 'FinalFour':
+            
           const semifinal1Matchup = {
             teamA: southRegion.winner,
             teamB: westRegion.winner,
@@ -509,9 +517,17 @@ const MarchMadnessBracket = () => {
           };
 
           return (
+            
             <div className="final-four-section">
+               <div className="ncaa-logo-container">
+              <img 
+                src="/logos/ncaa.png" 
+                alt="NCAA Logo" 
+                className="ncaa-logo"
+              />
+            </div>
             <h2 className="finals-title">FINAL FOUR</h2>
-
+            
             <div className="semifinals-container">
               <div className="semifinal-box" onClick={() => handleMatchupClick(semifinal1Matchup)}>
                 <p>{semifinal1Matchup.teamA ? `${semifinal1Matchup.teamA.seed}. ${semifinal1Matchup.teamA.name}` : 'South Winner'}</p>
@@ -524,6 +540,7 @@ const MarchMadnessBracket = () => {
                 <p>{semifinal2Matchup.teamB ? `${semifinal2Matchup.teamB.seed}. ${semifinal2Matchup.teamB.name}` : 'Midwest Winner'}</p>
               </div>
             </div>
+            
 
             {/* trophy - PLACED HERE ABOVE THE CHAMPIONSHIP TITLE */}
             <div className="trophy-container" style={{ textAlign: 'center', marginBottom: '30px', marginTop: '-30px' }}>
@@ -543,7 +560,9 @@ const MarchMadnessBracket = () => {
                 <p>{finalMatchup.teamB ? `${finalMatchup.teamB.seed}. ${finalMatchup.teamB.name}` : 'Semifinal #2 Winner'}</p>
               </div>
             </div>
+            
           </div>
+          
           );
         default:
           return null;
@@ -691,6 +710,11 @@ const MarchMadnessBracket = () => {
         <div className="bracket-layout">
           {renderActive()}
         </div>
+        {active !== 'FinalFour' && (
+          <div className="graphic-footer">
+            <img src="/logos/graphic.png" alt="Graphic Footer" className="footer-image" />
+          </div>
+        )}
       </div>
     );
   };

@@ -490,3 +490,12 @@
   width: 100px;
   height: 100px;
 }
+
+.graphic-footer {
+  margin-top: -12rem;
+}
+
+.footer-image {
+  width: 30%;
+  height: 340px;  
+}
