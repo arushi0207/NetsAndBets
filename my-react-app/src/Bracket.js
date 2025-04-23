@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom';
 import './Bracket.css';
 import { AuthContext } from './Context/AuthContext';
 
+
+//import auburnLogo from './logos/auburn.png';
+
+
 const MarchMadnessBracket = () => {
   const [active, setActive] = useState('WestEast');
   const [selectedBet, setSelectedBet] = useState(null);
@@ -17,6 +21,80 @@ const MarchMadnessBracket = () => {
       { name: 'Midwest', teams: [] }
     ]
   });
+
+  const TEAM_LOGOS = {
+    // South
+    'Auburn':              '/logos/auburn.png',
+    'Alabama St.':         '/logos/alabama-st.png',
+    'Louisville':          '/logos/louisville.png',
+    'Creighton':           '/logos/creighton.png',
+    'Michigan':            '/logos/michigan.png',
+    'UC San Diego':        '/logos/uc-san-diego.png',
+    'Texas A&M':           '/logos/texas-a-and-m.png',
+    'Yale':                '/logos/yale.png',
+    'Ole Miss':            '/logos/ole-miss.png',
+    'North Carolina':      '/logos/north-carolina.png',
+    'Iowa St.':            '/logos/iowa-st.png',
+    'Lipscomb':            '/logos/lipscomb.png',
+    'Marquette':           '/logos/marquette.png',
+    'New Mexico':          '/logos/new-mexico.png',
+    'Michigan St.':        '/logos/michigan-st.png',
+    'Bryant':              '/logos/bryant.png',
+  
+    // East
+    'Duke':                '/logos/duke.png',
+    "Mount St. Mary's":    '/logos/mount-st-marys.png',
+    'Mississippi St.':     '/logos/mississippi-st.png',
+    'Baylor':              '/logos/baylor.png',
+    'Oregon':              '/logos/oregon.png',
+    'Liberty':             '/logos/liberty.png',
+    'Arizona':             '/logos/arizona.png',
+    'Akron':               '/logos/akron.png',
+    'BYU':                 '/logos/byu.png',
+    'VCU':                 '/logos/vcu.png',
+    'Wisconsin':           '/logos/wisconsin.png',
+    'Montana':             '/logos/montana.png',
+    "Saint Mary's":        '/logos/saint-marys.png',
+    'Vanderbilt':          '/logos/vanderbilt.png',
+    'Alabama':             '/logos/alabama.png',
+    'Robert Morris':       '/logos/robert-morris.png',
+  
+    // West
+    'Florida':             '/logos/florida.png',
+    'Norfolk St.':         '/logos/norfolk-st.png',
+    'UConn':               '/logos/uconn.png',
+    'Oklahoma':            '/logos/oklahoma.png',
+    'Memphis':             '/logos/memphis.png',
+    'Colorado St.':        '/logos/colorado-st.png',
+    'Maryland':            '/logos/maryland.png',
+    'Grand Canyon':        '/logos/grand-canyon.png',
+    'Missouri':            '/logos/missouri.png',
+    'Drake':               '/logos/drake.png',
+    'Texas Tech':          '/logos/texas-tech.png',
+    'UNC Wilmington':      '/logos/unc-wilmington.png',
+    'Kansas':              '/logos/kansas.png',
+    'Arkansas':            '/logos/arkansas.png',
+    "St. John's":          '/logos/st-johns.png',
+    'Omaha':               '/logos/omaha.png',
+  
+    // Midwest
+    'Houston':             '/logos/houston.png',
+    'SIU Edwardsville':    '/logos/siu-edwardsville.png',
+    'Gonzaga':             '/logos/gonzaga.png',
+    'Georgia':             '/logos/georgia.png',
+    'Clemson':             '/logos/clemson.png',
+    'McNeese':             '/logos/mcneese.png',
+    'Purdue':              '/logos/purdue.png',
+    'High Point':          '/logos/high-point.png',
+    'Illinois':            '/logos/illinois.png',
+    'Xavier':              '/logos/xavier.png',
+    'Kentucky':            '/logos/kentucky.png',
+    'Troy':                '/logos/troy.png',
+    'UCLA':                '/logos/ucla.png',
+    'Utah St.':            '/logos/utah-st.png',
+    'Tennessee':           '/logos/tennessee.png',
+    'Wofford':             '/logos/wofford.png',
+  };
 
   useEffect(() => {
     async function fetchTeams() {
@@ -41,6 +119,8 @@ const MarchMadnessBracket = () => {
       if (regionGroups[team.region]) {
         const teamWithOdds = {
           ...team,
+          logoUrl: TEAM_LOGOS[team.name] || '/logos/default.png',
+
           spread: -0.5, // Default spread value
           moneyline: -112, // Default moneyline value
           overUnder: 140.5,
@@ -387,6 +467,13 @@ const MarchMadnessBracket = () => {
                 <h3 className="region-title">East Region</h3>
                 {eastRegion.element}
               </div>
+              <div className="ncaa-logo-container">
+              <img 
+                src="/logos/ncaa.png" 
+                alt="NCAA Logo" 
+                className="ncaa-logo"
+              />
+            </div>
             </div>
           );
         case 'SouthMidwest':
@@ -400,9 +487,17 @@ const MarchMadnessBracket = () => {
                 <h3 className="region-title">{regions[3].name} Region</h3>
                 {midwestRegion.element}
               </div>
+              <div className="ncaa-logo-container">
+              <img 
+                src="/logos/ncaa.png" 
+                alt="NCAA Logo" 
+                className="ncaa-logo"
+              />
+            </div>
             </div>
           );
           case 'FinalFour':
+            
           const semifinal1Matchup = {
             teamA: southRegion.winner,
             teamB: westRegion.winner,
@@ -422,31 +517,52 @@ const MarchMadnessBracket = () => {
           };
 
           return (
+            
             <div className="final-four-section">
-              <h2 className="finals-title">FINAL FOUR</h2>
-
-              <div className="semifinals-container">
-                <div className="semifinal-box" onClick={() => handleMatchupClick(semifinal1Matchup)}>
+               <div className="ncaa-logo-container">
+              <img 
+                src="/logos/ncaa.png" 
+                alt="NCAA Logo" 
+                className="ncaa-logo"
+              />
+            </div>
+            <h2 className="finals-title">FINAL FOUR</h2>
+            
+            <div className="semifinals-container">
+              <div className="semifinal-box" onClick={() => handleMatchupClick(semifinal1Matchup)}>
                 <p>{semifinal1Matchup.teamA ? `${semifinal1Matchup.teamA.seed}. ${semifinal1Matchup.teamA.name}` : 'South Winner'}</p>
                 <p>vs</p>
                 <p>{semifinal1Matchup.teamB ? `${semifinal1Matchup.teamB.seed}. ${semifinal1Matchup.teamB.name}` : 'West Winner'}</p>
-                </div>
-                <div className="semifinal-box" onClick={() => handleMatchupClick(semifinal2Matchup)}>
+              </div>
+              <div className="semifinal-box" onClick={() => handleMatchupClick(semifinal2Matchup)}>
                 <p>{semifinal2Matchup.teamA ? `${semifinal2Matchup.teamA.seed}. ${semifinal2Matchup.teamA.name}` : 'East Winner'}</p>
                 <p>vs</p>
                 <p>{semifinal2Matchup.teamB ? `${semifinal2Matchup.teamB.seed}. ${semifinal2Matchup.teamB.name}` : 'Midwest Winner'}</p>
-                </div>
               </div>
+            </div>
+            
 
-              <div className="championship-container">
-                <h2 className="finals-title">NATIONAL CHAMPIONSHIP</h2>
-                <div className="championship-box" onClick={() => handleMatchupClick(finalMatchup)}>
+            {/* trophy - PLACED HERE ABOVE THE CHAMPIONSHIP TITLE */}
+            <div className="trophy-container" style={{ textAlign: 'center', marginBottom: '30px', marginTop: '-30px' }}>
+              <img 
+                src="/logos/trophy.png" 
+                alt="Championship Trophy" 
+                style={{ height: '170px', margin: '0 auto' }}
+              />
+            </div>
+
+            <h2 className="finals-title">NATIONAL CHAMPIONSHIP</h2>
+            
+            <div className="championship-container">
+              <div className="championship-box" onClick={() => handleMatchupClick(finalMatchup)}>
                 <p>{finalMatchup.teamA ? `${finalMatchup.teamA.seed}. ${finalMatchup.teamA.name}` : 'Semifinal #1 Winner'}</p>
                 <p>vs</p>
                 <p>{finalMatchup.teamB ? `${finalMatchup.teamB.seed}. ${finalMatchup.teamB.name}` : 'Semifinal #2 Winner'}</p>
-                </div>
               </div>
             </div>
+            
+          </div>
+          
           );
         default:
           return null;
@@ -483,6 +599,11 @@ const MarchMadnessBracket = () => {
               {/* Team A Row */}
               <div className="team-stats-row">
                 <div className="team-name-cell">
+                <img
+                  src={selectedMatchup.teamA?.logoUrl}
+                  alt={`${selectedMatchup.teamA?.name} logo`}
+                  className="team-logo"
+                />
                   <div className="team-name-display">{selectedMatchup.teamA?.name}</div>
                 </div>
                 <div className="spread-cell">
@@ -521,6 +642,11 @@ const MarchMadnessBracket = () => {
               {/* Team B Row */}
               <div className="team-stats-row">
                 <div className="team-name-cell">
+                <img
+                    src={selectedMatchup.teamB?.logoUrl}
+                    alt={`${selectedMatchup.teamB?.name} logo`}
+                    className="team-logo"
+                  />
                   <div className="team-name-display">{selectedMatchup.teamB?.name}</div>
                 </div>
                 <div className="spread-cell">
@@ -584,6 +710,11 @@ const MarchMadnessBracket = () => {
         <div className="bracket-layout">
           {renderActive()}
         </div>
+        {active !== 'FinalFour' && (
+          <div className="graphic-footer">
+            <img src="/logos/graphic.png" alt="Graphic Footer" className="footer-image" />
+          </div>
+        )}
       </div>
     );
   };

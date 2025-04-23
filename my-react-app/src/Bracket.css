@@ -465,5 +465,37 @@
     padding-left: 10px;
     text-align: left; 
   }
-  
 
+  .team-logo {
+    width: 70px;       
+    height: 60px;
+    object-fit: contain;
+    margin-right: 10px; 
+    vertical-align: middle;
+  }
+  
+  
+  /* NCAA logo in center of bracket */
+.ncaa-logo-container {
+  position: absolute;
+  width: 150px;
+  height: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 80px;
+}
+
+.ncaa-logo {
+  width: 100px;
+  height: 100px;
+}
+
+.graphic-footer {
+  margin-top: -12rem;
+}
+
+.footer-image {
+  width: 20%;
+  height: 200px;  
+}
