@@ -1,16 +1,26 @@
 package com.example.demo.service;
 
+import com.example.demo.repository.MarchMadnessTeamRepository;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.example.demo.model.MarchMadnessElo;
+import com.example.demo.repository.MarchMadnessEloRepository;
+
 public class OddsScraper {
+
+    @Autowired
+    private MarchMadnessEloRepository eloRepository;
 
     public static void main(String[] args) {
         // URL for the ESPN men's college basketball team stats page for season 2025
         String url = "https://www.espn.com/mens-college-basketball/stats/team/_/season/2025";
 
+        /*
         try {
             System.out.println("Starting");
             // Connect to the URL with a common user agent
@@ -51,5 +61,6 @@ public class OddsScraper {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        */
     }
 }

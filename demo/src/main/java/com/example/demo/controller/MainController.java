@@ -26,13 +26,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 //import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 
 /**
  * This class controls flow to and from the database using GET and POST calls. The backend listens
@@ -350,15 +346,40 @@ public class MainController {
         return betRepository.findByUserId(userId);
     }
 
+
+    /**
+     * Endpoint to return the list of all the March Madness Teams stored in the database.
+     *
+     * @return A list of teams including their id, name, seed and region
+     */
+    @Operation(summary = "Get all team ELOs", description = "Retrieves all March Madness team ELOs from the database")
+    @ApiResponse(responseCode = "200", description = "List of all team ELOs",
+            content = @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = MarchMadnessElo.class))))
+    @GetMapping(path="/allTeamElo")
+    public @ResponseBody List<MarchMadnessElo> getAllTeamELOs() {
+        return marchMadnessTeamEloRepository.findAll();
+    }
+
+
     /**
      * Finds and returns a specific team's ELO in the MySQL Database by their unique id
      *
      * @param id the id of the given team
      * @return the entity if it exists, or null if there does not exist an entry with the given id
      */
-    @GetMapping(path="/teamElo")
-    public @ResponseBody Optional<MarchMadnessElo> getEloById(@RequestParam Long id) {
-        return marchMadnessTeamEloRepository.findEloById(id);
+    @Operation(summary = "Get elo by id", description = "Retrieves a specific elo by their id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "team elo found",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = MarchMadnessElo.class))),
+            @ApiResponse(responseCode = "404", description = "team elo not found",
+                    content = @Content)
+    })
+    @GetMapping(path="/teamElo/{id}")
+    public @ResponseBody Optional<MarchMadnessElo> getEloById(@PathVariable Long id) {
+        return marchMadnessTeamEloRepository.findById(id);
+        //return marchMadnessTeamEloRepository.findEloById(id);
     }
 
 }
