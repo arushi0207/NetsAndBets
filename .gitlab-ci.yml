@@ -21,7 +21,7 @@ unit-test-job:
   script:
     - echo "Navigating to backend folder..."
     - cd ./demo
-    - echo "Running tests with Spring profile: ${SPRING_PROFILES_ACTIVE}"
+    - echo "Running tests with Spring profile test"
     - mvn test
   artifacts:
     when: always
