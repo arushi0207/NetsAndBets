@@ -5,10 +5,42 @@ import { Home as HomeIcon, ArrowLeft, CircleDollarSign } from 'lucide-react';
 import './MyBets.css';
 
 const MyBets = () => {
-  const { user, isLoggedIn } = useContext(AuthContext);
+  const { user, isLoggedIn, login } = useContext(AuthContext);
   const [bet, setBet] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+
+  // Checking if any bet has the win status
+  const winningBet = (bet) => {
+    return bet.some(bets => bets.status.toLowerCase() === 'win');
+  };
+
+  // Refreshing user data from the server
+  const refreshUserInfo = async () => {
+    if (!user || !user.id) return; // Check if user is logged in
+    
+    // Fetch all users data
+    try {
+      const response = await fetch('http://localhost:8080/demo/all');
+      
+      // Check if the response is ok
+      if (!response.ok) {
+        throw new Error('Failed to fetch user info');
+      }
+
+      const allUsers = await response.json(); // Parse the response
+      const currUser = allUsers.find(u => u.id === user.id); // Find the current user
+      
+      // Check if the user exists
+      if (currUser) {
+        // Update the user data in context and localStorage
+        localStorage.setItem('currentUser', JSON.stringify(currUser));
+        login(currUser);
+      }
+    } catch (error) {
+      console.error('Error refreshing:', error);
+    }
+  };
 
   useEffect(() => {
     if (!user || !user.id) return;
@@ -24,6 +56,11 @@ const MyBets = () => {
 
         const data = await response.json();
         setBet(data);
+        
+        // If user wins any bets, refresh the data
+        if (winningBet(data)) {
+          await refreshUserInfo();
+        }
       } catch (error) {
         console.error('Error fetching bets:', error);
       } finally {
@@ -32,6 +69,11 @@ const MyBets = () => {
     };
 
     fetchBets();
+    
+    // Intervals to check for bet updates for winning or losing
+    const intervals = setInterval(fetchBets, 60000); // Check every 60 seconds
+    // Clean up
+    return () => clearInterval(intervals);
   }, [isLoggedIn, navigate, user]);
 
   if (!isLoggedIn) {
@@ -58,12 +100,12 @@ const MyBets = () => {
             <CircleDollarSign style={{ height: "2rem", width: "2rem", color: "#ED7014" }} />
             <span>Nets and Bets</span>
           </div>
-           <Link to="/" className="nav-link">
-                <button className="button-orange">
-                    <ArrowLeft style={{ height: "1rem", width: "1rem" }} />
-                    Back to Home
-                </button>
-            </Link> 
+          <Link to="/" className="nav-link">
+            <button className="button-orange">
+              <ArrowLeft style={{ height: "1rem", width: "1rem" }} />
+              Back to Home
+            </button>
+          </Link> 
         </div>
       </nav>
 
@@ -99,7 +141,7 @@ const MyBets = () => {
                   </div>
                   
                   <div className="bet-info">
-                    <span className="labels">Potential Win:</span>
+                  <span className="labels">Potential Win:</span>
                     <span className="text">${bet.amountToWin.toFixed(2)}</span>
                   </div>
                 </div>

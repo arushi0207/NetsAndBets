@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('currentUser');
     setUser(null);
     setIsLoggedIn(false);
+    window.location.href = '/';
   };
 
   return (

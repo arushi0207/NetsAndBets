@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import { CircleDollarSign, Calendar, Trophy, LogOut, User } from "lucide-react";
 import MarchMadnessBracket from './Bracket'; 
@@ -15,11 +15,41 @@ import './Home.css';
 // `;
 
 export default function Home() {
-  const { isLoggedIn, user, logout } = useContext(AuthContext);
+  const { isLoggedIn, user, logout, login } = useContext(AuthContext);
+  
+  // Refreshing user data to ensure balance is updated
+  useEffect(() => {
+    const refreshUserInfo = async () => {
+      if (!isLoggedIn || !user || !user.id) return; // Check if user is logged in
+      
+      // Fetch all users data
+      try {
+        const response = await fetch('http://localhost:8080/demo/all');
+        
+        // Check if the response is ok
+        if (!response.ok) {
+          throw new Error('Failed to fetch users info');
+        }
+
+        const allUsers = await response.json(); // Parse the response
+        const currUser = allUsers.find(u => u.id === user.id); // Find the current user
+        
+        if (currUser) {
+          // Update the user info
+          localStorage.setItem('currentUser', JSON.stringify(currUser));
+          login(currUser);
+        }
+      } catch (error) {
+        console.error('Error refreshing:', error);
+      }
+    };
+
+    refreshUserInfo();
+  }, [isLoggedIn, user, login]);
   
   const handleLogout = () => {
-    logout();
     alert("You have been logged out successfully!");
+    logout();
   };
 
   return (
@@ -41,7 +71,7 @@ export default function Home() {
                   <div className="nav-user-info">
                     <User style={{ height: "1.2rem", width: "1.2rem", color: "white" }} />
                     <span>
-                      {user?.name || user?.username} - ${user?.amount}
+                      {user?.name || user?.username} - ${user?.amount ? user.amount.toFixed(2) : '0.00'}
                     </span>
                   </div>
                   {/* My Bets Page*/}
