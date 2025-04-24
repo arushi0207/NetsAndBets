@@ -35,7 +35,7 @@ public class MarchMadnessEloRepositoryTest {
         MarchMadnessElo team = new MarchMadnessElo("Wisconsin", 1850);
         MarchMadnessElo saved = eloRepository.save(team);
 
-        Optional<MarchMadnessElo> result = eloRepository.findEloById(saved.getId());
+        Optional<MarchMadnessElo> result = eloRepository.findById(saved.getId());
 
         assertTrue(result.isPresent());
         assertEquals("Wisconsin", result.get().getName());
@@ -49,7 +49,7 @@ public class MarchMadnessEloRepositoryTest {
      */
     @Test
     public void testFindEloById_NotFound() {
-        Optional<MarchMadnessElo> result = eloRepository.findEloById(999L);
+        Optional<MarchMadnessElo> result = eloRepository.findById(999L);
         assertTrue(result.isEmpty());
     }
 }
