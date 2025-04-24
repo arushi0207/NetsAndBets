@@ -1,24 +1,45 @@
-image: maven:3.9.9-openjdk:23-jdk
-
 stages:
   - build
   - test
   - deploy
 
-
-build:
+build-job:
   stage: build
+  image: maven:3.9.5-eclipse-temurin-21
   script:
+    - echo "Navigating to backend folder..."
     - cd ./demo
-    - mvn clean install -DskipTests
-  artifacts:
-    paths:
-      - target/*.jar
-    expire_in: 1 day
+    - echo "Compiling the backend code..."
+    - mvn clean compile
+    - echo "Compile complete."
 
-test:
+unit-test-job:
   stage: test
+  image: maven:3.9.5-eclipse-temurin-21
+  variables:
+    SPRING_PROFILES_ACTIVE: "test"
   script:
+    - echo "Navigating to backend folder..."
+    - cd ./demo
+    - echo "Running tests with Spring profile: $SPRING_PROFILES_ACTIVE"
     - mvn test
-  dependencies:
-    - build
+  artifacts:
+    when: always
+    expire_in: 30 days
+    paths:
+      - ./demo/target/surefire-reports/
+    reports:
+      junit: ./demo/target/surefire-reports/*.xml
+
+lint-test-job:   # This job also runs in the test stage.
+  stage: test    # It can run at the same time as unit-test-job (in parallel).
+  script:
+    - echo "Linting code... This will take about 10 seconds."
+    - echo "No lint issues found."
+
+deploy-job:      # This job runs in the deploy stage.
+  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+  environment: production
+  script:
+    - echo "Deploying application..."
+    - echo "Application successfully deployed."
