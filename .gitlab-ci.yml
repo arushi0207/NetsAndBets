@@ -1,0 +1,23 @@
+image: maven:3.8.4-jdk-23
+
+stages:
+  - build
+  - test
+  - deploy
+
+
+build:
+  stage: build
+  script:
+    - mvn clean install -DskipTests
+  artifacts:
+    paths:
+      - target/*.jar
+    expire_in: 1 day
+
+test:
+  stage: test
+  script:
+    - mvn test
+  dependencies:
+    - build
