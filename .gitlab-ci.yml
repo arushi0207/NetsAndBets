@@ -1,4 +1,4 @@
-image: maven:3.8.4-jdk-23
+image: demo/Dockerfile
 
 stages:
   - build
