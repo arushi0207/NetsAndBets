@@ -21,6 +21,12 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Unit tests for the BetUpdateService class that focusses on the logic to update 
+ * bet statuses based on team wins per round.
+ * 
+ * {@link BetUpdateService}
+ */
 @ExtendWith(MockitoExtension.class)
 public class BetUpdateServiceTest {
 
@@ -40,6 +46,11 @@ public class BetUpdateServiceTest {
     private Bet bet;
     private MarchMadnessTeam team;
 
+    /**
+     * Initializes a valid user, bet, and team to be used across most of the test cases.
+     * 
+     * {@link BetUpdateService}
+     */
     @BeforeEach
     public void setup() {
         user = new User();
@@ -59,6 +70,10 @@ public class BetUpdateServiceTest {
         team.setWinsPerRound("1,1,1,1,1,0");
     }
 
+    /**
+     * Verifies that a winning bet updates the status to "Win" and 
+     * increments the user's balance according to the winning amount.
+     */
     @Test
     public void testUpdateBetResults_Win() {
         Mockito.when(betRepository.findByStatus("In Progress")).thenReturn(List.of(bet));
@@ -71,6 +86,10 @@ public class BetUpdateServiceTest {
         assertEquals(2050.0, user.getAmount());
     }
 
+    /**
+     * Verifies that a losing bet updates the status to "Loss"
+     * and the user's balance remains as is.
+     */
     @Test
     public void testUpdateBetResults_Loss() {
         team.setWinsPerRound("1,1,1,0,0,0");
@@ -84,6 +103,9 @@ public class BetUpdateServiceTest {
         assertEquals(2000.0, user.getAmount());
     }
 
+    /**
+     * Verifies that an invalid round index does not change the bet status.
+     */
     @Test
     public void testUpdateBetResults_InvalidRoundIndex() {
         bet.setRoundIndex(10);
@@ -95,6 +117,10 @@ public class BetUpdateServiceTest {
         assertEquals("In Progress", bet.getStatus());
     }
 
+    /**
+     * Verifies that if the team associated with the bet is not found in the database,
+     * the bet status remains unaltered.
+     */
     @Test
     public void testUpdateBetResults_TeamNotFound() {
         Mockito.when(betRepository.findByStatus("In Progress")).thenReturn(List.of(bet));
@@ -105,6 +131,9 @@ public class BetUpdateServiceTest {
         assertEquals("In Progress", bet.getStatus());
     }
 
+    /**
+     * Verifies that a malformed `winsPerRound` string does not change the bet status.
+     */
     @Test
     public void testUpdateBetResults_MalformedWinsPerRound() {
         team.setWinsPerRound("1,1,1,x,1,0");
@@ -117,6 +146,10 @@ public class BetUpdateServiceTest {
         assertEquals(2000.0, user.getAmount());
     }
 
+    /**
+     * Verifies that if an unexpected round result (any value other than 0 or 1)
+     * is present, the bet status does not change.
+     */
     @Test
     public void testUpdateBetResults_UnexpectedRoundResult() {
         team.setWinsPerRound("1,1,1,2,1,0");
@@ -128,6 +161,9 @@ public class BetUpdateServiceTest {
         assertEquals("In Progress", bet.getStatus());
     }
 
+    /**
+     * Verifies that when there are no bets to update, then the program does not crash.
+     */
     @Test
     public void testUpdateBetResults_NoBetsToUpdate() {
         Mockito.when(betRepository.findByStatus("In Progress")).thenReturn(List.of());
