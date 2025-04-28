@@ -31,7 +31,7 @@ build-frontend-job:
     - echo "Build complete"
   artifacts:
     paths:
-      - build/
+      - ./my-react-app/build/
   dependencies:
     - install-frontend-dependencies
 
