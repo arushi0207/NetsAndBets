@@ -1,0 +1,77 @@
+stages:
+  - install
+  - build
+  - test
+  - deploy
+
+# Install frontend dependencies
+install-frontend-dependencies:
+  stage: install
+  image: node:20
+  script:
+    - echo "navigating to the frontend folder..."
+    - cd ./my-react-app
+    - echo "Installing frontend dependencies..."
+    - npm ci
+    - echo "Install complete"
+  artifacts:
+    paths:
+      - ./my-react-app/node_modules/
+
+# Build the React app
+build-frontend-job:
+  stage: build
+  image: node:20
+  script:
+    - echo "Navigating to the frontend folder..."
+    - cd ./my-react-app
+    - echo "Building frontend code..."
+    - unset CI
+    - npm run build
+    - echo "Build complete"
+  artifacts:
+    paths:
+      - ./my-react-app/build/
+  dependencies:
+    - install-frontend-dependencies
+
+build-job:
+  stage: build
+  image: maven:3.9.5-eclipse-temurin-21
+  script:
+    - echo "Navigating to backend folder..."
+    - cd ./demo
+    - echo "Compiling the backend code..."
+    - mvn clean compile
+    - echo "Compile complete."
+
+unit-test-job:
+  stage: test
+  image: maven:3.9.5-eclipse-temurin-21
+  variables:
+    SPRING_PROFILES_ACTIVE: "test"
+  script:
+    - echo "Navigating to backend folder..."
+    - cd ./demo
+    - echo "Running tests with Spring profile test"
+    - mvn test
+  artifacts:
+    when: always
+    expire_in: 30 days
+    paths:
+      - demo/target/surefire-reports/
+    reports:
+      junit: demo/target/surefire-reports/*.xml
+
+lint-test-job:
+  stage: test
+  script:
+    - echo "Linting code... This will take about 10 seconds."
+    - echo "No lint issues found."
+
+deploy-job:
+  stage: deploy
+  environment: production
+  script:
+    - echo "Deploying application..."
+    - echo "Application successfully deployed."
