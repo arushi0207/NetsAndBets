@@ -1,11 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.MarchMadnessTeam;
-import com.example.demo.model.User;
-import com.example.demo.repository.MarchMadnessTeamRepository;
-import com.example.demo.repository.UserRepository;
-import com.example.demo.service.MarchMadnessScraper;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -21,6 +15,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.demo.model.MarchMadnessTeam;
+import com.example.demo.model.User;
+import com.example.demo.repository.MarchMadnessTeamRepository;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.service.MarchMadnessScraper;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 /**
  * This class controls flow to and from the database using GET and POST calls. The backend listens
  * on port 8080 and uses calls to query and modify the database.
@@ -32,6 +39,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller // This means that this class is a Controller
 @RequestMapping(path="/demo") // This means URL's start with /demo (after Application path)
+@Tag(name = "Main Controller", description = "APIs for user management and March Madness data")
 public class MainController {
 
     @Autowired // This means to get the bean called userRepository
@@ -55,6 +63,11 @@ public class MainController {
      */
 
     @PostMapping(path="/add") // Map ONLY POST Requests
+    @Operation(summary = "Add new user (Legacy)", description = "Creates a new user with plain text password (deprecated)")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "User created successfully"),
+        @ApiResponse(responseCode = "400", description = "Invalid input data")
+    })
     public @ResponseBody String addNewUser (@RequestParam String username
             , @RequestParam String password) {
         // @ResponseBody means the returned String is the response, now a view name
@@ -78,6 +91,11 @@ public class MainController {
      * @return A ResponseEntity indicating success or failure while signing up.
      */
     @PostMapping(path = "/signup")
+    @Operation(summary = "Register new user", description = "Creates a new user with securely hashed password")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "User registered successfully"),
+        @ApiResponse(responseCode = "400", description = "Username already taken or invalid input")
+    })
     public ResponseEntity<?> signUpUser(@RequestBody User user) {
 
         String username = user.getUsername();
@@ -109,6 +127,13 @@ public class MainController {
      * @return A ResponseEntity indicating success or failure while logging up.
      */
     @PostMapping(path = "/login")
+    @Operation(summary = "Authenticate user", description = "Verifies username and password")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Login successful", 
+                    content = @Content(schema = @Schema(implementation = User.class))),
+        @ApiResponse(responseCode = "401", description = "Invalid password"),
+        @ApiResponse(responseCode = "404", description = "User not found")
+    })
     public ResponseEntity<?> loginUser(@RequestBody User loginRequest) {
 
         // Find the username in the database
@@ -134,6 +159,9 @@ public class MainController {
      * @return an Iterable of all users in the database
      */
     @GetMapping(path="/all")
+    @Operation(summary = "Get all users", description = "Retrieves all users from the database")
+    @ApiResponse(responseCode = "200", description = "List of all users", 
+                content = @Content(schema = @Schema(implementation = User.class)))
     public @ResponseBody Iterable<User> getAllUsers() {
         // This returns a JSON or XML with the users
         return userRepository.findAll();
@@ -146,6 +174,12 @@ public class MainController {
      * @return the user entity if it exists, or null if there does not exist a user with the given username
      */
     @GetMapping(path="/user")
+    @Operation(summary = "Get user by username", description = "Finds user by their unique username")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "User found", 
+                    content = @Content(schema = @Schema(implementation = User.class))),
+        @ApiResponse(responseCode = "404", description = "User not found")
+    })
     public @ResponseBody Optional<User> getUserByUsername(@RequestParam String username) {
         return userRepository.findByUsername(username);
     }
@@ -160,6 +194,8 @@ public class MainController {
      */
 
     @PostMapping(path="/scrape")
+    @Operation(summary = "Scrape teams data", description = "Fetches March Madness teams data from web")
+    @ApiResponse(responseCode = "200", description = "Scraping completed successfully")
     public @ResponseBody String scrapeTeams() {
         scraper.runScraper();
         return "Scraping and saving teams completed!";
@@ -172,6 +208,9 @@ public class MainController {
      */
 
     @GetMapping(path="/teams")
+    @Operation(summary = "Get all teams", description = "Retrieves all March Madness teams")
+    @ApiResponse(responseCode = "200", description = "List of all teams", 
+                content = @Content(schema = @Schema(implementation = MarchMadnessTeam.class)))
     public @ResponseBody List<MarchMadnessTeam> getAllTeams() {
         return marchMadnessTeamRepository.findAll();
     }

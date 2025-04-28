@@ -12,6 +12,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 /**
  * REST controller for handling user-related operations.
  *
@@ -44,6 +51,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/user")
+@Tag(name = "User Management", description = "Operations for managing user profiles and account data")
 public class UserController {
     // Stores user data temporarily (in a real application, use a database)
     private final Map<String, Map<String, Object>> userDatabase = new HashMap<>();
@@ -76,6 +84,12 @@ public class UserController {
      * @return A ResponseEntity containing user information or an error message.
      */
     @GetMapping("/{username}")
+    @Operation(summary = "Get user profile", description = "Retrieves complete user information by username")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "User found", 
+                    content = @Content(schema = @Schema(implementation = Map.class))),
+        @ApiResponse(responseCode = "400", description = "User not found")
+    })
     public ResponseEntity<?> getUserInfo(@PathVariable String username) {
         if (userDatabase.containsKey(username)) {
             return ResponseEntity.ok(userDatabase.get(username));
@@ -90,6 +104,11 @@ public class UserController {
      * @return A ResponseEntity containing the user's name or an error message.
      */
     @GetMapping("/{username}/name")
+    @Operation(summary = "Get user's name", description = "Retrieves just the name field for a user")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Name retrieved successfully"),
+        @ApiResponse(responseCode = "400", description = "User not found")
+    })
     public ResponseEntity<?> getUserName(@PathVariable String username) {
         if (userDatabase.containsKey(username)) {
             return ResponseEntity.ok(userDatabase.get(username).get("name"));
@@ -104,6 +123,11 @@ public class UserController {
      * @return A ResponseEntity containing the username or an error message.
      */
     @GetMapping("/{username}/username")
+    @Operation(summary = "Get username confirmation", description = "Confirms if a username exists")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Username found"),
+        @ApiResponse(responseCode = "400", description = "User not found")
+    })
     public ResponseEntity<?> getUsername(@PathVariable String username) {
         if (userDatabase.containsKey(username)) {
             return ResponseEntity.ok(userDatabase.get(username).get("username"));
@@ -120,6 +144,12 @@ public class UserController {
      * @return A ResponseEntity containing the user's password or an error message.
      */
     @GetMapping("/{username}/password")
+    @Operation(summary = "Get password", 
+              description = "DEMO ONLY - Retrieves password (not for production use)")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Password retrieved"),
+        @ApiResponse(responseCode = "400", description = "User not found")
+    })
     public ResponseEntity<?> getUserPassword(@PathVariable String username) {
         if (userDatabase.containsKey(username)) {
             return ResponseEntity.ok(userDatabase.get(username).get("password"));
@@ -135,6 +165,11 @@ public class UserController {
      *         message.
      */
     @GetMapping("/{username}/amount")
+    @Operation(summary = "Get account balance", description = "Retrieves the user's current balance")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Balance retrieved successfully"),
+        @ApiResponse(responseCode = "400", description = "User not found")
+    })
     public ResponseEntity<?> getUserAmount(@PathVariable String username) {
         if (userDatabase.containsKey(username)) {
             return ResponseEntity.ok(userDatabase.get(username).get("amount"));
@@ -151,6 +186,11 @@ public class UserController {
      *         message.
      */
     @PostMapping
+    @Operation(summary = "Create new user", description = "Registers a new user account")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "User created successfully"),
+        @ApiResponse(responseCode = "400", description = "Username already exists or missing required fields")
+    })
     public ResponseEntity<?> createUser(@RequestBody Map<String, Object> userData) {
         String username = (String) userData.get("username");
 
