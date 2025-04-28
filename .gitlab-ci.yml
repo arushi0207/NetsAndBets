@@ -16,7 +16,7 @@ install-frontend-dependencies:
     - echo "Install complete"
   artifacts:
     paths:
-      - node_modules/
+      - ./my-react-app/node_modules/
 
 # Build the React app
 build-frontend-job:
