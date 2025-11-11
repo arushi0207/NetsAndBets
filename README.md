@@ -149,3 +149,30 @@ Kevin Yuan
 <!--This is a link to a seperate coding conventions document / style guide-->
 [Style Guide & Conventions](STYLE.md)
 
+### App Screenshots
+
+#### Login Page
+![Login Page](screenshots/LoginPage.png)
+
+#### Signup Page
+![Signup Page](screenshots/SignUpPage.png)
+
+#### Home Page
+![Home Page](screenshots/HomePage.png)
+
+#### Tournament Highlights
+![Tournament Highlights](screenshots/TournamentHighlights.png)
+
+#### Leaderboard
+![March Madness Teams](screenshots/MarchMadnessTeams.png)
+
+#### Place your bets
+![Place your bets](screenshots/PlaceBets.png)
+
+#### Bets Page
+![Bets Page](screenshots/BetPage.png)
+
+#### My Bets
+![Bets Page](screenshots/MyBets.png)
+
+
